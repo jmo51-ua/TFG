@@ -6,7 +6,6 @@
 <template>
   <div class="app">
     <Sidebar/>
-    <RouterView />
   </div>
 </template>
 
@@ -17,8 +16,9 @@
     --dark: #1e293b;
     --dark-alt: #334155;
     --light: #f1f5f9;
-    --sidebar-width: 300px;
+    --sidebar-width-expanded: 250px;
     --menu-color: #83b7ff;
+    --sidebar-width: calc(2rem + 32px);
   }
 
   * {
