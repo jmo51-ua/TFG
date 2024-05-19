@@ -59,8 +59,13 @@
 
 		<div style="width: 100%; height: 100%; background-color: #cbd5e0;">
 			<div class="header-sidebar">
-				<!--NOMBRE EQUIPO-->
-				TFG FC
+				<span class="nombre-equipo">TFG FC</span>
+				<span class="nombre-vista">{{ viewName }}</span>
+				<div class="usuario-info">
+					<!--NOMBRE USUARIO-->
+					<span class="nombre-usuario">jmo51</span>
+					<span class="foto-usuario">IMG</span>
+				</div>
 			</div>
 			<div style="height: calc(100vh - 50px); background-color: #ffffff; display: flex; justify-content: center;">
 				<RouterView />
@@ -70,186 +75,227 @@
 </template>
 
 <script setup>
-    import { ref } from 'vue'
-    import logoURL from '../assets/logo.png'
-	import { RouterView } from 'vue-router'
+	import { ref, computed } from 'vue'
+	import { useRoute } from 'vue-router'
 
-    const is_expanded = ref(localStorage.getItem("is_expanded") === "true")
+	const is_expanded = ref(localStorage.getItem("is_expanded") === "true")
 
-    const ToggleMenu = () => {
-        is_expanded.value = !is_expanded.value
-        localStorage.setItem("is_expanded", is_expanded.value)
-    }
+	const ToggleMenu = () => {
+		is_expanded.value = !is_expanded.value
+		localStorage.setItem("is_expanded", is_expanded.value)
+	}
+
+	const route = useRoute()
+
+	const viewName = computed(() => {
+		return route.name
+	})
 </script>
 
 <style lang="scss" scoped>
-aside {
-	display: flex;
-	flex-direction: column;
-
-	background-color: var(--dark);
-	color: var(--light);
-
-	width: var(--sidebar-width);
-	overflow: hidden;
-	min-height: 100vh;
-	padding: 1rem;
-
-	transition: 0.2s ease-in-out;
-
-	.flex {
-		flex: 1 1 0%;
-	}
-
-	.logo {
-		margin-bottom: 1rem;
-
-		img {
-			width: 2rem;
-		}
-	}
-
-	.menu-toggle-wrap {
+	aside {
 		display: flex;
-		justify-content: flex-end;
-		margin-bottom: 1rem;
+		flex-direction: column;
 
-		position: relative;
-		top: 0;
+		background-color: var(--dark);
+		color: var(--light);
+
+		width: var(--sidebar-width);
+		overflow: hidden;
+		min-height: 100vh;
+		padding: 1rem;
+
 		transition: 0.2s ease-in-out;
 
-		.menu-toggle {
-			transition: 0.2s ease-in-out;
-			.material-icons {
-				font-size: 2rem;
-				color: var(--light);
-				transition: 0.2s ease-out;
-			}
-			
-			&:hover {
-				.material-icons {
-					color: var(--primary);
-					transform: translateX(0.5rem);
-				}
+		.flex {
+			flex: 1 1 0%;
+		}
+
+		.logo {
+			margin-bottom: 1rem;
+
+			img {
+				width: 2rem;
 			}
 		}
-	}
-
-	h3, .button .text {
-		opacity: 0;
-		transition: opacity 0.3s ease-in-out;
-	}
-
-	h3 {
-		color: var(--menu-color);
-		font-size: 0.875rem;
-		margin-bottom: 0.5rem;
-		text-transform: uppercase;
-	}
-
-	.menu {
-		margin: 0 -1rem;
-
-		.button {
-			display: flex;
-			align-items: center;
-			text-decoration: none;
-
-			transition: 0.2s ease-in-out;
-			padding: 0.5rem 1rem;
-
-			.material-icons {
-				font-size: 2rem;
-				color: var(--light);
-				transition: 0.2s ease-in-out;
-			}
-			.text {
-				color: var(--light);
-				transition: 0.2s ease-in-out;
-			}
-
-			&:hover {
-				background-color: var(--dark-alt);
-
-				.material-icons, .text {
-					color: var(--primary);
-				}
-			}
-
-			&.router-link-exact-active {
-				background-color: var(--dark-alt);
-				border-right: 5px solid var(--primary);
-
-				.material-icons, .text {
-					color: var(--primary);
-				}
-			}
-		}
-	}
-
-	.footer {
-		opacity: 0;
-		transition: opacity 0.3s ease-in-out;
-
-		p {
-			font-size: 0.875rem;
-			color: var(--grey);
-		}
-	}
-
-	&.is-expanded {
-		width: var(--sidebar-width-expanded);
 
 		.menu-toggle-wrap {
-			top: -3rem;
-			
+			display: flex;
+			justify-content: flex-end;
+			margin-bottom: 1rem;
+
+			position: relative;
+			top: 0;
+			transition: 0.2s ease-in-out;
+
 			.menu-toggle {
-				transform: rotate(-180deg);
+				transition: 0.2s ease-in-out;
+				.material-icons {
+					font-size: 2rem;
+					color: var(--light);
+					transition: 0.2s ease-out;
+				}
+				
+				&:hover {
+					.material-icons {
+						color: var(--primary);
+						transform: translateX(0.5rem);
+					}
+				}
 			}
 		}
 
 		h3, .button .text {
-			opacity: 1;
+			opacity: 0;
+			transition: opacity 0.3s ease-in-out;
 		}
 
-		.button {
-			.material-icons {
-				margin-right: 1rem;
+		h3 {
+			color: var(--menu-color);
+			font-size: 0.875rem;
+			margin-bottom: 0.5rem;
+			text-transform: uppercase;
+		}
+
+		.menu {
+			margin: 0 -1rem;
+
+			.button {
+				display: flex;
+				align-items: center;
+				text-decoration: none;
+
+				transition: 0.2s ease-in-out;
+				padding: 0.5rem 1rem;
+
+				.material-icons {
+					font-size: 2rem;
+					color: var(--light);
+					transition: 0.2s ease-in-out;
+				}
+				.text {
+					color: var(--light);
+					transition: 0.2s ease-in-out;
+				}
+
+				&:hover {
+					background-color: var(--dark-alt);
+
+					.material-icons, .text {
+						color: var(--primary);
+					}
+				}
+
+				&.router-link-exact-active {
+					background-color: var(--dark-alt);
+					border-right: 5px solid var(--primary);
+
+					.material-icons, .text {
+						color: var(--primary);
+					}
+				}
 			}
 		}
 
 		.footer {
 			opacity: 0;
+			transition: opacity 0.3s ease-in-out;
+
+			p {
+				font-size: 0.875rem;
+				color: var(--grey);
+			}
+		}
+
+		&.is-expanded {
+			width: var(--sidebar-width-expanded);
+
+			.menu-toggle-wrap {
+				top: -3rem;
+				
+				.menu-toggle {
+					transform: rotate(-180deg);
+				}
+			}
+
+			h3, .button .text {
+				opacity: 1;
+			}
+
+			.button {
+				.material-icons {
+					margin-right: 1rem;
+				}
+			}
+
+			.footer {
+				opacity: 0;
+			}
+		}
+
+		@media (max-width: 1024px) {
+			position: absolute;
+			z-index: 99;
 		}
 	}
 
-	@media (max-width: 1024px) {
-		position: absolute;
-		z-index: 99;
+	.menu-container {
+		width: 100vw;
+		height: 100vh;
+		display: flex;
 	}
-}
 
-.menu-container {
-	width: 100vw;
-	height: 100vh;
-	display: flex;
-}
+	.header-sidebar{
+		height: 50px;
+		background-color: #85b4ff;
+		display: flex;
+		align-items: center;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+		padding-left: 20px;
+		padding-right: 20px;
+		padding-top:10px;
+		padding-bottom: 10px;
+		z-index: 10;
+		border-bottom: 1px solid #e2e8f0;
+		color: white;
+		font-weight: bold;
+    	transition: margin-left 0.2s ease-in-out;
 
-.header-sidebar{
-	height: 50px;
-	background-color: #85b4ff;
-	display: flex;
-	align-items: center;
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-	padding-left: 20px;
-	padding-right: 20px;
-	width: 100%;
-	padding-top:10px;
-	padding-bottom: 10px;
-	z-index: 10;
-	border-bottom: 1px solid #e2e8f0;
-	color: white;
-	font-weight: bold;
-	margin-left: var(--sidebar-width);
-}
+		.nombre-equipo {
+			margin-right: auto; /* Alinea el nombre del equipo a la izquierda */
+		}
+
+		.nombre-vista {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+		}
+
+		.usuario-info {
+			display: flex;
+			align-items: center;
+		}
+
+		.nombre-usuario {
+			margin-right: 10px; /* Espacio entre el nombre y la foto del usuario */
+		}
+
+		.foto-usuario {
+			width: 32px;
+			height: 32px;
+			background-color: #fff; /* Ejemplo, puedes cambiarlo por una imagen real */
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #85b4ff; /* Ejemplo de color de fondo */
+		}
+
+		&.is-expanded {
+			margin-left: var(--sidebar-width-expanded);
+		}
+	}
+
+	
+	
 </style>

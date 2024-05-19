@@ -27,6 +27,26 @@ const router = createRouter({
       name: 'Estadísticas',
       component: () => import('../views/StatsView.vue')
     },
+    {
+      path: '/mensajes',
+      name: 'Mensajes',
+      component: () => import('../views/MensajesView.vue')
+    },
+    {
+      path: '/calendario',
+      name: 'Calendario',
+      component: () => import('../views/CalendarioView.vue')
+    },
+    {
+      path: '/ajustes',
+      name: 'Ajustes',
+      component: () => import('../views/AjustesView.vue')
+    },
+    {
+      path: '/singleplayer',
+      name: 'Jugador',
+      component: () => import('../views/SinglePlayerView.vue')
+    },
   ]
 })
 
