@@ -27,6 +27,22 @@
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M280-280h80v-280h-80v280Zm160 0h80v-400h-80v400Zm160 0h80v-160h-80v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
         Estadísticas
       </div>
+      <div class="list-container">
+        <router-link
+          v-for="(item, index) in listStats"
+          :key="index"
+          :to="{ path: '/singleplayer', query: { player: item.name } }"
+          class="list-item-link"
+        >
+          <div class="list-item">
+            <img :src="item.image" alt="Profile" class="profile-pic" />
+            <div class="item-details">
+              <div class="name number">{{ item.name }} - {{ item.kpi_name }}</div>
+            </div>
+            <div class="avg">{{ item.score }}</div>
+          </div>
+        </router-link>
+      </div>
     </div>
     <div class="block block3">
       <div class="block-title">
@@ -65,6 +81,13 @@ export default {
         { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
         { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
         // elementos de la DB
+      ],
+      listStats: [
+        { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '61%' },
+        { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4' },
+        { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '61%' },
+        { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4' },
+        // elementos de la DB
       ]
     };
   }
@@ -81,10 +104,11 @@ export default {
     grid-template-columns: 2fr 2fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     gap: 30px;
-    height: 100%;
+    height: calc(100vh - 50px); /* Ajusta la altura según el espacio disponible */
     width: 90%;
     padding: 40px;
     box-sizing: border-box;
+    overflow: hidden; /* Permitir el desplazamiento si el contenido se desborda */
   }
 
   .block {
@@ -188,9 +212,27 @@ export default {
     display: flex;
     flex-direction: column;
   }
-  .block2 { grid-area: block2; }
-  .block3 { grid-area: block3; }
-  .block4 { grid-area: block4; }
+  .block2 {
+    grid-area: block2;
+    max-height: 100%; /* Mantiene la altura máxima */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .block3 {
+    grid-area: block3;
+    max-height: 100%; /* Mantiene la altura máxima */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .block4 {
+    grid-area: block4;
+    max-height: 100%; /* Mantiene la altura máxima */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
   .block5 { grid-area: block5; }
   .block6 { 
     grid-area: block6; 

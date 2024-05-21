@@ -13,6 +13,13 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
 ## Project Setup
 
 ```sh
+npm install -g @vue/cli
+vue create vue-jorge-tfg
+
+cd vue-jorge-tfg
+```
+
+```sh
 npm install
 ```
 

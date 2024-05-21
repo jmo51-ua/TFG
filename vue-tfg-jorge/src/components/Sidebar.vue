@@ -57,17 +57,35 @@
 			</aside>
 		</div>
 
-		<div style="width: 100%; height: 100%; background-color: #cbd5e0;">
-			<div class="header-sidebar">
-				<span class="nombre-equipo">TFG FC</span>
-				<span class="nombre-vista">{{ viewName }}</span>
-				<div class="usuario-info">
-					<!--NOMBRE USUARIO-->
-					<span class="nombre-usuario">jmo51</span>
-					<span class="foto-usuario">IMG</span>
+		<div class="main-container">
+			<div class="header-container">
+				<div class="header-sidebar">
+					<span class="nombre-equipo">TFG FC</span>
+					<span class="nombre-vista">{{ viewName }}</span>
+					<div class="usuario-info">
+						<!--NOMBRE USUARIO-->
+						<span class="nombre-usuario">jmo51</span>
+						<span class="foto-usuario">IMG</span>
+					</div>
+				</div>
+				<div class="header-inner">
+					<div class="option">
+						<input type="radio" id="modo1" name="modo" value="semanal" v-model="selectedModo" @change="cambiarModo" checked>
+						<label for="modo1">Semanal</label>
+					</div>
+
+					<div class="option">
+						<input type="radio" id="modo2" name="modo" value="partido" v-model="selectedModo" @change="cambiarModo">
+						<label for="modo2">Por partido</label>
+					</div>
+
+					<!-- Mostrar el modo actual -->
+					<div class="current-modo">
+						Modo actual: {{ modo }}
+					</div>
 				</div>
 			</div>
-			<div style="height: calc(100vh - 50px); background-color: #ffffff; display: flex; justify-content: center;">
+			<div class="content">
 				<RouterView />
 			</div>
 		</div>
@@ -90,6 +108,32 @@
 	const viewName = computed(() => {
 		return route.name
 	})
+</script>
+
+<script>
+	import { mapActions, mapGetters } from 'vuex';
+
+	export default {
+		data() {
+			return {
+				selectedModo: this.modo // Inicializar con el valor del estado de Vuex
+			};
+		},
+		computed: {
+			...mapGetters(['modo'])
+		},
+		watch: {
+			modo(newModo) {
+				this.selectedModo = newModo;
+			}
+		},
+		methods: {
+			...mapActions(['actualizarModo']),
+			cambiarModo() {
+				this.actualizarModo(this.selectedModo);
+			}
+		}
+	};
 </script>
 
 <style lang="scss" scoped>
@@ -239,6 +283,14 @@
 		}
 	}
 
+	.main-container {
+		display: flex;
+		flex-direction: column;
+		height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+		background-color: #cbd5e0;
+		width: 100%;
+	}
+
 	.menu-container {
 		width: 100vw;
 		height: 100vh;
@@ -246,7 +298,7 @@
 	}
 
 	.header-sidebar{
-		height: 50px;
+		height: 70px;
 		background-color: #85b4ff;
 		display: flex;
 		align-items: center;
@@ -296,6 +348,35 @@
 		}
 	}
 
-	
+	.header-inner {
+		height: 35px;
+		background-color: #dbdada;
+		display: flex;
+		align-items: center;
+		justify-content: center; /* Centramos el contenido */
+		z-index: 10;
+		border-bottom: 1px solid #e2e8f0;
+		color: rgb(0, 0, 0);
+		font-weight: bold;
+		transition: margin-left 0.2s ease-in-out;
+
+		.option {
+			display: flex;
+			align-items: center;
+			margin: 0 10px; /* Reducimos la separación */
+		}
+
+		.option label {
+			margin-left: 5px; /* Añadimos un pequeño margen entre el input y el label */
+		}
+	}
+
+	.content {
+		flex-grow: 1; /* Asegura que el contenido ocupe el espacio restante */
+		background-color: #ffffff;
+		overflow: auto; /* Permite el desplazamiento si el contenido es más grande */
+		display: flex;
+		justify-content: center;
+	}
 	
 </style>
