@@ -85,7 +85,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="content">
+			<div :class="['content', { scrollable: isTeamView }]">
 				<RouterView />
 			</div>
 		</div>
@@ -93,21 +93,24 @@
 </template>
 
 <script setup>
-	import { ref, computed } from 'vue'
-	import { useRoute } from 'vue-router'
+	import { ref, computed } from 'vue';
+	import { useRoute } from 'vue-router';
 
-	const is_expanded = ref(localStorage.getItem("is_expanded") === "true")
+	const is_expanded = ref(localStorage.getItem("is_expanded") === "true");
 
 	const ToggleMenu = () => {
 		is_expanded.value = !is_expanded.value
 		localStorage.setItem("is_expanded", is_expanded.value)
-	}
+	};
 
-	const route = useRoute()
+	const route = useRoute();
 
 	const viewName = computed(() => {
 		return route.name
-	})
+	});
+
+	const isTeamView = computed(() => (route.name == 'Equipo' || route.name == 'Estadísticas'));
+	
 </script>
 
 <script>
@@ -131,8 +134,8 @@
 			...mapActions(['actualizarModo']),
 			cambiarModo() {
 				this.actualizarModo(this.selectedModo);
-			}
-		}
+			},
+		},
 	};
 </script>
 
@@ -379,4 +382,11 @@
 		justify-content: center;
 	}
 	
+</style>
+
+<style scoped>
+	.content.scrollable {
+		height: 100vh;
+		overflow: auto;
+	}
 </style>

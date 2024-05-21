@@ -17,7 +17,9 @@
             <div class="item-details">
               <div class="name number">{{ item.name }} - Dorsal: {{ item.number }}</div>
             </div>
-            <div class="avg">{{ item.avg }}%</div>
+            <div :style="{ backgroundColor: calculateColor(item.avg), color: getTextColor(item.avg) }" class="avg">
+              {{ item.avg }}%
+            </div>
           </div>
         </router-link>
       </div>
@@ -39,7 +41,11 @@
             <div class="item-details">
               <div class="name number">{{ item.name }} - {{ item.kpi_name }}</div>
             </div>
-            <div class="avg">{{ item.score }}</div>
+            <div :style="{ backgroundColor: calculateColorKPI(item.score, item.target), color: getTextColorKPI(item.score, item.target) }"
+            class="avg"
+            style="display: inline-block; white-space: nowrap; margin-left: 5px;">
+              {{ item.score }} / {{ item.target }}
+            </div>
           </div>
         </router-link>
       </div>
@@ -71,27 +77,74 @@
 </template>
 
 <script>
-export default {
-  name: 'HomeView',
-  data() {
-    return {
-      listItems: [
-        { image: 'https://via.placeholder.com/50', name: 'C. Ronaldo - 39 yo - DC', number: '9', avg: 74 },
-        { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
-        { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
-        { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
-        // elementos de la DB
-      ],
-      listStats: [
-        { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '61%' },
-        { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4' },
-        { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '61%' },
-        { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4' },
-        // elementos de la DB
-      ]
-    };
+  export default {
+    name: 'HomeView',
+    data() {
+      return {
+        listItems: [
+          { image: 'https://via.placeholder.com/50', name: 'C. Ronaldo - 39 yo - DC', number: '9', avg: 74 },
+          { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
+          { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
+          { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
+          // elementos de la DB
+        ],
+        listStats: [
+          { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '41%', target:'90%' },
+          { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4', target:'2.1' },
+          { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '61%', target:'100%' },
+          { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4', target:'3.0' },
+          // elementos de la DB
+        ]
+      };
+    },
+    methods: {
+      calculateColor(value,) {
+        let red, green;
+
+        if (value < 50) {
+          // Red to Yellow (255, 0, 0) to (255, 255, 0)
+          red = 255;
+          green = Math.round(255 * (value / 50));
+        } else {
+          // Yellow to Green (255, 255, 0) to (0, 255, 0)
+          red = Math.round(255 * ((100 - value) / 50));
+          green = 255;
+        }
+
+        return `rgb(${red}, ${green}, 0)`;
+      },
+      getTextColor(value) {
+        return value > 49 ? '#000000' : '#FFFFFF';
+      },
+      calculateColorKPI(score, target) {
+        // Extraer valores numéricos de las cadenas
+        const scoreValue = parseFloat(score.replace('%', ''));
+        const targetValue = parseFloat(target.replace('%', ''));
+
+        let red, green;
+
+        // Si el valor es menor que el objetivo
+        if (scoreValue < targetValue) {
+          // Red to Yellow (255, 0, 0) to (255, 255, 0)
+          red = 255;
+          green = Math.round(255 * (scoreValue / targetValue));
+        } else {
+          // Yellow to Green (255, 255, 0) to (0, 255, 0)
+          red = Math.round(255 * ((2 * targetValue - scoreValue) / targetValue));
+          green = 255;
+        }
+
+        return `rgb(${red}, ${green}, 0)`;
+      },
+      getTextColorKPI(score, target) {
+        const scoreValue = parseFloat(score.replace('%', ''));
+        const targetValue = parseFloat(target.replace('%', ''));
+
+
+        return scoreValue > targetValue ? '#000000' : '#FFFFFF';
+      }
+    }
   }
-}
 </script>
 
 <style scoped>
