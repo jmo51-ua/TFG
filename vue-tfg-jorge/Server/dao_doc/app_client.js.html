@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: app_client.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: app_client.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function (isNode) {
+	"use strict";
+
+	var restClient = null;
+	var wsClient = null;
+	var daoClient = null;
+
+	/**
+	 * Aplicación Cliente
+	 */
+	class AppClient {
+		constructor() {
+			this.origin = null;
+			this.config = null;
+			this.rest = restClient();
+			this.ws = wsClient();
+			this.dao = daoClient(this.rest, this.ws);;
+			this.userId = null;
+		}
+
+		/**
+		 * Obtiene la configuración del cliente
+		 * @param {*} origin Dirección del servidor (http://server:port)
+		 * @param {*} [url="/config"]  Path para obtener la configuración
+		 */
+		getConfig(origin, url = "/config") {
+			console.log("Get client config from:", origin, url);
+			this.rest.urlBase = origin;
+			this.rest.resend = 0;
+			return this.rest.get(url).then(
+				(config) => { // obtener configuración del servidor
+					console.log("Client config:", config);
+					this.origin = origin;
+					this.config = config;
+					this.rest.resend = config.rest.resend;
+					this.rest.urlBase += this.config.rest.url;
+					return config;
+				},
+				(err) => {
+					console.error("Can't obtain client configuration from '" + url + "'");
+					return Promise.reject(err);
+				}
+			);
+		}
+
+		/**
+		 * Realiza un login, tanto en REST como en WS
+		 * @param {Object} credentials Datos para el login
+		 */
+		login(credentials) {
+			console.log("login:", credentials);
+			return this.rest.login(this.config.rest.login, credentials).then(
+				(userId) => {
+					console.log("login: REST login OK:", userId);
+					var u = new URL(this.origin);
+					var wsURL = (u.protocol === "https:" ? "wss" : "ws") + "://" + u.host + this.config.websocket.url;
+					console.log("login: websocket URL:", wsURL);
+					return this.ws.connect({ base: wsURL, protocol: this.config.websocket.protocol, reconnect: this.config.websocket.reconnect }, credentials).then(() => {
+						return this.rest.get("/").then(
+							(schemas) => {
+								console.log("login: OK:", userId);
+								this.dao.addSchemas(schemas);
+								this.userId = userId;
+								return userId;
+							}, () => {
+								console.error("Unable to obtain schemas from server");
+								return Promise.reject("Unable to obtain schemas from server");
+							}
+						);
+					});
+				}, () => {
+					console.warn("login: Bad credentials", credentials);
+					return Promise.reject("Bad credentials");
+				}
+			);
+		}
+
+		/**
+		 * Registra un usuario. Si todo va bien realiza el login
+		 * @param {Object} userData 
+		 */
+		register(userData) {
+			console.log("register:", userData);
+			return this.rest.post(this.config.rest.register, userData).then(() => {
+				return this.login(userData);
+			});
+		}
+
+		/**
+		 * Realiza un logut, tanto en REST como WS
+		 */
+		logout() {
+			console.log("logout");
+			this.userId = null;
+			this.ws.close();
+			return this.rest.logout();
+		}
+
+		/**
+		 * Indica si el usuario tiene acceso a una sección
+		 * @param {Integer|String} section Sección (nombre o código). Asume que elementType es un staticData
+		 * @param {Function} callback Función de finalización: callback({read, write, create, delete, auth})
+		 */
+		accessSection(section, callback) {
+			//if (typeof section === "string") section = this.dao.elementType.staticData("code")[section].id
+			this.dao.system.read({ id: 0 }).then((et) => {
+				callback(et.auth.lists[section]);
+			}, () => {
+				callback({ read: false, write: false, create: false, delete: false, auth: false });
+			});
+		};
+	}
+
+	if (isNode) { // NodeJS
+		restClient = require("./rest_client").restClient;
+		wsClient = require("./ws_client").wsClient;
+		daoClient = require("./dao_client").daoClient;
+
+		exports.AppClient = AppClient;
+		exports.appClient = function (...args) { return new AppClient(...args); };
+	} else { // Browser
+		if (typeof angular !== "undefined") { // AngularJS
+			angular.module("appClient", ["restClient", "wsClient", "daoClient"]).factory("appClient", ["restClient", "wsClient", "daoClient", function (rest, ws, dao) {
+				restClient = rest;
+				wsClient = ws;
+				daoClient = dao;
+				return function () { return new AppClient(); };
+			}]);
+		} else {
+			restClient = window.restClient;
+			wsClient = window.wsClient;
+			daoClient = window.daoClient;
+			window.appClient = function (...args) { return new AppClient(...args); };
+		}
+	}
+})(typeof module !== 'undefined' &amp;&amp; module.exports);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-appServer.html">appServer</a></li><li><a href="module-config.html">config</a></li><li><a href="module-entitySchema.html">entitySchema</a></li><li><a href="module-restDoc.html">restDoc</a></li><li><a href="module-restServer.html">restServer</a></li><li><a href="module-webServer.html">webServer</a></li></ul><h3>Classes</h3><ul><li><a href="AppClient.html">AppClient</a></li><li><a href="DAOClient.html">DAOClient</a></li><li><a href="DAOElement.html">DAOElement</a></li><li><a href="DAOEntity.html">DAOEntity</a></li><li><a href="DAOEntityClient.html">DAOEntityClient</a></li><li><a href="DAOEntityServer.html">DAOEntityServer</a></li><li><a href="DAOItem.html">DAOItem</a></li><li><a href="DAOList.html">DAOList</a></li><li><a href="DAOServer.html">DAOServer</a></li><li><a href="Database.html">Database</a></li><li><a href="Evented.html">Evented</a></li><li><a href="RESTClient.html">RESTClient</a></li><li><a href="WSClient.html">WSClient</a></li><li><a href="global.html#WSServer">WSServer</a></li><li><a href="WSSession.html">WSSession</a></li></ul><h3>Events</h3><ul><li><a href="DAOEntity.html#event:create">create</a></li><li><a href="DAOEntity.html#event:delete">delete</a></li><li><a href="DAOEntity.html#event:update">update</a></li><li><a href="DAOEntityClient.html#event:create">create</a></li><li><a href="DAOEntityClient.html#event:delete">delete</a></li><li><a href="DAOEntityClient.html#event:update">update</a></li><li><a href="DAOEntityServer.html#event:create">create</a></li><li><a href="DAOEntityServer.html#event:delete">delete</a></li><li><a href="DAOEntityServer.html#event:update">update</a></li><li><a href="DAOItem.html#event:load">load</a></li><li><a href="DAOItem.html#event:load-error">load-error</a></li><li><a href="Database.html#event:connected">connected</a></li><li><a href="Database.html#event:error">error</a></li><li><a href="WSSession.html#event:close">close</a></li><li><a href="WSSession.html#event:connect">connect</a></li><li><a href="WSSession.html#event:create">create</a></li><li><a href="WSSession.html#event:disconnect">disconnect</a></li></ul><h3>Global</h3><ul><li><a href="global.html">DAOListdebug</a></li><li><a href="global.html#wsServer">wsServer</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu May 12 2022 16:39:40 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

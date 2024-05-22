@@ -1,1 +1,0 @@
-import{_ as s,c as t,o as n,a as e}from"./index-xv5I6LdW.js";const o={},a={id:"team-page"},c=e("h1",null,"Mensajes",-1),_=e("p",null,"Mi Mensajes",-1),r=[c,_];function i(d,l){return n(),t("main",a,r)}const h=s(o,[["render",i]]);export{h as default};

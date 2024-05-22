@@ -1,9 +1,11 @@
-node_modules/
 # Ignorar todo el contenido de la carpeta Memoria/
 Memoria/**
 
 # Exceptuar el archivo TFG-TFM_EPS_UA.pdf
-!Memoria/TFG-TFM_EPS_UA.pdf
-Diego/frutas.sql
+
 vue-tfg-jorge/dist/
+
+# Ignorar todo el contenido de la carpeta logs/
 logs/
+
+node_modules/

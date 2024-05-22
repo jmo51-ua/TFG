@@ -1,1 +1,0 @@
-import{_ as o,c as a,o as t,a as e}from"./index-xv5I6LdW.js";const n={},s={id:"team-page"},c=e("h1",null,"Calendario",-1),_=e("p",null,"Mi Calendario",-1),r=[c,_];function i(d,l){return t(),a("main",s,r)}const h=o(n,[["render",i]]);export{h as default};

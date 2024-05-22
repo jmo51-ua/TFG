@@ -24,6 +24,6 @@ app.dao(config, (err, dao) => {
 
 	app.server(config, dao, auth, function (err, server) {
 		if (err) return;
-		console.info(`Server started!, at http://localhost:${config.web.server.http}/`);
+		console.info("Server started!");
 	});
 });

@@ -1,0 +1,37 @@
+Estructura
+----------
+
+ * /server -> Carpeta del servidor
+ * /server/logs -> Logs del servidor
+ * /server/schemas -> Esquemas de las entidades
+ * /server/profiles -> Configuración del servidor
+ * /cliente -> Carpeta del cliente
+ * /dao -> Librería DAO (para cliente y servidor)
+ * /dao_doc -> Documentación DAO
+
+
+Requerimientos
+--------------
+
+ * NodeJS
+
+
+Instalación
+-----------
+
+Para instalar el servidor desde la carpeta principal del proyecto:
+npm install
+
+
+Configuración
+-------------
+
+ * /server/profiles/default -> Configuración del servidor (puertos, rutas...)
+ * /server/schemas -> Definición de esquemas para el acceso a entidades de la BD
+
+
+Ejecución
+---------
+
+Para lanzar el servidor, desde la carpeta del proyecto:
+node server
