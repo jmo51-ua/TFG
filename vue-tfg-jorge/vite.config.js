@@ -14,6 +14,6 @@ export default defineConfig({
     }
   },
   server: {
-    port: 8080 // PUERTO
+    port: 8081 // PUERTO
   }
 })

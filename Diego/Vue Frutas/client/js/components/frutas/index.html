@@ -1,0 +1,10 @@
+<h2>Frutas</h2>
+<ul>
+    <li v-for="fruta in frutas">
+        {{fruta.id}} - {{fruta.nombre}} ({{fruta.precio}})
+        <button @click="eliminar(fruta.id)">Eliminar</button>
+        <button @click="cambiarPrecio(fruta.id, fruta.precio + 1)">+</button>
+        <button @click="cambiarPrecio(fruta.id, fruta.precio - 1)">-</button>
+    </li>
+</ul>
+<div><input type="nombre" v-model="nombreFruta" /> <button @click="anyadir()">Añadir</button></div>

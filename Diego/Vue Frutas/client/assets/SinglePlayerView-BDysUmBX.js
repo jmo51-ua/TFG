@@ -1,0 +1,1 @@
+import{_ as a,c as r,a as t,t as n,o}from"./index-xv5I6LdW.js";const c={name:"SinglePlayerView",computed:{playerName(){return this.$route.query.player||"Unknown"}}};function l(s,p,i,_,d,e){return o(),r("div",null,[t("h1",null,"Player: "+n(e.playerName),1)])}const m=a(c,[["render",l],["__scopeId","data-v-6dc4f4be"]]);export{m as default};

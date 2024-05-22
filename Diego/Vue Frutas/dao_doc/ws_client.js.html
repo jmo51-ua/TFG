@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ws_client.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ws_client.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// Módulo para la comunicación por WebSocket (cliente)
+// Es compatible con NodeJS y Browser
+
+(function (isNode) {
+	'use strict';
+
+	var WebSocket = isNode ? require('websocket').w3cwebsocket : window.WebSocket; // API para WebSocket
+	var Evented = (isNode ? require("./evented") : window).Evented;
+	var apply = function () { }; // para compatibilidad con $scope.$apply() de AngularJS
+
+	/**
+	 * Clase que encapsula un cliente de Web Socket.&lt;br />
+	 * Compatible con NodeJS y Browser.&lt;br />
+	 * Si la conexión se pierde (evento disconnect), es capaz de reconectar y restablecer la sesión (evento connect).&lt;br />
+	 * El objeto trabaja mediante eventos:
+	 * &lt;ul>
+	 * &lt;li>emit() envia un evento al servidor.&lt;/li>
+	 * &lt;li>on() realiza una subscripción a eventos, tanto locales como remotos.&lt;/li>
+	 * &lt;li>off() elimina una subscripción a evento.&lt;/li>
+	 * &lt;/ul>
+	 * &lt;pre>
+	 * CLIENT                                       SERVER
+	 * wsClient.emit("event1", data) ---------------> wsSession.on("event1", function (data) {...});
+	 * wsClient.on("event2", function (data) {}) &lt;--- wsSession.emit("event2", data);
+	 * &lt;/pre>
+	 * @extends Evented
+	 * @emits WSClient#connect
+	 * @emits WSClient#disconnect
+	 * @emits WSClient#close
+	 */
+	class WSClient extends Evented {
+		/**
+		 * Crea un nuevo cliente de WS
+		 */
+		constructor() {
+			super(); // herencia de Evented
+
+			// Datos internos
+			this._socket = null; // socket de comunicacion
+			this._eventBuffer = []; // eventos pendientes de ser enviados (se acumulan mientras no hay conexión)
+
+			/**
+			 * Id de sesion (obtenido del servidor)
+			 * @type {integer}
+			 */
+			this.id = null;
+
+			/**
+			 * Id de usuario (obtenido del servidor)
+			 */
+			this.userId = null;
+		}
+
+		// Debug con datos de la sesion
+		debug(...args) {
+			console.log("(" + this.id + "/" + this.userId + ")", ...args);
+			return this;
+		}
+
+		// Emite un evento de forma local
+		localEmit(...args) {
+			super.emit(...args);
+			//apply();
+		}
+
+		/**
+		 * Envia un evento por WS&lt;br />
+		 * Si no se puede enviar por falta de conexión, lo almacena en un buffer para enviarlo al reconectar.&lt;br />
+		 * Si se invoca sin argumentos, intenta enviar los comandos pendientes.
+		 * @param {string} [name] Nombre del evento
+		 * @param {...*} [data] Datos del evento
+		 */
+		emit(name, ...data) {
+			if (name) {
+				this.debug(name, '>>>', ...data);
+				var c = name + JSON.stringify(data); // crear evento
+				this._eventBuffer.push(c); // almacenar
+			}
+			// vaciar buffer si hay conexión
+			while (this._eventBuffer.length &amp;&amp; this._socket &amp;&amp; this._socket.readyState === WebSocket.OPEN) {
+				this._socket.send(this._eventBuffer.shift());
+			}
+			return this;
+		};
+
+		/**
+		 * Conecta el web socket y realiza el login
+		 * @param {object} options Opciones de conexión: { base, protocol, reconnect }
+		 * @param {object} credentials Credenciales de acceso (email y password)
+		 * @returns {Promise} Promesa de finalización del proceso de conexión
+		 */
+		connect(options, credentials) {
+			return new Promise((resolve, reject) => {
+				var connect = () => {
+					if (!credentials) return;
+					this.debug('Conecting...', options);
+					this._socket = new WebSocket(options.base, options.protocol);
+
+					// Cuando se inicia la conexión damos de alta los eventos que estaban ya subscritos
+					this._socket.addEventListener('open', (event) => {
+						this.debug("Conected");
+						this._socket.send(JSON.stringify({ id: this.id, credentials })); // enviar id y credenciales
+						var link = (msg) => {
+							this._socket.removeEventListener("message", link);
+							var data = JSON.parse(msg.data);
+							this.debug("link:", data);
+							if (!data.userId) {
+								console.error('Auth incorrect:', credential);
+								this.close();
+								reject('Auth incorrect');
+							}
+							this.userId = data.userId;
+							this.id = data.id;
+							this.debug("Sesion logueada");
+							this.emit(); // por si hay eventos pendientes
+							resolve();
+							this.localEmit("connect")
+
+							// Mensajes (eventos) recibidos por el servidor
+							this._socket.addEventListener('message', (msg) => {
+								this.debug("message:", msg);
+								var x = msg.data.indexOf("[");
+								var name = msg.data.substr(0, x);
+								var data = JSON.parse(msg.data.substr(x));
+								this.debug(name, '&lt;&lt;&lt; ', ...data);
+								this.localEmit(name, ...data);
+							});
+						};
+						this._socket.addEventListener("message", link); // primer mensaje de linkado
+					});
+
+					// Detectar el cierre
+					this._socket.addEventListener('close', (reason) => {
+						this._socket = null;
+						this.debug("Socket closed. Reason:", reason);
+						this.localEmit("disconnect", reason);
+						if (options.reconnect &amp;&amp; this.id) {
+							this.debug("Reconnect in:", options.reconnect)
+							setTimeout(function () {
+								connect();
+							}, options.reconnect * 1000);
+						}
+					});
+				}
+
+				connect(); // conectar por primera vez
+			});
+		};
+
+		/**
+		 * Indica si el socket está conectado
+		 */
+		connected() {
+			return this._socket !== null;
+		}
+
+		/**
+		 * Cierra la conexión con el servidor.
+		 * @emits close
+		 */
+		close() {
+			this.debug("close");
+			this.emit("close");
+			this.localEmit("close");
+			this.id = null;
+			this.userId = null;
+			if (this._socket.readyState !== WebSocket.CLOSED) this._socket.close();
+		}
+	}
+
+	if (isNode) { // NodeJS
+		exports.WSClient = WSClient;
+		exports.wsClient = function (...args) { return new WSClient(...args); }
+	} else { // Bowser
+		if (typeof angular !== "undefined") { // AngularJS
+			angular.module("wsClient", []).factory("wsClient", function ($rootScope) {
+				apply = $rootScope.$apply.bind($rootScope);
+				return function (...args) { return new WSClient(...args); };
+			});
+		} else {
+			window.wsClient = function (...args) { return new WSClient(...args); };
+		}
+	}
+})(typeof module !== 'undefined' &amp;&amp; module.exports);</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-appServer.html">appServer</a></li><li><a href="module-config.html">config</a></li><li><a href="module-entitySchema.html">entitySchema</a></li><li><a href="module-restDoc.html">restDoc</a></li><li><a href="module-restServer.html">restServer</a></li><li><a href="module-webServer.html">webServer</a></li></ul><h3>Classes</h3><ul><li><a href="AppClient.html">AppClient</a></li><li><a href="DAOClient.html">DAOClient</a></li><li><a href="DAOElement.html">DAOElement</a></li><li><a href="DAOEntity.html">DAOEntity</a></li><li><a href="DAOEntityClient.html">DAOEntityClient</a></li><li><a href="DAOEntityServer.html">DAOEntityServer</a></li><li><a href="DAOItem.html">DAOItem</a></li><li><a href="DAOList.html">DAOList</a></li><li><a href="DAOServer.html">DAOServer</a></li><li><a href="Database.html">Database</a></li><li><a href="Evented.html">Evented</a></li><li><a href="RESTClient.html">RESTClient</a></li><li><a href="WSClient.html">WSClient</a></li><li><a href="global.html#WSServer">WSServer</a></li><li><a href="WSSession.html">WSSession</a></li></ul><h3>Events</h3><ul><li><a href="DAOEntity.html#event:create">create</a></li><li><a href="DAOEntity.html#event:delete">delete</a></li><li><a href="DAOEntity.html#event:update">update</a></li><li><a href="DAOEntityClient.html#event:create">create</a></li><li><a href="DAOEntityClient.html#event:delete">delete</a></li><li><a href="DAOEntityClient.html#event:update">update</a></li><li><a href="DAOEntityServer.html#event:create">create</a></li><li><a href="DAOEntityServer.html#event:delete">delete</a></li><li><a href="DAOEntityServer.html#event:update">update</a></li><li><a href="DAOItem.html#event:load">load</a></li><li><a href="DAOItem.html#event:load-error">load-error</a></li><li><a href="Database.html#event:connected">connected</a></li><li><a href="Database.html#event:error">error</a></li><li><a href="WSSession.html#event:close">close</a></li><li><a href="WSSession.html#event:connect">connect</a></li><li><a href="WSSession.html#event:create">create</a></li><li><a href="WSSession.html#event:disconnect">disconnect</a></li></ul><h3>Global</h3><ul><li><a href="global.html">DAOListdebug</a></li><li><a href="global.html#wsServer">wsServer</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Thu May 12 2022 16:39:40 GMT+0200 (hora de verano de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
