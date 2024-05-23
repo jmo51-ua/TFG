@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,30 +6,22 @@ const router = createRouter({
     {
       path: '/',
       name: 'Inicio',
-      component: HomeView
-    },
-    {
-      path: '/about',
-      name: 'Sobre Nosotros',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      component: () => import('../views/coach/HomeView.vue')
     },
     {
       path: '/equipo',
       name: 'Equipo',
-      component: () => import('../views/TeamView.vue')
+      component: () => import('../views/coach/TeamView.vue')
     },
     {
       path: '/stats',
       name: 'Estadísticas',
-      component: () => import('../views/StatsView.vue')
+      component: () => import('../views/coach/StatsView.vue')
     },
     {
       path: '/mensajes',
       name: 'Mensajes',
-      component: () => import('../views/MensajesView.vue')
+      component: () => import('../views/coach/MensajesView.vue')
     },
     {
       path: '/calendario',
@@ -45,7 +36,7 @@ const router = createRouter({
     {
       path: '/singleplayer',
       name: 'Jugador',
-      component: () => import('../views/SinglePlayerView.vue')
+      component: () => import('../views/coach/SinglePlayerView.vue')
     },
   ]
 })

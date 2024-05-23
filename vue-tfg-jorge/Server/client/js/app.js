@@ -19,6 +19,10 @@ function loadComponent(name) {
 const daoApp = appClient(); // crea la app del cliente. Tiene un objeto 'dao' con todas las entidades definidas en 'schemas'
 daoApp.getConfig(location.origin); // obtener configuración del servidor
 console.log('location.origin:', location.origin);
+console.log('Config DAO:', daoApp);
+console.log('Config DAO (stringified):', JSON.stringify(daoApp, null, 2));
+console.dir(daoApp, { depth: null });
+
 // App de Vue
 const vueApp = Vue.createApp({
     data: function () {

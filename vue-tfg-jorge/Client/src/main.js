@@ -12,7 +12,9 @@ const app = createApp(App);
 
 app.config.globalProperties.$app = daoApp; // acceso global a la app del DAO
 app.config.globalProperties.$dao = daoApp.dao; // acceso global al DAO
-
+  
+app.provide('app', daoApp);
+app.provide('dao', daoApp.dao);
 
 app.use(router);
 app.use(store);

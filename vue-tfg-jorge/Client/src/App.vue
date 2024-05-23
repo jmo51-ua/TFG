@@ -1,12 +1,28 @@
 <script setup>
   import Sidebar from './components/Sidebar.vue'
+  import login from './components/login.vue'
 </script>
+
 
 <template>
   <div class="app">
-    <Sidebar/>
+    <Sidebar v-if="logged"></Sidebar>
+		<login v-else></login>
   </div>
 </template>
+
+<script>
+	import { mapActions, mapGetters } from 'vuex';
+
+	export default {
+    computed: {
+      ...mapGetters(['logged']),
+    },
+    methods: {
+      ...mapActions(['actualizarLogged']),
+    },
+  };
+</script>
 
 <style>
   :root {
