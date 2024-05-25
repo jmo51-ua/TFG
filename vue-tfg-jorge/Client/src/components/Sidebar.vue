@@ -189,6 +189,10 @@
 						transform: translateX(0.5rem);
 					}
 				}
+
+				@media (max-width: 1024px) {
+					display: none;
+				}
 			}
 		}
 
@@ -281,7 +285,6 @@
 		}
 
 		@media (max-width: 1024px) {
-			position: absolute;
 			z-index: 99;
 		}
 	}
@@ -289,7 +292,7 @@
 	.main-container {
 		display: flex;
 		flex-direction: column;
-		height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+		height: 100vh;
 		background-color: #cbd5e0;
 		width: 100%;
 	}
@@ -375,11 +378,12 @@
 	}
 
 	.content {
-		flex-grow: 1; /* Asegura que el contenido ocupe el espacio restante */
+		flex-grow: 1;
 		background-color: #ffffff;
-		overflow: auto; /* Permite el desplazamiento si el contenido es más grande */
+		overflow-y: auto;
 		display: flex;
 		justify-content: center;
+		box-sizing: border-box;
 	}
 	
 </style>

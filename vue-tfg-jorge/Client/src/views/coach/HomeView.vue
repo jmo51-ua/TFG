@@ -72,6 +72,7 @@
       <div class="block-title">
         Calendario
       </div>
+      
     </div>
   </div>
 </template>
@@ -82,10 +83,10 @@
     data() {
       return {
         listItems: [
-          { image: 'https://via.placeholder.com/50', name: 'C. Ronaldo - 39 yo - DC', number: '9', avg: 74 },
-          { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
-          { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
-          { image: 'https://via.placeholder.com/50', name: 'J. Bellingham - 20 yo - MCO', number: '12', avg: 86 },
+          { image: 'https://via.placeholder.com/50', name: 'C. Ronaldo', age: 39, position: 'DC', number: '9', avg: 74 },
+          { image: 'https://via.placeholder.com/50', name: 'J. Bellingham', age: 20, position: 'MCO', number: '12', avg: 86 },
+          { image: 'https://via.placeholder.com/50', name: 'Javier', age: 20, position: 'DC', number: '12', avg: 86 },
+          { image: 'https://via.placeholder.com/50', name: 'Jorge Moreno', age: 22, position: 'MC',number: '12', avg: 86 },
           // elementos de la DB
         ],
         listStats: [
@@ -264,6 +265,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    min-height: 250px;
   }
   .block2 {
     grid-area: block2;
@@ -271,6 +273,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    min-height: 250px;
   }
   .block3 {
     grid-area: block3;

@@ -1,8 +1,0 @@
-{
-	"name": "test",
-	"web": {
-		"rest": {
-			"authorization": "none"
-		}
-	}
-}
