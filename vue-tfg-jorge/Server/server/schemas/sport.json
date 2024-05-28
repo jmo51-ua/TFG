@@ -1,0 +1,12 @@
+{
+	"title": "Sport",
+	"description": "Deportes",
+	"properties": {
+		"idSport": "#",
+		"name": "@string",
+		"description": "@string"
+	},
+	"table": "Sport",
+	"urlList": "/sport",
+	"urlItem": "/sport/:idSport"
+}

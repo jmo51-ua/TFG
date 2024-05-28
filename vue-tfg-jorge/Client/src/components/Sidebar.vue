@@ -60,7 +60,7 @@
 		<div class="main-container">
 			<div class="header-container">
 				<div class="header-sidebar">
-					<span class="nombre-equipo">TFG FC</span>
+					<span class="nombre-equipo">{{ teamSelectedName }}</span>
 					<span class="nombre-vista">{{ viewName }}</span>
 					<div class="usuario-info">
 						<!--NOMBRE USUARIO-->
@@ -119,11 +119,13 @@
 	export default {
 		data() {
 			return {
-				selectedModo: this.modo // Inicializar con el valor del estado de Vuex
+				selectedModo: this.modo // Inicializado
 			};
 		},
 		computed: {
-			...mapGetters(['modo'])
+			...mapGetters(['modo']),
+			...mapGetters(['teamSelectedID']),
+			...mapGetters(['teamSelectedName']),
 		},
 		watch: {
 			modo(newModo) {

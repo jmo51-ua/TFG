@@ -1,0 +1,18 @@
+{
+	"title": "actor",
+	"description": "Información de un actor",
+	"properties": {
+		"idActor": "#",
+		"dni": "@string",
+        "name": "@string",
+        "surname": "@string",
+        "photo": "@blob",
+        "birth": "@datetime",
+        "phoneNumber": "@int",
+        "address": "@string",
+		"User_idUser": "@int !"
+	},
+	"table": "actor",
+	"urlList": "/actor",
+	"urlItem": "/actor/:idActor"
+}

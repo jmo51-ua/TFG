@@ -1,0 +1,31 @@
+{
+	"title": "Element",
+	"description": "Element with ACL",
+	"properties": {
+		"id": "#",
+		"creation_time": "@datetime",
+		"creator": "@integer",
+		"owner": "@integer"
+	},
+	"lists": {
+		"aclElement": {
+			"type": "aclElement",
+			"params": {
+				"element": "id"
+			}
+		},
+		"aclType": {
+			"type": "aclType",
+			"params": {
+				"element": "id"
+			}
+		},
+		"aclList": {
+			"type": "aclList",
+			"params": {
+				"element": "id"
+			}
+		}
+	},
+	"table": "element"
+}

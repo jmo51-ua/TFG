@@ -1,0 +1,14 @@
+{
+	"title": "actor_has_actortype",
+	"description": "Tipo de un actor",
+	"properties": {
+		"Actor_idActor": "@int !",
+		"ActorType_idActorType": "@int !",
+        "Organization_has_Category_Organization_idOrganization": "@int !",
+        "Organization_has_Category_Category_idCategory": "@int !",
+        "Organization_has_Category_type": "@string !"
+	},
+	"table": "actor_has_actortype",
+	"urlList": "/actor_actortype",
+	"urlItem": "/actor_actortype/:Actor_idActor/:ActorType_idActorType"
+}

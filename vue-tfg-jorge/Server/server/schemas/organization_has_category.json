@@ -1,0 +1,13 @@
+{
+	"title": "Organization_has_category",
+	"description": "Categorías de una organización o equipos",
+	"properties": {
+		"Organization_idOrganization": "@int !",
+        "Category_idCategory": "@int !",
+        "type": "@string !",
+        "name": "@string"
+	},
+	"table": "organization_has_category",
+	"urlList": "/organization_has_category",
+	"urlItem": "/organization_has_category/:Organization_idOrganization/:Category_idCategory/:type"
+}

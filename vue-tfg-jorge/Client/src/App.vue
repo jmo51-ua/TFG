@@ -1,13 +1,15 @@
 <script setup>
   import Sidebar from './components/Sidebar.vue'
-  import login from './components/login.vue'
+  import Login from './components/login.vue'
+  import TeamSelectionView from './components/TeamSelectionView.vue'
 </script>
 
 
 <template>
   <div class="app">
-    <Sidebar v-if="logged"></Sidebar>
-		<login v-else></login>
+    <Sidebar v-if="logged && teamSelectedID"></Sidebar>
+    <TeamSelectionView v-else-if="logged && !teamSelectedID"></TeamSelectionView>
+    <Login v-else></Login>
   </div>
 </template>
 
@@ -17,6 +19,8 @@
 	export default {
     computed: {
       ...mapGetters(['logged']),
+      ...mapGetters(['teamSelectedID']),
+      ...mapGetters(['teamSelectedName']),
     },
     methods: {
       ...mapActions(['actualizarLogged']),

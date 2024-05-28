@@ -1,0 +1,35 @@
+{
+	"title": "User",
+	"description": "System user",
+	"properties": {
+		"userId": ".userId ~ =entity.id",
+		"email": "@string !",
+		"nick": "@string",
+		"password": "@password",
+		"image": "@blob"
+	},
+	"lists": {
+		"groups": {
+			"type": "userGroup",
+			"params": {
+				"user": "id"
+			}
+		},
+		"actor":{
+			"type": "actor",
+			"params":{
+				"User_idUser": "id"
+			}
+		}
+	},
+	"table": "user",
+	"extends": "entity",
+	"urlList": "/user",
+	"urlItem": "/user/:userId"
+}
+
+
+
+
+
+

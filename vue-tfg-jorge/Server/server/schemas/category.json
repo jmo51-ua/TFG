@@ -1,0 +1,15 @@
+{
+	"title": "Category",
+	"description": "Categorias de un deporte",
+	"properties": {
+		"idCategory": "#",
+		"name": "@string",
+        "gender": "@string",
+        "duration": "@int",
+		"Sport_idSport": "@int !",
+		"order": "@int"
+	},
+	"table": "Category",
+	"urlList": "/category",
+	"urlItem": "/category/:idCategory"
+}

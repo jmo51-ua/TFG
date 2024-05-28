@@ -1,0 +1,14 @@
+{
+	"title": "KPI",
+	"description": "KPIs de un resultado de aprendizaje",
+	"properties": {
+		"idKPI": "#",
+		"LearningOutcoming_idLearningOutcoming": "@int !",
+        "name": "@string",
+        "description": "@string",
+		"range": "@int "
+	},
+	"table": "Kpi",
+	"urlList": "/kpi",
+	"urlItem": "/kpi/:idKPI"
+}

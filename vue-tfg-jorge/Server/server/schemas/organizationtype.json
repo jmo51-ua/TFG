@@ -1,0 +1,11 @@
+{
+	"title": "Organizationtype",
+	"description": "Tipos de organización",
+	"properties": {
+		"idOrganizationType": "#",
+        "name": "@int"
+	},
+	"table": "Organizationtype",
+	"urlList": "/organizationtype",
+	"urlItem": "/organizationtype/:idOrganizationType"
+}

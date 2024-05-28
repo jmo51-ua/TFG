@@ -1,0 +1,11 @@
+{
+	"title": "LearninngType",
+	"description": "Tipos de resultados de aprendizaje",
+	"properties": {
+		"idLearninngType": "#",
+		"name": "@string"
+	},
+	"table": "LearninngType",
+	"urlList": "/learninngtype",
+	"urlItem": "/learninngtype/:idLearninngType"
+}

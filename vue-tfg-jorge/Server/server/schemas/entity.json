@@ -1,0 +1,11 @@
+{
+	"title": "Entity",
+	"description": "Entity of the system (User, Group, Organization)",
+	"properties": {
+		"entityId": ".id ~ =element.id",
+		"name": "!",
+		"image": "@image"
+	},
+	"table": "entity",
+	"extends": "element"
+}

@@ -1,0 +1,17 @@
+{
+	"title": "Organization",
+	"description": "Organization",
+	"properties": {
+		"idOrganization": "#",
+		"OrganizationType_idOrganizationType": "@int !",
+		"name": "@string ",
+		"description": "@string ",
+		"responsible": "@string ",
+		"cif": "@string ",
+		"adress": "@string ",
+		"phone": "@string "
+	},
+	"table": "Organization",
+	"urlList": "/org",
+	"urlItem": "/org/:idOrganization"
+}

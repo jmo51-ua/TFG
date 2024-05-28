@@ -7,19 +7,19 @@
       </div>
       <div class="list-container">
         <router-link
-          v-for="(item, index) in listItems"
+          v-for="(item, index) in actoresCompletos"
           :key="index"
           :to="{ path: '/singleplayer', query: { player: item.name } }"
           class="list-item-link"
         >
-          <div class="list-item">
-            <img :src="item.image" alt="Profile" class="profile-pic" />
+          <div class="list-item player-item">
+            <img :src="item.photo || 'https://ui-avatars.com/api/?name=Default&size=50'" alt="Foto-perfil" class="profile-pic" />
             <div class="item-details">
-              <div class="name number">{{ item.name }} - Dorsal: {{ item.number }}</div>
+              <div class="name number">{{ item.name }} {{ item.surname }}</div>
             </div>
-            <div :style="{ backgroundColor: calculateColor(item.avg), color: getTextColor(item.avg) }" class="avg">
+            <!-- <div :style="{ backgroundColor: calculateColor(item.avg), color: getTextColor(item.avg) }" class="avg">
               {{ item.avg }}%
-            </div>
+            </div> -->
           </div>
         </router-link>
       </div>
@@ -31,7 +31,7 @@
       </div>
       <div class="list-container">
         <router-link
-          v-for="(item, index) in listStats"
+          v-for="(item, index) in jugadoresKPIs"
           :key="index"
           :to="{ path: '/singleplayer', query: { player: item.name } }"
           class="list-item-link"
@@ -52,7 +52,7 @@
     </div>
     <div class="block block3">
       <div class="block-title">
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="m160-419 101-101-101-101L59-520l101 101Zm540-21 100-160 100 160H700Zm-220-40q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T600-600q0 50-34.5 85T480-480Zm0-160q-17 0-28.5 11.5T440-600q0 17 11.5 28.5T480-560q17 0 28.5-11.5T520-600q0-17-11.5-28.5T480-640Zm0 40ZM0-240v-63q0-44 44.5-70.5T160-400q13 0 25 .5t23 2.5q-14 20-21 43t-7 49v65H0Zm240 0v-65q0-65 66.5-105T480-450q108 0 174 40t66 105v65H240Zm560-160q72 0 116 26.5t44 70.5v63H780v-65q0-26-6.5-49T754-397q11-2 22.5-2.5t23.5-.5Zm-320 30q-57 0-102 15t-53 35h311q-9-20-53.5-35T480-370Zm0 50Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M350-63q-46 0-82.5-24T211-153q-16 21-40.5 32.5T120-109q-51 0-85.5-35T0-229q0-43 28-77.5T99-346q-14-20-21.5-42.5T70-436q0-40 20.5-75t57.5-57q5 18 13.5 38.5T181-494q-14 11-22 26.5t-8 32.5q0 56 46 69t87 21l19 32q-11 32-19 54.5t-8 40.5q0 30 21.5 52.5T350-143q38 0 63-34t41-80q16-46 24.5-93t13.5-72l78 21q-9 45-22 103t-36.5 110.5Q488-135 449.5-99T350-63ZM120-189q17 0 28.5-11.5T160-229q0-17-11.5-28.5T120-269q-17 0-28.5 11.5T80-229q0 17 11.5 28.5T120-189Zm284-158q-46-41-83.5-76.5t-64.5-69q-27-33.5-41.5-67T200-629q0-65 44.5-109.5T354-783q4 0 7 .5t7 .5q-4-10-6-20t-2-21q0-50 35-85t85-35q50 0 85 35t35 85q0 11-2 20.5t-6 19.5h14q60 0 102 38.5t50 95.5q-18-3-40.5-3t-41.5 2q-7-23-25.5-38T606-703q-35 0-54.5 20.5T498-623h-37q-35-41-54.5-60.5T354-703q-32 0-53 21t-21 53q0 23 13 47.5t36.5 52q23.5 27.5 57 58.5t74.5 67l-57 57Zm76-436q17 0 28.5-11.5T520-823q0-17-11.5-28.5T480-863q-17 0-28.5 11.5T440-823q0 17 11.5 28.5T480-783ZM609-63q-22 0-43.5-6T524-88q11-14 22-33t20-35q11 7 22 10t22 3q32 0 53.5-22.5T685-219q0-19-8-41t-19-54l19-32q42-8 87.5-21t45.5-69q0-40-29.5-58T716-512q-42 0-98 16t-131 41l-21-78q78-25 139-42t112-17q69 0 121 41t52 115q0 25-7.5 47.5T861-346q43 5 71 39.5t28 77.5q0 50-34.5 85T840-109q-26 0-50.5-11.5T749-153q-20 42-56.5 66T609-63Zm232-126q17 0 28-11.5t11-28.5q0-17-11.5-29T840-270q-17 0-28.5 11.5T800-230q0 17 12 29t29 12Zm-721-40Zm360-594Zm360 593Z"/></svg>
         Mis otros equipos
       </div>
     </div>
@@ -70,6 +70,7 @@
     </div>
     <div class="block block6">
       <div class="block-title">
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-160 0q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm320 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-160 0q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm320 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z"/></svg>
         Calendario
       </div>
       
@@ -78,36 +79,43 @@
 </template>
 
 <script>
+  import { inject } from 'vue';
+  import { mapGetters } from 'vuex';
+
   export default {
     name: 'HomeView',
     data() {
       return {
-        listItems: [
-          { image: 'https://via.placeholder.com/50', name: 'C. Ronaldo', age: 39, position: 'DC', number: '9', avg: 74 },
-          { image: 'https://via.placeholder.com/50', name: 'J. Bellingham', age: 20, position: 'MCO', number: '12', avg: 86 },
-          { image: 'https://via.placeholder.com/50', name: 'Javier', age: 20, position: 'DC', number: '12', avg: 86 },
-          { image: 'https://via.placeholder.com/50', name: 'Jorge Moreno', age: 22, position: 'MC',number: '12', avg: 86 },
-          // elementos de la DB
-        ],
+        actores: [],
+        actorIds: [],
+        actoresCompletos: [],
+
+        jugadoresKPIs: [],
         listStats: [
           { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '41%', target:'90%' },
           { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4', target:'2.1' },
           { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '61%', target:'100%' },
           { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4', target:'3.0' },
-          // elementos de la DB
         ]
       };
+    },
+    computed: {
+      ...mapGetters(['teamSelectedID']),
+      ...mapGetters(['teamSelectedName']),
+    },
+    setup() {
+      const app = inject('app');
+      const dao = inject('dao');
+      return { app, dao };
     },
     methods: {
       calculateColor(value,) {
         let red, green;
 
         if (value < 50) {
-          // Red to Yellow (255, 0, 0) to (255, 255, 0)
           red = 255;
           green = Math.round(255 * (value / 50));
         } else {
-          // Yellow to Green (255, 255, 0) to (0, 255, 0)
           red = Math.round(255 * ((100 - value) / 50));
           green = 255;
         }
@@ -117,33 +125,90 @@
       getTextColor(value) {
         return value > 49 ? '#000000' : '#FFFFFF';
       },
+      getColorForPercentage(pct) {
+        var percentColors = [
+          { pct: 0.0, color: { r: 0xff, g: 0x00, b: 0 } },
+          { pct: 0.5, color: { r: 0xff, g: 0xff, b: 0 } },
+          { pct: 1.0, color: { r: 0x00, g: 0xff, b: 0 } }
+        ];
+        for (var i = 1; i < percentColors.length - 1; i++) {
+            if (pct < percentColors[i].pct) {
+                break;
+            }
+        }
+        var lower = percentColors[i - 1];
+        var upper = percentColors[i];
+        var range = upper.pct - lower.pct;
+        var rangePct = (pct - lower.pct) / range;
+        var pctLower = 1 - rangePct;
+        var pctUpper = rangePct;
+        var color = {
+            r: Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+            g: Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+            b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+        };
+        return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
+        // or output as hex if preferred
+      },
       calculateColorKPI(score, target) {
-        // Extraer valores numéricos de las cadenas
         const scoreValue = parseFloat(score.replace('%', ''));
         const targetValue = parseFloat(target.replace('%', ''));
 
-        let red, green;
+        const ratio = scoreValue / targetValue;
 
-        // Si el valor es menor que el objetivo
-        if (scoreValue < targetValue) {
-          // Red to Yellow (255, 0, 0) to (255, 255, 0)
-          red = 255;
-          green = Math.round(255 * (scoreValue / targetValue));
-        } else {
-          // Yellow to Green (255, 255, 0) to (0, 255, 0)
-          red = Math.round(255 * ((2 * targetValue - scoreValue) / targetValue));
-          green = 255;
-        }
-
-        return `rgb(${red}, ${green}, 0)`;
+        return this.getColorForPercentage(ratio);
       },
       getTextColorKPI(score, target) {
         const scoreValue = parseFloat(score.replace('%', ''));
         const targetValue = parseFloat(target.replace('%', ''));
 
+        let red, green;
 
-        return scoreValue > targetValue ? '#000000' : '#FFFFFF';
-      }
+        if (scoreValue <= targetValue) {
+          const ratio = scoreValue / targetValue;
+          red = 255;
+          green = Math.round(255 * ratio);
+        } else {
+          const ratio = (scoreValue - targetValue) / (100 - targetValue);
+          red = Math.round(255 * (1 - ratio));
+          green = 255;
+        }
+
+        const brightness = (red * 299 + green * 587 + 0 * 114) / 1000;
+
+        return brightness > 128 ? '#000000' : '#FFFFFF';
+      },
+      cargarJugadores() {
+        if (!this.teamSelectedID) {
+          console.error('No team selected');
+          return;
+        }
+
+       //! FALLA EL FILTRO ?¿?¿¿?¿
+        this.dao.actor_has_actortype.read().then((response) => {
+          // ActorType_idActorType = 2
+          this.actores = response.filter(actor =>
+            actor.ActorType_idActorType === 2 &&
+            actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
+          );
+          this.actorIds = this.actores.map(actor => actor.Actor_idActor);
+          //console.log('Actores con Actor Type 2:', this.actores);
+
+          // 2a consulta
+          this.cargarDatosCompletosJugadores();
+        });
+      },
+      cargarDatosCompletosJugadores() {
+        const promises = this.actorIds.map(id => this.dao.actor.read({ idActor: id }));
+        Promise.all(promises).then((responses) => {
+          this.actoresCompletos = responses;
+          console.log('Datos completos de los actores:', this.actoresCompletos);
+        });
+      },
+    },
+    created() {
+      this.cargarJugadores();
+
     }
   }
 </script>
@@ -223,9 +288,13 @@
     color: #000;
     border-radius: 5px;
     border: 1px solid grey;
-    justify-content: space-between;
     transition: background-color 0.3s;
   }
+
+  .player-item {
+    width: 100%; /* Make sure it takes the full width */
+  }
+
 
   .list-item:hover {
     background-color: #f0f0f0; /* Cambia el color de fondo al pasar el ratón */
@@ -298,7 +367,7 @@
     justify-content: center;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 800px) {
     .grid-container {
       grid-template-areas:
         "block1"
@@ -309,6 +378,10 @@
         "block6";
       grid-template-columns: 1fr;
       grid-template-rows: auto;
+    }
+
+    .block1{
+      display: none;
     }
   }
 </style>

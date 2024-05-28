@@ -1,0 +1,22 @@
+{
+	"title": "LearningOutcoming",
+	"description": "Resultados de aprendizaje",
+	"properties": {
+		"idLearningOutcoming": "#",
+		"LearninngType_idLearninngType": "@int !",
+		"name": "@string ",
+		"description": "@string "
+
+	},
+	"lists": {
+		"learningOutcoming_has_variable": {
+			"type": "learningoutcoming_has_variable",
+			"params": {
+				"LearningOutcoming_idLearningOutcoming": "idLearningOutcoming"
+			}
+		}
+	},
+	"table": "LearningOutcoming",
+	"urlList": "/learningoutcoming",
+	"urlItem": "/learningoutcoming/:idLearningOutcoming"
+}

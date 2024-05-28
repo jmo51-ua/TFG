@@ -18,16 +18,31 @@
 		</button>
 	  </div>
   
-	  <div class="row">
-		<div class="chart" v-for="(chart, index) in charts" :key="index">
-		  <img :src="chart" alt="Chart Image">
+		<div class="row">
+			<div class="chart" v-for="(chart, index) in charts" :key="index">
+				<img :src="chart" alt="Chart Image">
+			</div>
+			<div class="chart">
+				<button class="add-chart-button button" @click="addChart">
+					Añadir nuevo registro
+				</button>
+			</div>
 		</div>
-		<div class="chart">
-			<button class="add-chart-button button" @click="addChart">
-				Añadir nuevo registro
-			</button>
+
+		<div class="create-kpi" v-if="showCreateKpiForm">
+			<form @submit.prevent="createKpi" class="kpi-form">
+				<label for="name">Nombre del KPI:</label>
+				<input type="text" id="name" v-model="newKpi.name" required>
+				
+				<label for="description">Descripción:</label>
+				<input type="text" id="description" v-model="newKpi.description" required>
+				
+				<label for="target">Objetivo (%):</label>
+				<input type="number" min="1" max="100" id="target" v-model="newKpi.target" required>
+				
+				<button type="submit">Crear KPI</button>
+			</form>
 		</div>
-	  </div>
 	</main>
 </template>
   
@@ -43,12 +58,24 @@
 		  'https://via.placeholder.com/300',
 		  'https://via.placeholder.com/300',
 		  'https://via.placeholder.com/300',
-		]
+		],
+		showCreateKpiForm: false,
+		newKpi: {
+			name: '',
+			description: '',
+			target: ''
+		}
 	  };
 	},
 	methods: {
 		addChart() {
-			// Lógica para añadir una nueva gráfica
+			//nueva gráfica
+			//this.charts.push('https://via.placeholder.com/300');
+			this.showCreateKpiForm = true;
+		},
+		createKpi() {
+			console.log('Nuevo KPI:', this.newKpi);
+			this.showCreateKpiForm = false; // Ocultar el formulario
 			this.charts.push('https://via.placeholder.com/300');
 		}
 	}
@@ -166,6 +193,45 @@
 
 	.button:hover::before {
 		opacity: 1;
+	}
+
+	.create-kpi {
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		background-color: white;
+		padding: 20px;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		border-radius: 10px;
+	}
+
+	.kpi-form {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.kpi-form label {
+		margin-bottom: 5px;
+	}
+
+	.kpi-form input {
+		margin-bottom: 15px;
+		padding: 5px;
+		font-size: 16px;
+	}
+
+	.kpi-form button {
+		padding: 10px 20px;
+		font-size: 16px;
+		background-color: #4CAF50;
+		color: white;
+		border: none;
+		cursor: pointer;
+	}
+
+	.kpi-form button:hover {
+		background-color: #45a049;
 	}
 
 	@media (max-width: 600px) {

@@ -64,7 +64,7 @@
 	},
 	"database": {
 		"connection": {
-			"database": "frutas",
+			"database": "tfg",
 			"host": "localhost",
 			"user": "root",
 			"password": "root",

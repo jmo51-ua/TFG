@@ -1,0 +1,10 @@
+{
+	"title": "actortype",
+	"description": "Tipo de actor",
+	"properties": {
+		"idActorType": "#"
+	},
+	"table": "actortype",
+	"urlList": "/actortype",
+	"urlItem": "/actortype/:idActorType"
+}
