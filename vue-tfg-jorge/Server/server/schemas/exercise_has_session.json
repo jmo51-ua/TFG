@@ -1,0 +1,29 @@
+{
+	"title": "exercise_has_session",
+	"description": "Ejercicios de una sesion",
+	"properties": {
+		"Exercise_idExercise": "@int !",
+        "Session_idSession": "@int !",
+        "Organization_has_Category_Organization_idOrganization": "@int !",
+        "Organization_has_Category_Category_idCategory": "@int !",
+        "Organization_has_Category_type": "@string !"
+	},
+	"lists": {
+		"organization_has_category": {
+			"type": "organization_has_category",
+			"params": {
+				"Organization_idOrganization": "Organization_has_Category_Organization_idOrganization",
+				"Category_idCategory":"Organization_has_Category_Category_idCategory",
+				"type":"Organization_has_Category_type"
+			}
+		},"exercise": {
+			"type": "exercise",
+			"params": {
+				"idExercise": "Exercise_idExercise"
+			}
+		}
+	},
+	"table": "exercise_has_session",
+	"urlList": "/exercise_session",
+    "urlItem": "/exercise_session/:Exercise_idExercise"
+}

@@ -1,0 +1,11 @@
+{
+	"title": "Skill_has_learningOutcoming",
+	"description": "Resultados de aprendizaje de una competencia",
+	"properties": {
+		"Skill_idSkill": "@int !",
+		"LearningOutcoming_idLearningOutcoming": "@int !"
+	},
+	"table": "Skill_has_learningOutcoming",
+	"urlList": "/skill_has_learningOutcoming",
+	"urlItem": "/skill_has_learningOutcoming/:Skill_idSkill/:LearningOutcoming_idLearningOutcoming"
+}

@@ -1,0 +1,13 @@
+{
+	"title": "Skill",
+	"description": "Competencias de un nivel",
+	"properties": {
+		"idSkill": "#",
+		"Level_idLevel": "@int !",
+		"name": "@string",
+		"description": "@string"
+	},
+	"table": "Skill",
+	"urlList": "/skill",
+	"urlItem": "/skill/:idSkill"
+}

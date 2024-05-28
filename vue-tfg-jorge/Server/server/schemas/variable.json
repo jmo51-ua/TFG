@@ -1,0 +1,15 @@
+{
+	"title": "Variable",
+	"description": "Variables de los KPIs",
+	"properties": {
+		"idVariable": "#",
+		"name": "@string",
+        "description": "@string",
+        "KPI_idKPI": "@int !",
+        "KPI_LearningOutcoming_idLearningOutcoming": "@int !",
+		"type" : "@int !"       
+	},
+	"table": "Variable",
+	"urlList": "/variable",
+	"urlItem": "/variable/:idVariable"
+}

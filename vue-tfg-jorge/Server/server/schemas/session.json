@@ -1,0 +1,23 @@
+{
+	"title": "session",
+	"description": "Sesiones de una organizacion",
+	"properties": {
+		"idSession": "#",
+        "Actor_idActor": "@int !",
+        "name": "@string",
+        "date": "@datetime",
+        "time": "@time",
+        "duration": "@int"
+	},
+	"lists": {
+		"exercise_has_session": {
+			"type": "exercise_has_session",
+			"params": {
+				"Session_idSession": "idSession"
+			}
+		}
+	},
+	"table": "session",
+	"urlList": "/session",
+    "urlItem": "/session/:idSession"
+}

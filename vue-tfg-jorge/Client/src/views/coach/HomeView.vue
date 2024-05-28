@@ -9,7 +9,7 @@
         <router-link
           v-for="(item, index) in actoresCompletos"
           :key="index"
-          :to="{ path: '/singleplayer', query: { player: item.name } }"
+          :to="{ path: '/singleplayer', query: { player: item.name, idActor: item.idActor } }"
           class="list-item-link"
         >
           <div class="list-item player-item">
@@ -74,6 +74,17 @@
         Calendario
       </div>
       
+      <div class="calendar-container">
+        <vue-cal
+          active-view="month"
+          :events="events"
+          @cell-click="onCellClick"
+          @event-click="onEventClick"
+          class="vue-cal-custom"
+          :locale="es"
+          style="width: 270px;">
+        </vue-cal>
+      </div>
     </div>
   </div>
 </template>
@@ -81,22 +92,58 @@
 <script>
   import { inject } from 'vue';
   import { mapGetters } from 'vuex';
+  import VueCal from 'vue-cal';
+  import 'vue-cal/dist/vuecal.css';
 
   export default {
     name: 'HomeView',
+    components: {
+      VueCal,
+    },
     data() {
       return {
         actores: [],
         actorIds: [],
         actoresCompletos: [],
-
+        sessions: [],
         jugadoresKPIs: [],
         listStats: [
           { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '41%', target:'90%' },
           { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4', target:'2.1' },
           { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '61%', target:'100%' },
           { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4', target:'3.0' },
-        ]
+        ],
+
+        //VUE CALENDAR
+        events: [
+          {
+            start: '2024-05-30 10:35',
+            end: '2024-05-30 11:30',
+            title: 'Doctor appointment'
+          },
+          {
+            start: '2024-05-30 18:30',
+            end: '2024-05-30 20:15',
+            title: 'Dentist appointment',
+            background: true
+          },
+        ],
+        es : {
+          "weekDays": ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
+          "weekDaysShort": ["L", "M", "X", "J", "V", "S", "D"],
+          "months": ["Enero", "Febero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+          "years": "Años",
+          "year": "Año",
+          "month": "Mes",
+          "week": "Semana",
+          "day": "Día",
+          "today": "Hoy",
+          "noEvent": "Sin eventos",
+          "allDay": "Todo el día",
+          "deleteEvent": "Borrar evento",
+          "createEvent": "Crear evento",
+          "dateFormat": "dddd MMMM YYYY"
+        }
       };
     },
     computed: {
@@ -205,10 +252,45 @@
           console.log('Datos completos de los actores:', this.actoresCompletos);
         });
       },
+      cargarSesiones(){
+        this.dao.session.read().then((response) => {
+          console.info('Respuesta del servidor: ',response);
+          
+          /* { FORMATO
+            start: '2024-11-19 10:35',
+            end: '2024-11-19 11:30',
+            title: 'Doctor appointment'
+          }, */
+
+          this.sessions = response
+          .filter(sesion => sesion.date != null)
+          .map(sesion => ({
+            start: new Date(sesion.date),
+            end: new Date(new Date(sesion.date).getTime() + (sesion.duration * 60000)),
+            title: sesion.name
+          }));
+
+          console.log('Sesiones filtradas y convertidas:', this.sessions);
+        });
+      },
+      calculateEndTime(startTime, duration) {
+        var [hours, minutes] = [0, 0];
+        if(startTime != null){
+          [hours, minutes] = startTime.split(':').map(Number);
+        }
+        const endDate = new Date(0, 0, 0, hours, minutes + duration);
+        return endDate.toTimeString().split(' ')[0];
+      },
+      onCellClick({ startDate, endDate }) {
+        console.log(`Clicked on cell from ${startDate} to ${endDate}`);
+      },
+      onEventClick(event) {
+        console.log(`Clicked on event: ${event.title}`);
+      },
     },
     created() {
       this.cargarJugadores();
-
+      this.cargarSesiones();
     }
   }
 </script>
@@ -223,19 +305,19 @@
     grid-template-columns: 2fr 2fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     gap: 30px;
-    height: calc(100vh - 50px); /* Ajusta la altura según el espacio disponible */
+    height: calc(100vh - 50px); /* Altura por espacio disponible */
     width: 90%;
     padding: 40px;
     box-sizing: border-box;
-    overflow: hidden; /* Permitir el desplazamiento si el contenido se desborda */
   }
 
   .block {
     background-color: #ffffff;
     color: rgb(0, 0, 0);
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     font-weight: bold;
     padding: 20px;
     box-sizing: border-box;
@@ -263,20 +345,16 @@
     max-height: 100%;
   }
 
-  .block6{
-    min-height: 100%;
-  }
-
   .list-container {
     width: 100%;
     height: 100%;
-    overflow-y: auto; /* Asegura que haya una barra de desplazamiento dentro del contenedor */
-    padding-right: 10px; /* Añadir padding para que la barra de desplazamiento no cubra el contenido */
+    overflow-y: auto;
+    padding-right: 10px;
     box-sizing: border-box;
   }
  
   .list-item-link {
-    text-decoration: none; /* Quita el subrayado de los enlaces */
+    text-decoration: none;
   }
 
   .list-item {
@@ -292,12 +370,12 @@
   }
 
   .player-item {
-    width: 100%; /* Make sure it takes the full width */
+    width: 100%;
   }
 
 
   .list-item:hover {
-    background-color: #f0f0f0; /* Cambia el color de fondo al pasar el ratón */
+    background-color: #f0f0f0;
   }
 
   .avg {
@@ -317,7 +395,7 @@
 
   .item-details {
     display: flex;
-    flex-direction: row; /* Mantiene los elementos en fila */
+    flex-direction: row;
   }
 
   .name {
@@ -328,9 +406,21 @@
     color: #000000;
   }
 
+  .vue-cal-custom {
+    max-width: 100%;
+    height: 600px;
+  }
+  .calendar-container {
+    width: 100%;
+    flex-grow: 1;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+  }
+
   .block1{
     grid-area: block1;
-    max-height: 100%; /* Mantiene la altura máxima */
+    max-height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -338,7 +428,7 @@
   }
   .block2 {
     grid-area: block2;
-    max-height: 100%; /* Mantiene la altura máxima */
+    max-height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -346,25 +436,26 @@
   }
   .block3 {
     grid-area: block3;
-    max-height: 100%; /* Mantiene la altura máxima */
+    max-height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
   .block4 {
     grid-area: block4;
-    max-height: 100%; /* Mantiene la altura máxima */
+    min-height: 250px;
+    max-height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
   .block5 { grid-area: block5; }
-  .block6 { 
-    grid-area: block6; 
-    min-height: 100px; /* Ajusta esta altura mínima según tus necesidades */
+  .block6 {
+    grid-area: block6;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   @media (max-width: 800px) {
@@ -378,10 +469,6 @@
         "block6";
       grid-template-columns: 1fr;
       grid-template-rows: auto;
-    }
-
-    .block1{
-      display: none;
     }
   }
 </style>

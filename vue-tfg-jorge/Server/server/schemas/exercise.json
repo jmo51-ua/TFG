@@ -1,0 +1,20 @@
+{
+	"title": "exercise",
+	"description": "Ejercicios de una organizacion",
+	"properties": {
+		"idExercise": "#",
+        "Activity_idActivity": "@int !",
+        "defaultTime": "@int",
+        "name": "@string"
+	},"lists": {
+		"activity": {
+			"type": "activity",
+			"params": {
+				"idActivity": "Activity_idActivity"
+			}
+		}
+	},
+	"table": "exercise",
+	"urlList": "/exercise",
+    "urlItem": "/exercise/:idExercise"
+}

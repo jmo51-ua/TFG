@@ -3,15 +3,13 @@
   <div class="grid-container">
     <div class="block player-info-container">
       <div class="player-pic">
-        <img :src="player_info.image" alt="Player Picture">
+        <img :src="informacion_jugador.photo || 'https://placehold.co/200x250'" alt="Player Picture">
         <h3 class="player-name">{{ playerName }}</h3>
       </div>
       <div class="player-data">
-        <p class="player-data-line"><b>Fecha de nacimiento: </b>{{ player_info.birth_date }}</p>
-        <p class="player-data-line"><b>Posición: </b>{{ player_info.position }}</p>
-        <p class="player-data-line"><b>Altura: </b>{{ player_info.height }}</p>
-        <p class="player-data-line"><b>Peso: </b>{{ player_info.weight }}</p>
-        <p class="player-data-line"><b>Dorsal: </b>{{ player_info.number }}</p>
+        <p class="player-data-line"><b>Fecha de nacimiento: </b>{{ informacion_jugador.birth || 'XXX' }}</p>
+        <p class="player-data-line"><b>DNI: </b>{{ informacion_jugador.dni || 'XXX' }}</p>
+        <p class="player-data-line"><b>Número de teléfono: </b>{{ informacion_jugador.phoneNumber || 'XXX' }}</p>
       </div>
     </div>
     <div class="block kpis-container">
@@ -87,6 +85,8 @@
 </template>
 
 <script>
+import { inject } from 'vue';
+
 export default {
   name: 'SinglePlayerView',
   computed: {
@@ -128,7 +128,13 @@ export default {
           {name: "Rendimiento en direrentes posiciones"},
         ],
       ],
+      informacion_jugador: [],
     };
+  },
+  setup() {
+    const app = inject('app');
+    const dao = inject('dao');
+    return { app, dao };
   },
   methods: {
 
@@ -165,7 +171,6 @@ export default {
 
       return this.getColorForPercentage(ratio);
     },
-
     getTextColorKPI(score, target) {
       const scoreValue = parseFloat(score.replace('%', ''));
       const targetValue = parseFloat(target.replace('%', ''));
@@ -185,7 +190,20 @@ export default {
       const brightness = (red * 299 + green * 587 + 0 * 114) / 1000;
 
       return brightness > 128 ? '#000000' : '#FFFFFF';
-    }
+    },
+    getPlayerInfo(){
+      this.dao.actor.read().then((response) => {
+        // ActorType_idActorType = 2
+        this.informacion_jugador = response.filter(actor =>
+          actor.idActor == this.$route.query.idActor
+        )[0];
+        
+        console.log('Info Jugador: ', this.informacion_jugador.idActor);
+      });
+    },
+  },
+  created() {
+    this.getPlayerInfo();
   }
 };
 </script>

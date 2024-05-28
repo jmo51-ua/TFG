@@ -1,0 +1,17 @@
+{
+	"title": "activity",
+	"description": "Actividad de una organizacion",
+	"properties": {
+		"idActivity": "#",
+        "name": "@string",
+        "description": "@string",
+        "image": "@blob",
+        "dificulty": "@int",
+        "intensity": "@int",
+        "material": "@string",
+        "advices": "@string"
+	},
+	"table": "activity",
+	"urlList": "/activity",
+    "urlItem": "/activity/:idActivity"
+}
