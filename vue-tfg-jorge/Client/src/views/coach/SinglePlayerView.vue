@@ -19,7 +19,7 @@
       </div>
       <div class="list-container">
         <router-link
-          v-for="(item, index) in player_kpis"
+          v-for="(item, index) in kpis_jugador"
           :key="index"
           :to="{ path: '/stats', query: { player: item.name } }"
           class="list-item-link"
@@ -28,10 +28,10 @@
             <div class="item-details">
               <div class="name">{{ item.name }}</div>
             </div>
-            <div :style="{ backgroundColor: calculateColorKPI(item.score, item.target), color: getTextColorKPI(item.score, item.target) }"
+            <div :style="{ backgroundColor: calculateColorKPI((item.score || '0').toString(), ((item.range || '0').toString())), color: getTextColorKPI((item.score || '0').toString(), ((item.range || '0').toString())) }"
             class="avg"
             style="display: inline-block; white-space: nowrap; margin-left: 5px;">
-              {{ item.score }} / {{ item.target }}
+              {{ item.score || 0 }} / {{ item.range || 0 }}%
             </div>
           </div>
         </router-link>
@@ -96,14 +96,6 @@ export default {
   },
   data() {
     return {
-      player_info: {
-        image: 'https://placehold.co/200x250',
-        birth_date: '08/03/2006',
-        position: 'Mediocampo (MC)',
-        weight: '79 kg',
-        height: '179 cm',
-        number: 10,
-      },
       player_kpis: [
         { name: 'Efectividad de pases', score: '10%', target: '80%' },
         { name: 'Efectividad de pases', score: '15%', target: '80%' },
@@ -129,6 +121,7 @@ export default {
         ],
       ],
       informacion_jugador: [],
+      kpis_jugador: [],
     };
   },
   setup() {
@@ -164,6 +157,7 @@ export default {
       // or output as hex if preferred
     },
     calculateColorKPI(score, target) {
+      console.log('Score:',score);
       const scoreValue = parseFloat(score.replace('%', ''));
       const targetValue = parseFloat(target.replace('%', ''));
 
@@ -193,7 +187,6 @@ export default {
     },
     getPlayerInfo(){
       this.dao.actor.read().then((response) => {
-        // ActorType_idActorType = 2
         this.informacion_jugador = response.filter(actor =>
           actor.idActor == this.$route.query.idActor
         )[0];
@@ -201,9 +194,18 @@ export default {
         console.log('Info Jugador: ', this.informacion_jugador.idActor);
       });
     },
+    cargarKPIs(){
+      this.dao.kpi.read().then((indicadores) => {
+
+        this.kpis_jugador = indicadores;
+        
+        console.log('Info KPIs: ', this.kpis_jugador);
+      });
+    },
   },
   created() {
     this.getPlayerInfo();
+    this.cargarKPIs();
   }
 };
 </script>
