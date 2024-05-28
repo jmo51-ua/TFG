@@ -6,6 +6,6 @@ Memoria/**
 vue-tfg-jorge/dist/
 
 # Ignorar todo el contenido de la carpeta logs/
-logs/
+
 
 node_modules/
