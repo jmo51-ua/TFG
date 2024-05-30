@@ -1,0 +1,13 @@
+{
+	"title": "Season",
+	"description": "Temporadas de una organización",
+	"properties": {
+		"idSeason": "#",
+		"Organization_idOrganization": "@int !",
+		"startDate": "@datetime",
+		"endDate": "@datetime"
+	},
+	"table": "Season",
+	"urlList": "/season",
+	"urlItem": "/season/:idSeason"
+}

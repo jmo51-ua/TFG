@@ -1,0 +1,13 @@
+{
+	"title": "Learningoutcoming_has_Organization_has_Category",
+	"description": "Resultados de aprendizaje de una categoría de una organización",
+	"properties": {
+		"LearningOutcoming_idLearningOutcoming": "@int !",
+		"Organization_has_Category_Organization_idOrganization": "@int !",
+        "Organization_has_Category_Category_idCategory": "@int !",
+        "Organization_has_Category_type": "@string !"
+	},
+	"table": "LearningOutcoming_has_Organization_has_Category",
+	"urlList": "/learning_org_cat",
+	"urlItem": "/learning_org_cat/:LearningOutcoming_idLearningOutcoming"
+}

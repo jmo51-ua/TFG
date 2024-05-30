@@ -1,0 +1,12 @@
+{
+	"title": "ACL Element",
+	"description": "ACL values for an element",
+	"properties": {
+		"element": "@integer",
+		"entity": "@integer",
+		"level": "@integer"
+	},
+	"table": "acl_element",
+	"urlList": "/element/:element/alc_element",
+	"urlItem": "/element/:element/alc_element/:entity"
+}

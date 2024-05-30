@@ -1,0 +1,21 @@
+{
+	"title": "Group",
+	"description": "System user group",
+	"properties": {
+		"groupId": ".id ~ =entity.id",
+		"organization": "@integer !",
+		"description": ""
+	},
+	"lists": {
+		"users": {
+			"type": "groupUser",
+			"params": {
+				"group": "id"
+			}
+		}
+	},
+	"table": "group",
+	"extends": "entity",
+	"urlList": "/organization/:organization/group",
+	"urlItem": "/group/:id"
+}

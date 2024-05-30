@@ -1,0 +1,13 @@
+{
+	"title": "Level",
+	"description": "Niveles de una temporada",
+	"properties": {
+		"idLevel": "#",
+        "Season_idSeason": "@int !",
+		"name": "@string",
+		"description": "@string"
+	},
+	"table": "Level",
+	"urlList": "/level",
+	"urlItem": "/level/:idLevel"
+}

@@ -1,0 +1,19 @@
+{
+	"title": "Learningoutcoming_Has_Variable",
+	"description": "Variables de los resultados de aprendizaje",
+	"properties": {
+		"LearningOutcoming_idLearningOutcoming": "@int !",
+		"Variable_idVariable": "@int !"
+	},
+	"lists": {
+		"variables": {
+			"type": "variable",
+			"params": {
+				"idVariable": "Variable_idVariable"
+			}
+		}
+	},
+	"table": "Learningoutcoming_Has_Variable",
+	"urlList": "/learningvariables",
+	"urlItem": "/learningvariables/:LearningOutcoming_idLearningOutcoming/:Variable_idVariable"
+}

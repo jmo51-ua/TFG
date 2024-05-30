@@ -1,0 +1,12 @@
+{
+	"title": "actor_manages_exercise_in_session",
+	"description": "Actor responsable de un ejercicio en una sesion",
+	"properties": {
+		"Actor_idActor": "@int !",
+        "Exercise_has_Session_Exercise_idExercise": "@int !",
+        "Exercise_has_Session_Session_idSession": "@int !"
+	},
+	"table": "actor_manages_exercise_in_session",
+	"urlList": "/actor_manages_exercise_session",
+    "urlItem": "/actor_manages_exercise_session/:Actor_idActor"
+}

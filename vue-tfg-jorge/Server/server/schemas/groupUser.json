@@ -1,0 +1,10 @@
+{
+	"description": "Users of a system group",
+	"properties": {
+		"group": "@integer",
+		"user": "@integer !"
+	},
+	"table": "user_group",
+	"urlList": "/group/:group/user",
+	"urlItem": "/group/:group/user/:user"
+}

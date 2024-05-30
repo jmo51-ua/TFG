@@ -1,0 +1,13 @@
+{
+	"title": "exercisetracktrace",
+	"description": "",
+	"properties": {
+		"idExerciseTrackTrace": "@int !",
+        "Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer": "@int !",
+        "Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes": "@int !",
+        "Exercise_has_Session_has_Actor_Actor_idActor": "@int !"
+	},
+	"table": "exercisetracktrace",
+	"urlList": "/exercisetracktrace",
+    "urlItem": "/exercisetracktrace/:idExerciseTrackTrace"
+}

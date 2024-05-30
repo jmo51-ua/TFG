@@ -1,0 +1,11 @@
+{
+	"title": "Skill_has_specialty",
+	"description": "Resultados de aprendizaje de una posición",
+	"properties": {
+		"Skill_idSkill": "@int !",
+		"Specialty_idSpecialty": "@int !"
+	},
+	"table": "Skill_has_specialty",
+	"urlList": "/skill_has_specialty",
+	"urlItem": "/skill_has_specialty/:Skill_idSkill"
+}

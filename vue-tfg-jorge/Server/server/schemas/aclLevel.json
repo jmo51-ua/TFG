@@ -1,0 +1,12 @@
+{
+	"title": "ACL Level",
+	"description": "Levels for ACL",
+	"properties": {
+		"id": "@integer",
+		"code": "@string !",
+		"name": "@i18n !"
+	},
+	"table": "acl_level",
+	"urlList": "/acl_level",
+	"urlItem": "/acl_level/:id"
+}

@@ -1,0 +1,11 @@
+{
+	"title": "activity_has_learningoutcoming",
+	"description": "Resultados de aprendizaje de una actividad",
+	"properties": {
+		"Activity_idActivity": "@int !",
+		"LearningOutcoming_idLearningOutcoming": "@int !"
+	},
+	"table": "activity_has_learningoutcoming",
+	"urlList": "/activity_learningoutcoming",
+    "urlItem": "/activity_learningoutcoming/:Activity_idActivity"
+}

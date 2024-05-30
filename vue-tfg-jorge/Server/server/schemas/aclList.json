@@ -1,0 +1,13 @@
+{
+	"title": "ACL List",
+	"description": "ACL values for a list (type)",
+	"properties": {
+		"element": "@integer",
+		"entity": "@integer",
+		"type": "@integer",
+		"level": "@integer"
+	},
+	"table": "acl_list",
+	"urlList": "/element/:element/acl_list",
+	"urlItem": "/element/:element/acl_list/:entity/:type"
+}

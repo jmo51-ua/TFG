@@ -1,0 +1,12 @@
+{
+	"title": "Level_has_category_has_learningoutcoming",
+	"description": "Resultados de aprendizaje de cada categoria de cada nivel",
+	"properties": {
+		"Level_has_Category_Level_idLevel": "@int !",
+		"Level_has_Category_Category_idCategory": "@int !",
+        "LearningOutcoming_idLearningOutcoming": "@int !"
+	},
+	"table": "level_has_category_has_learningoutcoming",
+	"urlList": "/level_category_learningoutcoming",
+	"urlItem": "/level_category_learningoutcoming/:Level_has_Category_Level_idLevel"
+}

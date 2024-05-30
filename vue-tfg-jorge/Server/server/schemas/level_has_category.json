@@ -1,0 +1,14 @@
+{
+	"title": "Level_has_category",
+	"description": "Categorías de cada nivel",
+	"properties": {
+		"Level_idLevel": "@int !",
+		"Category_idCategory": "@int !",
+        "order": "@int",
+        "startDate": "@datetime",
+        "endDate": "@datetime"
+	},
+	"table": "Level_has_category",
+	"urlList": "/level_category",
+	"urlItem": "/level_category/:Level_idLevel/:Category_idCategory"
+}

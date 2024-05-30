@@ -1,0 +1,12 @@
+{
+	"title": "level_has_category_has_actor",
+	"description": "Actores de una categoria en un nivel",
+	"properties": {
+		"Level_has_Category_Level_idLevel": "@int !",
+		"Level_has_Category_Category_idCategory": "@int !",
+        "Actor_idActor": "@int !"
+	},
+	"table": "level_has_category_has_actor",
+	"urlList": "/level_category_actor",
+	"urlItem": "/level_category_actor/:Level_has_Category_Level_idLevel/:Level_has_Category_Category_idCategory/:Actor_idActor"
+}

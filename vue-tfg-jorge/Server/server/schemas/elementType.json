@@ -1,0 +1,13 @@
+{
+	"title": "Element Type",
+	"description": "Types of elements",
+	"properties": {
+		"id": "@integer",
+		"schema": "@string",
+		"name": "@i18n",
+		"parent": "@integer",
+		"parent_field": "@string"
+	},
+	"table": "element_type",
+	"urlList": "/element_type"
+}

@@ -1,0 +1,19 @@
+{
+	"title": "learningoutcoming_has_exercise",
+	"description": "Resultados de aprendizaje de un ejercicio",
+	"properties": {
+		"LearningOutcoming_idLearningOutcoming": "@int !",
+		"Exercise_idExercise": "@int !"
+	},
+	"lists": {
+		"learningOutcoming": {
+			"type": "learningoutcoming",
+			"params": {
+				"idLearningOutcoming": "LearningOutcoming_idLearningOutcoming"
+			}
+		}
+	},
+	"table": "learningoutcoming_has_exercise",
+	"urlList": "/learningoutcoming_exercise",
+    "urlItem": "/learningoutcoming_exercise/:LearningOutcoming_idLearningOutcoming/:Exercise_idExercise"
+}

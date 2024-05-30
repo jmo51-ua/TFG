@@ -1,0 +1,17 @@
+{
+	"title": "Exercise_has_session_has_actor_has_variable",
+	"description": "Valoracion de las variables de un KPI de un ejercicio",
+	"properties": {
+		"Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer": "@int !",
+		"Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes": "@int !",
+        "Exercise_has_Session_has_Actor_Actor_idActor": "@int !",
+        "Variable_idVariable": "@int !",
+        "Variable_KPI_idKPI": "@int !",
+		"Variable_KPI_LearningOutcoming_idLearningOutcoming": "@int !",
+		"DateTime": "@datetime !",
+		"value": "@int"
+	},
+	"table": "Exercise_has_session_has_actor_has_variable",
+	"urlList": "/exercise_has_session_has_actor_has_variable",
+	"urlItem": "/exercise_has_session_has_actor_has_variable/:Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer/:Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes/:Exercise_has_Session_has_Actor_Actor_idActor/:Variable_KPI_idKPI/:Variable_KPI_LearningOutcoming_idLearningOutcoming/:Variable_idVariable/:DateTime"
+}

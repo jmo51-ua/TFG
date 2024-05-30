@@ -1,0 +1,13 @@
+{
+	"title": "specialty_has_level_has_category_has_actor",
+	"description": "Especialidad de un actor",
+	"properties": {
+		"Specialty_idSpecialty": "@int !",
+		"Level_has_Category_has_Actor_Level_has_Category_Level_idLevel": "@int !",
+        "Level_has_Category_has_Actor_Level_has_Category_Cat_idCat": "@int !",
+        "Level_has_Category_has_Actor_Actor_idActor": "@int !"
+	},
+	"table": "specialty_has_level_has_category_has_actor",
+	"urlList": "/specialty_level_category_actor",
+	"urlItem": "/specialty_level_category_actor/:Specialty_idSpecialty"
+}

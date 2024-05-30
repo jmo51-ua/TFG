@@ -1,0 +1,15 @@
+{
+	"title": "Exercise_has_session_has_actor_has_kpi",
+	"description": "Evaluacion de los resultados de aprendizaje del entrenamiento de un jugador",
+	"properties": {
+		"Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer": "@int !",
+		"Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes": "@int !",
+        "Exercise_has_Session_has_Actor_Actor_idActor": "@int !",
+        "KPI_idKPI": "@int !",
+		"KPI_LearningOutcoming_idLearningOutcoming": "@int !",
+		"score": "@int"
+	},
+	"table": "Exercise_has_session_has_actor_has_kpi",
+	"urlList": "/exercise_has_session_has_actor_has_kpi",
+	"urlItem": "/exercise_has_session_has_actor_has_kpi/:Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer/:Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes/:Exercise_has_Session_has_Actor_Actor_idActor/:KPI_idKPI/:KPI_LearningOutcoming_idLearningOutcoming"
+}

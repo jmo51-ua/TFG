@@ -1,0 +1,16 @@
+{
+	"title": "Valuation",
+	"description": "Valoraciones de los resultados de aprendizaje",
+	"properties": {
+		"idValuation": "#",
+		"LearningOutcoming_idLearningOutcoming": "@int !",
+        "description": "@string",
+        "Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer": "@int !",
+        "Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes": "@int !",
+        "Exercise_has_Session_has_Actor_Actor_idActor": "@int !"
+        
+	},
+	"table": "Valuation",
+	"urlList": "/valuation",
+	"urlItem": "/valuation/:idValuation"
+}

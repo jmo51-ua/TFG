@@ -1,0 +1,12 @@
+{
+	"title": "Specialty",
+	"description": "Posiciones de un deporte",
+	"properties": {
+		"idSpecialty": "#",
+		"Sport_idSport": "@int !",
+		"name": "@string"
+	},
+	"table": "Specialty",
+	"urlList": "/specialty",
+	"urlItem": "/specialty/:idSpecialty"
+}

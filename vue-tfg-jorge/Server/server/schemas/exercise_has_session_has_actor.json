@@ -1,0 +1,21 @@
+{
+	"title": "exercise_has_session_has_actor",
+	"description": "Actores que relizaran los ejercicios de una sesion",
+	"properties": {
+		"Exercise_has_Session_Exercise_idExercise": "@int !",
+        "Exercise_has_Session_Session_idSession": "@int !",
+        "Actor_idActor": "@int !",
+		"comment": "@string"
+	},
+	"lists": {
+		"actores": {
+			"type": "actor",
+			"params": {
+				"idActor": "Actor_idActor"
+			}
+		}
+	},
+	"table": "exercise_has_session_has_actor",
+	"urlList": "/exercise_session_actor",
+    "urlItem": "/exercise_session_actor/:Exercise_has_Session_Exercise_idExercise/:Exercise_has_Session_Session_idSession/:Actor_idActor"
+}

@@ -1,0 +1,12 @@
+{
+	"title": "User_has_organization",
+	"description": "Organizations of user",
+	"properties": {
+		"user_id": "@integer !",
+		"Organization_idOrganization": "@integer !"
+	},
+
+	"table": "user_has_organization",
+	"urlList": "/userorganization",
+	"urlItem": "/userorganization/:user_id/:Organization_idOrganization"
+}

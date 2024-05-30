@@ -1,0 +1,13 @@
+{
+	"title": "actorparam",
+	"description": "Parametros de un actor",
+	"properties": {
+		"idActorParam": "@int !",
+        "Level_has_Category_has_Actor_Level_has_Category_Level_idLevel": "@int !",
+        "Level_has_Category_has_Actor_Level_has_Category_Category_idCat": "@int !",
+        "Level_has_Category_has_Actor_Actor_idActor": "@int !"
+	},
+	"table": "actorparam",
+	"urlList": "/actorparam",
+	"urlItem": "/actorparam/:idActorParam"
+}

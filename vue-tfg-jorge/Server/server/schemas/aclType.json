@@ -1,0 +1,14 @@
+{
+	"title": "ACL Type",
+	"description": "ACL values for a type (subelements) in a element",
+	"properties": {
+		"element": "@integer",
+		"entity": "@integer",
+		"type": "@integer",
+		"creator": "@integer",
+		"level": "@integer"
+	},
+	"table": "acl_type",
+	"urlList": "/element/:element/alc_type",
+	"urlItem": "/element/:element/alc_type/:entity/:type/:creator"
+}
