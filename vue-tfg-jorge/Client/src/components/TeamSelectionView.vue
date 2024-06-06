@@ -2,32 +2,43 @@
   <div class="main">
     <h1>Selecciona un equipo</h1>
 
-    <div class="buttons-container">
-      <button @click="selectTeam('CEIP La Romana')">CEIP La Romana</button>
-      <button @click="selectTeam('C.F. Atlético La Romana')">C.F. Atlético La Romana</button>
+    <div
+      v-for="(item, index) in equipos"
+      :key="index"
+      class="buttons-container"
+    >
+    <button @click="selectTeam(item.name)">{{ item.name }}</button>
     </div>
+
   </div>
 </template>
 
 <script>
 import { useStore } from 'vuex';
-import { inject } from 'vue';
+import { inject, onMounted } from 'vue';
+import { mapGetters } from 'vuex';
 
 export default {
+  data() {
+    return {
+      user: [],
+      equipos: [],
+    };
+  },
   setup() {
     const store = useStore();
     const dao = inject('dao');
-    let orgs =[];
+    let orgs = [];
 
     const selectTeam = (team) => {
       dao.organization.read().then((response) => {
-        orgs.value = response.filter(organization =>
+        orgs = response.filter(organization =>
           organization.name === team
         );
-        console.log('Organizaciones: ', orgs.value);
-        if (orgs.value.length > 0) {
-          store.dispatch('actualizarTeamSelectedID', orgs.value[0].idOrganization);
-          store.dispatch('actualizarTeamSelectedName', orgs.value[0].name);
+        console.log('Organizaciones: ', orgs);
+        if (orgs.length > 0) {
+          store.dispatch('actualizarTeamSelectedID', orgs[0].idOrganization);
+          store.dispatch('actualizarTeamSelectedName', orgs[0].name);
         } else {
           console.error('Team not found');
         }
@@ -36,9 +47,35 @@ export default {
 
     return {
       selectTeam,
-      orgs,
+      dao,
     };
   },
+  computed: {
+    ...mapGetters(['userID']),
+  },
+  methods: {
+    cargarOrgs() {
+      this.dao.organization.read().then((response) => {
+        this.equipos = response.filter(fila => fila.idOrganization == this.user.Organization_idOrganization);
+        console.log("Equipos:",this.equipos);
+      }).catch(error => {
+        console.error('Error al cargar organizaciones:', error);
+      });
+    },
+    cargarEquipos() {
+      this.dao.user_has_organization.read().then((response) => {
+        this.user = response.filter(fila => fila.user_id == this.userID)[0];
+        console.log("Usuario", this.userID, ":", this.user);
+
+        this.cargarOrgs();
+      }).catch(error => {
+        console.error('Error al cargar equipos:', error);
+      });
+    },
+  },
+  created() {
+    this.cargarEquipos();
+  }
 };
 </script>
 

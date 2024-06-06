@@ -2,16 +2,20 @@ import { createStore } from 'vuex';
 
 export default createStore({
   state: {
-    modo: 'semanal', // Valor inicial
+    modo: 'sesion', // Valor inicial
     logged: false,
     teamSelectedID: null,
     teamSelectedName: null,
+    userID: null,
+    userName: null,
   },
   getters: {
     modo: state => state.modo,
     logged: state => state.logged,
     teamSelectedID: state => state.teamSelectedID,
     teamSelectedName: state => state.teamSelectedName,
+    userID: state => state.userID,
+    userName: state => state.userName,
   },
   mutations: {
     setModo(state, nuevoModo) {
@@ -26,6 +30,12 @@ export default createStore({
     setTeamSelectedName(state, nuevoValor) {
       state.teamSelectedName = nuevoValor;
     },
+    setUserID(state, nuevoValor) {
+      state.userID = nuevoValor;
+    },
+    setUserName(state, nuevoValor) {
+      state.userName = nuevoValor;
+    },
   },
   actions: {
     actualizarModo({ commit }, nuevoModo) {
@@ -39,6 +49,12 @@ export default createStore({
     },
     actualizarTeamSelectedName({ commit }, nuevoValor) {
       commit('setTeamSelectedName', nuevoValor);
+    },
+    actualizarUserID({ commit }, nuevoValor) {
+      commit('setUserID', nuevoValor);
+    },
+    actualizarUserName({ commit }, nuevoValor) {
+      commit('setUserName', nuevoValor);
     },
   }
 });

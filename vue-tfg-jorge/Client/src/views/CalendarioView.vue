@@ -3,7 +3,7 @@
 		<div class="calendar-container">
 			<vue-cal
 			active-view="month"
-			:events="events"
+			:events="sessions"
 			@cell-click="onCellClick"
 			@event-click="onEventClick"
 			class="vue-cal-custom"
@@ -27,8 +27,7 @@
     },
     data() {
       return {
-        //VUE CALENDAR
-		sessions: [],
+		    sessions: [],
         events: [
           {
             start: '2024-05-30 10:35',
@@ -63,6 +62,7 @@
     computed: {
       ...mapGetters(['teamSelectedID']),
       ...mapGetters(['teamSelectedName']),
+      ...mapGetters(['userID']),
     },
     setup() {
       const app = inject('app');
@@ -70,34 +70,76 @@
       return { app, dao };
     },
     methods: {
-      cargarSesiones(){
-        this.dao.session.read().then((response) => {
-          console.info('Respuesta del servidor: ',response);
-          
-          /* { FORMATO
-            start: '2024-11-19 10:35',
-            end: '2024-11-19 11:30',
-            title: 'Doctor appointment'
-          }, */
-
-          this.sessions = response
-          .filter(sesion => sesion.date != null)
-          .map(sesion => ({
-            start: new Date(sesion.date),
-            end: new Date(new Date(sesion.date).getTime() + (sesion.duration * 60000)),
-            title: sesion.name
-          }));
-
-          console.log('Sesiones filtradas y convertidas:', this.sessions);
-        });
-      },
-      calculateEndTime(startTime, duration) {
-        var [hours, minutes] = [0, 0];
-        if(startTime != null){
-          [hours, minutes] = startTime.split(':').map(Number);
+      carcularTimeStart(date,time){
+        if(!time){
+          time = "9:00:00";
         }
-        const endDate = new Date(0, 0, 0, hours, minutes + duration);
-        return endDate.toTimeString().split(' ')[0];
+
+        const dateFormat = new Date(date);
+        const year = dateFormat.getFullYear();
+        const month = String(dateFormat.getMonth() + 1).padStart(2, '0');
+        const day = String(dateFormat.getDate()).padStart(2, '0');
+        const hours = String(time).substring(0, 2);
+        const minutes = String(time).substring(3, 5);
+
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+      },
+      carcularTimeEnd(date,time,duration){
+        if(!time){
+          time = "9:00:00";
+        }
+
+        if(!duration){
+          duration= 30;
+        }
+
+        const dateFormat = new Date(date);
+        const year = dateFormat.getFullYear();
+        const month = String(dateFormat.getMonth() + 1).padStart(2, '0');
+        const day = String(dateFormat.getDate()).padStart(2, '0');
+        let hours = String(time).substring(0, 2);
+        let minutes = String(time).substring(3, 5);
+        minutes = (parseInt(minutes) + duration).toString();
+
+        if (minutes >= 60) {
+          hours = (parseInt(hours) +  Math.floor(minutes / 60)).toString();
+          minutes = minutes % 60;
+        }
+
+        hours = String(hours).padStart(2, '0');
+        minutes = String(minutes).padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+      },
+      cargarSesiones() {
+        let actorID,actores
+        let sesiones;
+
+        this.dao.actor.read().then((response) => {
+          actores = response.filter(actor =>
+            actor.User_idUser == this.userID
+          );
+
+          actores.forEach(fila => {
+            actorID = fila.idActor;
+            
+            this.dao.session.read().then((response) => {
+              sesiones = actorID !== null 
+                ? response.filter(sesion => sesion.Actor_idActor == actorID && sesion.date !=null)
+              : response;
+              sesiones.forEach(element => {
+                this.sessions.push(
+                  {
+                    start: this.carcularTimeStart(element.date.toString(),element.time.toString()),
+                    end: this.carcularTimeEnd(element.date.toString(),element.time.toString(),element.duration),
+                    title: element.name
+                  }
+                );
+              });
+            });
+
+          });
+        });
       },
       onCellClick({ startDate, endDate }) {
         console.log(`Clicked on cell from ${startDate} to ${endDate}`);

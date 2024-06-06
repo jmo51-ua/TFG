@@ -28,7 +28,7 @@
   };
 </script>
 
-<style>
+<style lang="scss">
   :root {
     --primary: #499af1;
     --grey: #64748b;

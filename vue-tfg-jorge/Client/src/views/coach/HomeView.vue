@@ -77,7 +77,7 @@
       <div class="calendar-container">
         <vue-cal
           active-view="month"
-          :events="events"
+          :events="sessions"
           @cell-click="onCellClick"
           @event-click="onEventClick"
           class="vue-cal-custom"
@@ -149,6 +149,8 @@
     computed: {
       ...mapGetters(['teamSelectedID']),
       ...mapGetters(['teamSelectedName']),
+      ...mapGetters(['userName']),
+      ...mapGetters(['userID']),
     },
     setup() {
       const app = inject('app');
@@ -195,7 +197,6 @@
             b: Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
         };
         return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
-        // or output as hex if preferred
       },
       calculateColorKPI(score, target) {
         const scoreValue = parseFloat(score.replace('%', ''));
@@ -231,17 +232,13 @@
           return;
         }
 
-       //! FALLA EL FILTRO ?¿?¿¿?¿
         this.dao.actor_has_actortype.read().then((response) => {
-          // ActorType_idActorType = 2
           this.actores = response.filter(actor =>
             actor.ActorType_idActorType === 2 &&
             actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
           );
           this.actorIds = this.actores.map(actor => actor.Actor_idActor);
-          //console.log('Actores con Actor Type 2:', this.actores);
 
-          // 2a consulta
           this.cargarDatosCompletosJugadores();
         });
       },
@@ -254,13 +251,6 @@
       },
       cargarSesiones(){
         this.dao.session.read().then((response) => {
-          console.info('Respuesta del servidor: ',response);
-          
-          /* { FORMATO
-            start: '2024-11-19 10:35',
-            end: '2024-11-19 11:30',
-            title: 'Doctor appointment'
-          }, */
 
           this.sessions = response
           .filter(sesion => sesion.date != null)
@@ -286,6 +276,78 @@
       },
       onEventClick(event) {
         console.log(`Clicked on event: ${event.title}`);
+      },
+      carcularTimeStart(date,time){
+        if(!time){
+          time = "9:00:00";
+        }
+
+        const dateFormat = new Date(date);
+        const year = dateFormat.getFullYear();
+        const month = String(dateFormat.getMonth() + 1).padStart(2, '0');
+        const day = String(dateFormat.getDate()).padStart(2, '0');
+        const hours = String(time).substring(0, 2);
+        const minutes = String(time).substring(3, 5);
+
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+      },
+      carcularTimeEnd(date,time,duration){
+        if(!time){
+          time = "9:00:00";
+        }
+
+        if(!duration){
+          duration= 30;
+        }
+
+        const dateFormat = new Date(date);
+        const year = dateFormat.getFullYear();
+        const month = String(dateFormat.getMonth() + 1).padStart(2, '0');
+        const day = String(dateFormat.getDate()).padStart(2, '0');
+        let hours = String(time).substring(0, 2);
+        let minutes = String(time).substring(3, 5);
+        minutes = (parseInt(minutes) + duration).toString();
+
+        if (minutes >= 60) {
+          hours = (parseInt(hours) +  Math.floor(minutes / 60)).toString();
+          minutes = minutes % 60;
+        }
+
+        hours = String(hours).padStart(2, '0');
+        minutes = String(minutes).padStart(2, '0');
+
+        return `${year}-${month}-${day} ${hours}:${minutes}`;
+      },
+      cargarSesiones() {
+        let actorID,actores
+        let sesiones;
+
+        this.dao.actor.read().then((response) => {
+          actores = response.filter(actor =>
+            actor.User_idUser == this.userID
+          );
+
+          actores.forEach(fila => {
+            actorID = fila.idActor;
+
+            this.dao.session.read().then((response) => {
+              sesiones = actorID !== null 
+                ? response.filter(sesion => sesion.Actor_idActor == actorID && sesion.date !=null)
+              : response;
+              
+              sesiones.forEach(element => {
+                this.sessions.push(
+                  {
+                    start: this.carcularTimeStart(element.date.toString(),element.time.toString()),
+                    end: this.carcularTimeEnd(element.date.toString(),element.time.toString(),element.duration),
+                    title: element.name
+                  }
+                );
+              });
+            });
+
+          });
+        });
       },
     },
     created() {

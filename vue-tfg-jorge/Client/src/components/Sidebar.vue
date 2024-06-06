@@ -64,19 +64,28 @@
 					<span class="nombre-vista">{{ viewName }}</span>
 					<div class="usuario-info">
 						<!--NOMBRE USUARIO-->
-						<span class="nombre-usuario">jmo51</span>
-						<span class="foto-usuario">IMG</span>
+						<span class="nombre-usuario">{{userName}}</span>
+						<span class="foto-usuario">
+							<img :src="user.image || 'https://gallery.yopriceville.com/var/albums/Free-Clipart-Pictures/Sport-PNG/Gold_Football_Ball_PNG_Clip_Art_Image.png?m=1629815688'" alt="User Picture">
+						</span>
 					</div>
 				</div>
 				<div class="header-inner">
 					<div class="option">
-						<input type="radio" id="modo1" name="modo" value="semanal" v-model="selectedModo" @change="cambiarModo" checked>
-						<label for="modo1">Semanal</label>
+						<input type="radio" id="modo1" name="modo" value="sesion" v-model="selectedModo" @change="cambiarModo" checked>
+						<label for="modo1">Por sesión</label>
 					</div>
-
 					<div class="option">
-						<input type="radio" id="modo2" name="modo" value="partido" v-model="selectedModo" @change="cambiarModo">
-						<label for="modo2">Por partido</label>
+						<input type="radio" id="modo2" name="modo" value="mensual" v-model="selectedModo" @change="cambiarModo">
+						<label for="modo2">Mensual</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="modo2" name="modo" value="trimestral" v-model="selectedModo" @change="cambiarModo">
+						<label for="modo2">Trimestral</label>
+					</div>
+					<div class="option">
+						<input type="radio" id="modo2" name="modo" value="todo" v-model="selectedModo" @change="cambiarModo">
+						<label for="modo2">Todo el tiempo</label>
 					</div>
 
 					<!-- Mostrar el modo actual -->
@@ -115,17 +124,26 @@
 
 <script>
 	import { mapActions, mapGetters } from 'vuex';
+	import { inject } from 'vue';
 
 	export default {
+		setup(){
+			const app = inject('app');
+      		const dao = inject('dao');
+      		return { app, dao };
+		},
 		data() {
 			return {
-				selectedModo: this.modo // Inicializado
+				selectedModo: this.modo, // Inicializado
+				user: [],
 			};
 		},
 		computed: {
 			...mapGetters(['modo']),
 			...mapGetters(['teamSelectedID']),
 			...mapGetters(['teamSelectedName']),
+			...mapGetters(['userName']),
+			...mapGetters(['userID']),
 		},
 		watch: {
 			modo(newModo) {
@@ -137,6 +155,13 @@
 			cambiarModo() {
 				this.actualizarModo(this.selectedModo);
 			},
+			cargarUserInfo(){
+				this.dao.actor.read().then((response) => {
+					this.user = response.filter(actor =>
+						actor.user_id == this.userID
+					)[0];
+				});
+			}
 		},
 	};
 </script>
@@ -343,12 +368,17 @@
 		.foto-usuario {
 			width: 32px;
 			height: 32px;
-			background-color: #fff; /* Ejemplo, puedes cambiarlo por una imagen real */
+			background-color: #fff;
 			border-radius: 50%;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			color: #85b4ff; /* Ejemplo de color de fondo */
+			color: #85b4ff;
+		}
+
+		.foto-usuario img{
+			width: 32px;
+			height: 32px;
 		}
 
 		&.is-expanded {

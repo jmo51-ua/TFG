@@ -16,6 +16,7 @@
   export default {
     setup() {
         const app = inject('app');
+        const dao = inject('dao');
         const store = useStore();
 
         const email = ref("");
@@ -24,7 +25,22 @@
         const login = () => {
             app.login({ email: email.value, password: password.value }).then(
                 () => {
-                    store.dispatch('actualizarLogged', true);
+                    dao.user.read().then((response) => {
+                        console.log('Users:', response);
+                        let usuario = response.filter(user =>
+                            user.email == email.value //&&
+                            //user.password == password.value
+                        )[0];
+
+                        if(usuario.length != 0){
+                            console.log('Usuario encontrado:', usuario);
+                            store.dispatch('actualizarLogged', true);
+                            store.dispatch('actualizarUserID', usuario.id);
+                            store.dispatch('actualizarUserName', usuario.nick);
+                        }
+                    }).catch((error) => {
+                        console.error('Error reading users:', error);
+                    });
                 },
                 () => {
                     alert("Error en login");
