@@ -1,24 +1,24 @@
 <template>
 	<main id="stats-page">
   
-	  <div class="row">
-		<button class="report-button">
-			Informe de todos los KPIs
-			<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M360-460h40v-80h40q17 0 28.5-11.5T480-580v-40q0-17-11.5-28.5T440-660h-80v200Zm40-120v-40h40v40h-40Zm120 120h80q17 0 28.5-11.5T640-500v-120q0-17-11.5-28.5T600-660h-80v200Zm40-40v-120h40v120h-40Zm120 40h40v-80h40v-40h-40v-40h40v-40h-80v200ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"/></svg>
-		</button>
-		<button class="report-button">
-			Informe de todos los KPIs
-			<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 48 48">
-				<path fill="#169154" d="M29,6H15.744C14.781,6,14,6.781,14,7.744v7.259h15V6z"></path><path fill="#18482a" d="M14,33.054v7.202C14,41.219,14.781,42,15.743,42H29v-8.946H14z"></path><path fill="#0c8045" d="M14 15.003H29V24.005000000000003H14z"></path><path fill="#17472a" d="M14 24.005H29V33.055H14z"></path><g><path fill="#29c27f" d="M42.256,6H29v9.003h15V7.744C44,6.781,43.219,6,42.256,6z"></path><path fill="#27663f" d="M29,33.054V42h13.257C43.219,42,44,41.219,44,40.257v-7.202H29z"></path><path fill="#19ac65" d="M29 15.003H44V24.005000000000003H29z"></path><path fill="#129652" d="M29 24.005H44V33.055H29z"></path></g><path fill="#0c7238" d="M22.319,34H5.681C4.753,34,4,33.247,4,32.319V15.681C4,14.753,4.753,14,5.681,14h16.638 C23.247,14,24,14.753,24,15.681v16.638C24,33.247,23.247,34,22.319,34z"></path><path fill="#fff" d="M9.807 19L12.193 19 14.129 22.754 16.175 19 18.404 19 15.333 24 18.474 29 16.123 29 14.013 25.07 11.912 29 9.526 29 12.719 23.982z"></path>
-			</svg>
-		</button>
-		<button class="report-button">
-			Informe de ún solo los KPI
-			<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M360-460h40v-80h40q17 0 28.5-11.5T480-580v-40q0-17-11.5-28.5T440-660h-80v200Zm40-120v-40h40v40h-40Zm120 120h80q17 0 28.5-11.5T640-500v-120q0-17-11.5-28.5T600-660h-80v200Zm40-40v-120h40v120h-40Zm120 40h40v-80h40v-40h-40v-40h40v-40h-80v200ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"/></svg>
-		</button>
-	  </div>
-  
 		<div class="row">
+			<button class="report-button">
+				Informe de todos los KPIs
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M360-460h40v-80h40q17 0 28.5-11.5T480-580v-40q0-17-11.5-28.5T440-660h-80v200Zm40-120v-40h40v40h-40Zm120 120h80q17 0 28.5-11.5T640-500v-120q0-17-11.5-28.5T600-660h-80v200Zm40-40v-120h40v120h-40Zm120 40h40v-80h40v-40h-40v-40h40v-40h-80v200ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"/></svg>
+			</button>
+			<button class="report-button">
+				Informe de todos los KPIs
+				<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 48 48">
+					<path fill="#169154" d="M29,6H15.744C14.781,6,14,6.781,14,7.744v7.259h15V6z"></path><path fill="#18482a" d="M14,33.054v7.202C14,41.219,14.781,42,15.743,42H29v-8.946H14z"></path><path fill="#0c8045" d="M14 15.003H29V24.005000000000003H14z"></path><path fill="#17472a" d="M14 24.005H29V33.055H14z"></path><g><path fill="#29c27f" d="M42.256,6H29v9.003h15V7.744C44,6.781,43.219,6,42.256,6z"></path><path fill="#27663f" d="M29,33.054V42h13.257C43.219,42,44,41.219,44,40.257v-7.202H29z"></path><path fill="#19ac65" d="M29 15.003H44V24.005000000000003H29z"></path><path fill="#129652" d="M29 24.005H44V33.055H29z"></path></g><path fill="#0c7238" d="M22.319,34H5.681C4.753,34,4,33.247,4,32.319V15.681C4,14.753,4.753,14,5.681,14h16.638 C23.247,14,24,14.753,24,15.681v16.638C24,33.247,23.247,34,22.319,34z"></path><path fill="#fff" d="M9.807 19L12.193 19 14.129 22.754 16.175 19 18.404 19 15.333 24 18.474 29 16.123 29 14.013 25.07 11.912 29 9.526 29 12.719 23.982z"></path>
+				</svg>
+			</button>
+			<button class="report-button">
+				Informe de ún solo los KPI
+				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M360-460h40v-80h40q17 0 28.5-11.5T480-580v-40q0-17-11.5-28.5T440-660h-80v200Zm40-120v-40h40v40h-40Zm120 120h80q17 0 28.5-11.5T640-500v-120q0-17-11.5-28.5T600-660h-80v200Zm40-40v-120h40v120h-40Zm120 40h40v-80h40v-40h-40v-40h40v-40h-80v200ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"/></svg>
+			</button>
+		</div>
+  
+		<div id="graficos" class="row">
 			<div class="chart" v-for="(chart, index) in charts" :key="index">
 				<img :src="chart" alt="Chart Image">
 			</div>
@@ -47,6 +47,9 @@
 </template>
   
 <script>
+import { inject } from 'vue';
+import { mapGetters } from 'vuex';
+
   export default {
 	data() {
 	  return {
@@ -67,6 +70,17 @@
 		}
 	  };
 	},
+	computed: {
+      ...mapGetters(['teamSelectedID']),
+      ...mapGetters(['teamSelectedName']),
+      ...mapGetters(['userName']),
+      ...mapGetters(['userID']),
+    },
+	setup() {
+      const app = inject('app');
+      const dao = inject('dao');
+      return { app, dao };
+    },
 	methods: {
 		addChart() {
 			//nueva gráfica
@@ -77,7 +91,88 @@
 			console.log('Nuevo KPI:', this.newKpi);
 			this.showCreateKpiForm = false; // Ocultar el formulario
 			this.charts.push('https://via.placeholder.com/300');
-		}
+		},
+		cargarKPIsPor_sesion() {
+			this.dao.exercise_has_session_has_actor_has_kpi.read().then((ejercicios) => {
+
+			ejercicios = ejercicios.filter(sesion =>
+			sesion.Exercise_has_Session_has_Actor_Actor_idActor == this.$route.query.idActor
+			);
+
+			const kpiPromises = ejercicios.map(element => {
+			return this.dao.kpi.read().then((indicadores) => {
+				let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+				indicador.score = element.score;
+
+				return this.dao.session.read().then((sesiones) => {
+				let sesion = sesiones.find(sesion =>
+					sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
+				);
+				indicador.ses_date = sesion.date;
+				indicador.ses_name = sesion.name;
+
+				return this.dao.exercise.read().then((ejercicios) => {
+					let ejercicio = ejercicios.find(ex =>
+					ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
+					);
+					indicador.ex_name = ejercicio.name;
+
+					return indicador;
+				});
+				});
+			});
+			});
+
+			Promise.all(kpiPromises).then((result) => {
+				const kpiData = {};
+
+				result.forEach(indicador => {
+					if (!kpiData[indicador.name]) {
+					kpiData[indicador.name] = [];
+					}
+					kpiData[indicador.name].push({
+					time: this.cogerYearMonth(indicador.ses_date),
+					score: indicador.score
+					});
+				});
+				
+				//BORRAR
+				result.forEach(indicador => {
+					if (!kpiData[indicador.name]) {
+					kpiData[indicador.name] = [];
+					}
+					kpiData[indicador.name].push({
+					time: this.cogerYearMonth(indicador.ses_date),
+					score: 10
+					});
+				});
+				//BORRAR
+				result.forEach(indicador => {
+					if (!kpiData[indicador.name]) {
+					kpiData[indicador.name] = [];
+					}
+					kpiData[indicador.name].push({
+					time: this.cogerYearMonth(indicador.ses_date),
+					score: 6
+					});
+				});
+
+				for (const [key, value] of Object.entries(kpiData)) {
+					this.chartData.push({
+					name: key,
+					data: value
+					});
+				}
+			});
+		});
+		},
+		cogerYearMonth(date){
+		const dateFormat = new Date(date);
+		const year = dateFormat.getFullYear();
+		const month = String(dateFormat.getMonth() + 1).padStart(2, '0');
+
+		return `${year}-${month}`;
+		},
 	}
   }
 </script>
