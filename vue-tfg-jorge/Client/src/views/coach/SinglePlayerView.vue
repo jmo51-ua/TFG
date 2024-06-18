@@ -17,27 +17,31 @@
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z"/></svg>
         KPIs
       </div>
+
       <div class="list-container">
-        <router-link
-          v-for="(item, index) in kpisJugador"
-          :key="index"
-          :to="{ path: '/stats', query: { player: item.name } }"
-          class="list-item-link"
-        >
-          <div class="list-item">
-            <div class="item-details">
-              <div class="name">
-                {{ item.ses_name }} - {{ item.ex_name }} - {{ item.name }}
+        <div v-for="(session, sessionIndex) in kpisJugador" :key="'session-' + sessionIndex">
+          <div @click="toggleDropdown(sessionIndex)" class="session-name">
+            {{ session.ses_name }}
+          </div>
+          <transition name="dropdown">
+            <div v-if="isDropdownOpen(sessionIndex)" class="kpi-dropdown">
+              <div v-for="(kpi, kpiIndex) in kpisJugador" :key="'kpi-' + sessionIndex + '-' + kpiIndex">
+                <div @click="toggleKpiDropdown(sessionIndex, kpiIndex)" class="kpi-name">
+                  {{ kpi.name }} - {{ kpi.score }}
+                </div>
+                <transition name="dropdown">
+                  <div v-if="isKpiDropdownOpen(sessionIndex, kpiIndex)" class="exercise-dropdown">
+                    <div v-for="(exercise, exerciseIndex) in kpi.exercises" :key="'exercise-' + sessionIndex + '-' + kpiIndex + '-' + exerciseIndex" class="exercise-item">
+                      {{ exercise.name }} - {{ exercise.score }}
+                    </div>
+                  </div>
+                </transition>
               </div>
             </div>
-            <div :style="{ backgroundColor: calculateColorKPI((item.score || '0').toString(), ((item.range || '0').toString())), color: getTextColorKPI((item.score || '0').toString(), ((item.range || '0').toString())) }"
-            class="avg"
-            style="display: inline-block; white-space: nowrap; margin-left: 5px;">
-              {{ item.score || 0 }} / {{ item.range || 0 }}
-            </div>
-          </div>
-        </router-link>
+          </transition>
+        </div>
       </div>
+      
     </div>
 
     <div class="block dafo-container">
@@ -104,6 +108,7 @@ export default {
     kpisJugador() {
       switch (this.modo) {
         case 'sesion':
+          console.log(this.kpis_jugador_sesion)
           return this.kpis_jugador_sesion;
         case 'mensual':
           return this.kpis_jugador_mensual;
@@ -145,62 +150,9 @@ export default {
       chartData_mensual: [],
       chartData_trimestral: [],
       chartData_all: [],
-      chartData2: [
-        {
-          idKPI: 10,
-          name: "Centros pierna mala",
-          time: "2020-Q1",
-          score: 9
-        },
-        {
-          idKPI: 11,
-          name: "Centros pierna mala",
-          time: "2020-Q2",
-          score: 2
-        },
-        {
-          idKPI: 12,
-          name: "Centros pierna mala",
-          time: "2020-Q3",
-          score: 6
-        },
-        {
-          idKPI: 12,
-          name: "Centros pierna mala",
-          time: "2021-Q1",
-          score: 7
-        },
-        {
-          idKPI: 12,
-          name: "Centros pierna mala",
-          time: "2021-Q2",
-          score: 4
-        },
-        {
-          idKPI: 12,
-          name: "Centros pierna mala",
-          time: "2021-Q3",
-          score: 6
-        },
-        {
-          idKPI: 12,
-          name: "Centros pierna mala",
-          time: "2022-Q1",
-          score: 7
-        },
-        {
-          idKPI: 12,
-          name: "Centros pierna mala",
-          time: "2022-Q2",
-          score: 4
-        },
-        {
-          idKPI: 12,
-          name: "Centros pierna mala",
-          time: "2022-Q3",
-          score: 6
-        },
-      ],
+
+      openSessions: [],
+      openKpis: []
     };
   },
   setup() {
@@ -209,6 +161,27 @@ export default {
     return { app, dao };
   },
   methods: {
+    toggleDropdown(index) {
+      if (this.openSessions.includes(index)) {
+        this.openSessions = this.openSessions.filter(i => i !== index);
+      } else {
+        this.openSessions.push(index);
+      }
+    },
+    isDropdownOpen(index) {
+      return this.openSessions.includes(index);
+    },
+    toggleKpiDropdown(sessionIndex, kpiIndex) {
+      const key = `${sessionIndex}-${kpiIndex}`;
+      if (this.openKpis.includes(key)) {
+        this.openKpis = this.openKpis.filter(i => i !== key);
+      } else {
+        this.openKpis.push(key);
+      }
+    },
+    isKpiDropdownOpen(sessionIndex, kpiIndex) {
+      return this.openKpis.includes(`${sessionIndex}-${kpiIndex}`);
+    },
 
     getColorForPercentage(pct) {
       var percentColors = [
@@ -273,11 +246,13 @@ export default {
       });
     },
     cargarKPIs_sesion() {
-      this.dao.exercise_has_session_has_actor_has_kpi.read().then((ejercicios) => {
 
+      this.dao.exercise_has_session_has_actor_has_kpi.read().then((ejercicios) => {
         ejercicios = ejercicios.filter(sesion =>
           sesion.Exercise_has_Session_has_Actor_Actor_idActor == this.$route.query.idActor
         );
+
+        let kpiPorSesion = {};
 
         const kpiPromises = ejercicios.map(element => {
           return this.dao.kpi.read().then((indicadores) => {
@@ -291,53 +266,98 @@ export default {
               indicador.ses_date = sesion.date;
               indicador.ses_name = sesion.name;
 
+              if (!kpiPorSesion[sesion.idSession]) {
+                kpiPorSesion[sesion.idSession] = {};
+                kpiPorSesion[sesion.idSession].name = sesion.name;
+                kpiPorSesion[sesion.idSession].date = sesion.date;
+              }
+
+              if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
+                kpiPorSesion[sesion.idSession][indicador.idKPI] = {
+                  idKPI: indicador.idKPI,
+                  name: indicador.name,
+                  scores: [],
+                  range: indicador.range,
+                };
+              }
+
               return this.dao.exercise.read().then((ejercicios) => {
                 let ejercicio = ejercicios.find(ex =>
                   ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
                 );
-                indicador.ex_name = ejercicio.name;
-                this.kpis_jugador_sesion.push(indicador);
 
-                console.log("indicador:",indicador)
-                return indicador;
+                indicador.ex_name = ejercicio.name;
+
+                if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
+                  kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise] = {
+                    id: ejercicio.idExercise,
+                    name: ejercicio.name,
+                    score: element.score,
+                  };
+                }
+                kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
               });
             });
           });
         });
 
         Promise.all(kpiPromises).then((result) => {
+          // promedio score para cada KPI
+          let resultado = [];
+
+          for (let sesion in kpiPorSesion) {
+            
+            for (let idKPI in kpiPorSesion[sesion]) {
+              let kpi = kpiPorSesion[sesion][idKPI];
+              
+              if(kpi.scores){
+                let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+                let exercises = {};
+
+                for (let ex in kpi) {
+                  let ejercicio = kpi[ex];
+                  if(ejercicio.name){
+
+                    if(!exercises[ejercicio.id]){
+                      exercises[ejercicio.id]={
+                        name: ejercicio.name,
+                        score: ejercicio.score,
+                      };
+                    }
+                  }
+                }
+
+                resultado.push({
+                  ses_name: kpiPorSesion[sesion].name, //Nombre Sesion, Mes, Trimestre (sesion, mensual, trimestral)
+                  ses_date: kpiPorSesion[sesion].date,
+                  score: avgScore,
+
+                  idKPI: kpi.idKPI,
+                  name: kpi.name, //Nombre KPI, Sesion o Mes (sesion, mensual, trimestral)
+                  range: kpi.range,
+
+                  exercises: exercises, //Ejercicios, KPIs o Sesiones (sesion, mensual, trimestral)
+
+                  ex_name: kpiPorSesion[sesion].name,
+                });
+              }
+            }
+          }
+          this.kpis_jugador_sesion = resultado;
+
+          this.chartData = [];
           const kpiData = {};
 
-          result.forEach(indicador => {
+          this.kpis_jugador_sesion.forEach(indicador => {
+
             if (!kpiData[indicador.name]) {
               kpiData[indicador.name] = [];
             }
             kpiData[indicador.name].push({
-              time: this.cogerYearMonth(indicador.ses_date),
+              time: indicador.ses_name,
               score: indicador.score
             });
-          });
-          
-          //BORRAR
-          result.forEach(indicador => {
-            if (!kpiData[indicador.name]) {
-              kpiData[indicador.name] = [];
-            }
-            kpiData[indicador.name].push({
-              time: this.cogerYearMonth(indicador.ses_date),
-              score: 10
-            });
-          });
-          //BORRAR
-          result.forEach(indicador => {
-            if (!kpiData[indicador.name]) {
-              kpiData[indicador.name] = [];
-            }
-            kpiData[indicador.name].push({
-              time: this.cogerYearMonth(indicador.ses_date),
-              score: 6
-            });
-          });
+          });          
 
           for (const [key, value] of Object.entries(kpiData)) {
             this.chartData.push({
@@ -365,7 +385,7 @@ export default {
         );
         
 
-        let kpiPorMes = {}
+        let kpiPorMes = {};
 
         let kpiPromises = ejercicios.map(element => {
           return this.dao.kpi.read().then((indicadores) => {
@@ -439,16 +459,6 @@ export default {
             });
           });
 
-          //BORRAR
-          this.kpis_jugador_mensual.forEach(indicador => {
-            if (!kpiData[indicador.name]) {
-              kpiData[indicador.name] = [];
-            }
-            kpiData[indicador.name].push({
-              time: indicador.date,
-              score: 5
-            });
-          });
 
           for (const [key, value] of Object.entries(kpiData)) {
             this.chartData.push({
@@ -554,28 +564,6 @@ export default {
             });
           });
 
-          //BORRAR
-          this.kpis_jugador_trimestral.forEach(indicador => {
-            if (!kpiData[indicador.name]) {
-              kpiData[indicador.name] = [];
-            }
-            kpiData[indicador.name].push({
-              time: indicador.date,
-              score: 3
-            });
-          });
-
-          //BORRAR
-          this.kpis_jugador_trimestral.forEach(indicador => {
-            if (!kpiData[indicador.name]) {
-              kpiData[indicador.name] = [];
-            }
-            kpiData[indicador.name].push({
-              time: indicador.date,
-              score: 2
-            });
-          });
-
           for (const [key, value] of Object.entries(kpiData)) {
             this.chartData.push({
               name: key,
@@ -665,6 +653,50 @@ export default {
     padding-right: 10px; /* Añadir padding para que la barra de desplazamiento no cubra el contenido */
     box-sizing: border-box;
   }
+
+  .session-name {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    background: rgb(44, 160, 238);
+    border: 1px solid grey;
+  }
+
+  .session-name:hover {
+    background-color: rgb(125, 196, 243);
+  }
+
+  .kpi-dropdown {
+    margin-left: 20px;
+  }
+
+  .kpi-name {
+    cursor: pointer;
+    font-weight: bold;
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 5px;
+    background: rgb(44, 238, 196);
+    border: 1px solid grey;
+  }
+
+  .kpi-name:hover {
+    background-color: rgb(169, 240, 224);
+  }
+
+  .exercise-dropdown {
+    margin-left: 20px;
+  }
+
+  .exercise-item {
+    margin: 3px 0;
+    padding: 5px;
+    border-radius: 5px;
+    background: rgb(225, 238, 44);
+    border: 1px solid grey;
+  }
  
   .list-item-link {
     text-decoration: none; /* Quita el subrayado de los enlaces */
@@ -684,7 +716,7 @@ export default {
   }
 
   .list-item:hover {
-    background-color: #f0f0f0; /* Cambia el color de fondo al pasar el ratón */
+    background-color: #f0f0f0;
   }
 
   .avg {
@@ -781,6 +813,7 @@ export default {
     display: flex;
     flex-direction: column;
   }
+
   .match-history-container{
     grid-area:match-history-container;
     max-height: 100%; /* Mantiene la altura máxima */
@@ -805,6 +838,15 @@ export default {
     justify-content: flex-start;
     padding: 10px;
     box-sizing: border-box;
+  }
+
+  .dropdown-enter-active, .dropdown-leave-active {
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+
+  .dropdown-enter, .dropdown-leave-to {
+    max-height: 0;
+    opacity: 0;
   }
 
 </style>

@@ -1,0 +1,12 @@
+idActor,dni,name,surname,photo,birth,phoneNumber,address,User_idUser,session_id,session_name,date,exercise_id,exercise_name,kpi_id,kpi_name,score,dafo_label
+13,2021212121,Pedrito,,NULL,NULL,NULL,NULL,NULL,1,Entrenamiento jueves,2024-03-14,1,Ejercicio A,10,Centros pierna buena,20,fortaleza
+14,2021212122,Javito,,NULL,NULL,NULL,NULL,NULL,1,Entrenamiento lunes,2024-03-10,1,Ejercicio A,10,Centros pierna buena,15,oportunidad
+15,2021212123,Ivancito,,NULL,NULL,NULL,NULL,NULL,1,Entrenamiento miércoles,2024-03-12,2,Ejercicio B,11,Pases cortos,30,fortaleza
+13,2021212121,Pedrito,,NULL,NULL,NULL,NULL,NULL,2,Partido domingo,2024-03-16,2,Ejercicio B,11,Pases cortos,10,debilidad
+16,2021212124,Alvarito,,NULL,NULL,NULL,NULL,NULL,1,Entrenamiento viernes,2024-03-14,3,Ejercicio C,12,Regates,25,fortaleza
+17,2021212125,Marito,,NULL,NULL,NULL,NULL,NULL,1,Entrenamiento jueves,2024-03-13,3,Ejercicio C,12,Regates,15,oportunidad
+13,2021212121,Pedrito,,NULL,NULL,NULL,NULL,NULL,1,Entrenamiento martes,2024-03-11,1,Ejercicio A,10,Centros pierna buena,5,amenaza
+18,2021212126,Raulito,,NULL,NULL,NULL,NULL,NULL,2,Partido sábado,2024-03-15,4,Ejercicio D,13,Disparos a puerta,35,fortaleza
+19,2021212127,Oscarito,,NULL,NULL,NULL,NULL,NULL,1,Entrenamiento miércoles,2024-03-12,4,Ejercicio D,13,Disparos a puerta,20,oportunidad
+20,2021212128,Pablito,,NULL,NULL,NULL,NULL,NULL,2,Partido domingo,2024-03-16,2,Ejercicio B,11,Pases cortos,10,debilidad
+21,2021212129,Pepito,,NULL,NULL,NULL,NULL,NULL,1,Entrenamiento lunes,2024-03-10,1,Ejercicio A,10,Centros pierna buena,0,amenaza

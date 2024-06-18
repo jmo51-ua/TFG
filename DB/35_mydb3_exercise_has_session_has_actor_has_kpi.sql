@@ -43,7 +43,7 @@ CREATE TABLE `exercise_has_session_has_actor_has_kpi` (
 
 LOCK TABLES `exercise_has_session_has_actor_has_kpi` WRITE;
 /*!40000 ALTER TABLE `exercise_has_session_has_actor_has_kpi` DISABLE KEYS */;
-INSERT INTO `exercise_has_session_has_actor_has_kpi` VALUES (1,1,1,2,3,62),(1,1,1,4,1,100),(1,1,1,5,3,49),(1,1,1,6,7,100),(4,4,13,10,13,0);
+INSERT INTO `exercise_has_session_has_actor_has_kpi` VALUES (1,1,1,2,3,62),(1,1,1,4,1,100),(1,1,1,5,3,49),(1,1,1,6,7,100),(4,4,13,10,13,0),(7,4,13,10,13,17),(6,4,13,10,13,35);
 /*!40000 ALTER TABLE `exercise_has_session_has_actor_has_kpi` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

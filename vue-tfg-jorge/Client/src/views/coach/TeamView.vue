@@ -65,8 +65,8 @@ export default {
 
 			this.dao.actor_has_actortype.read().then((response) => {
 				this.actores = response.filter(actor =>
-				actor.ActorType_idActorType === 2 &&
-				actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
+					actor.ActorType_idActorType === 2 &&
+					actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
 				);
 				this.actorIds = this.actores.map(actor => actor.Actor_idActor);
 
@@ -76,8 +76,8 @@ export default {
 		cargarDatosCompletosJugadores() {
 			const promises = this.actorIds.map(id => this.dao.actor.read({ idActor: id }));
 			Promise.all(promises).then((responses) => {
-			this.actoresCompletos = responses;
-			console.log('Datos completos de los actores:', this.actoresCompletos);
+				this.actoresCompletos = responses;
+				console.log('Datos completos de los actores:', this.actoresCompletos);
 			});
 		},
 	},

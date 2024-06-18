@@ -19,9 +19,10 @@
 		</div>
   
 		<div id="graficos" class="row">
-			<div class="chart" v-for="(chart, index) in charts" :key="index">
-				<img :src="chart" alt="Chart Image">
+			<div v-for="(chart, index) in chartData" :key="index" class="chart">
+				<KpiChart :chartData="chart.data" :chartId="'chart-' + index" :chartName="chart.name" />
 			</div>
+
 			<div class="chart">
 				<button class="add-chart-button button" @click="addChart">
 					Añadir nuevo registro
@@ -47,28 +48,39 @@
 </template>
   
 <script>
+import KpiChart from '@/components/KpiChart.vue'
 import { inject } from 'vue';
 import { mapGetters } from 'vuex';
 
   export default {
+	components: {
+		KpiChart
+	},
 	data() {
-	  return {
-		charts: [
-		  'https://via.placeholder.com/300',
-		  'https://via.placeholder.com/300',
-		  'https://via.placeholder.com/300',
-		  'https://via.placeholder.com/300',
-		  'https://via.placeholder.com/300',
-		  'https://via.placeholder.com/300',
-		  'https://via.placeholder.com/300',
-		],
-		showCreateKpiForm: false,
-		newKpi: {
-			name: '',
-			description: '',
-			target: ''
-		}
-	  };
+		return {
+			charts: [
+				'https://via.placeholder.com/300',
+				'https://via.placeholder.com/300',
+				'https://via.placeholder.com/300',
+				'https://via.placeholder.com/300',
+				'https://via.placeholder.com/300',
+				'https://via.placeholder.com/300',
+				'https://via.placeholder.com/300',
+			],
+			showCreateKpiForm: false,
+			newKpi: {
+				name: '',
+				description: '',
+				target: ''
+			},
+			actores: [],
+			actorIds: [],
+			actoresCompletos: [],
+
+			kpis_sesion: [],
+
+			chartData: [],
+		};
 	},
 	computed: {
       ...mapGetters(['teamSelectedID']),
@@ -173,8 +185,184 @@ import { mapGetters } from 'vuex';
 
 		return `${year}-${month}`;
 		},
-	}
-  }
+		cargarGraficos() {
+			if (!this.teamSelectedID) {
+				console.error('No team selected');
+				return;
+			}
+
+			this.dao.actor_has_actortype.read().then((response) => {
+				this.actores = response.filter(actor =>
+					actor.ActorType_idActorType === 2 &&
+					actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
+				);
+				this.actorIds = this.actores.map(actor => actor.Actor_idActor);
+
+				const promises = this.actorIds.map(id => this.dao.actor.read({ idActor: id }));
+				Promise.all(promises).then((responses) => {
+					this.actoresCompletos = responses;
+					console.log('Datos completos de los actores:', this.actoresCompletos);
+					this.cargarKPIs_sesion();
+				});
+			});
+		},
+		cargarKPIs_sesion() {
+			let kpiPorSesion = {};
+
+			this.dao.exercise_has_session_has_actor_has_kpi.read().then((ejercicios) => {
+				const kpiPromises = this.actorIds.map(idActor => {
+					const ejerciciosFiltrados = ejercicios.filter(sesion =>
+						sesion.Exercise_has_Session_has_Actor_Actor_idActor == idActor
+					);
+					return Promise.all(ejerciciosFiltrados.map(element => {
+						return this.dao.kpi.read().then((indicadores) => {
+							let indicador = indicadores.filter(indic =>
+								indic.idKPI == element.KPI_idKPI
+							)[0];
+							indicador.score = element.score;
+
+							return this.dao.session.read().then((sesiones) => {
+								let sesion = sesiones.find(sesion =>
+									sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
+								);
+								indicador.ses_date = sesion.date;
+								indicador.ses_name = sesion.name;
+								let distinctSesion = `${sesion.idSession}-${sesion.name}`;
+
+								if (!kpiPorSesion[distinctSesion]) {
+									kpiPorSesion[distinctSesion] = {};
+								}
+
+								if (!kpiPorSesion[distinctSesion][indicador.idKPI]) {
+									kpiPorSesion[distinctSesion][indicador.idKPI] = {
+										idKPI: indicador.idKPI,
+										name: indicador.name,
+										scores: [],
+										range: indicador.range,
+									};
+								}
+
+								kpiPorSesion[distinctSesion][indicador.idKPI].scores.push(indicador.score);
+								console.log("indicador:", indicador);
+
+								return indicador;
+							});
+						});
+					}));
+				});
+
+				Promise.all(kpiPromises.flat()).then((result) => {
+					let resultado = [];
+
+					for (let sesion in kpiPorSesion) {
+						for (let idKPI in kpiPorSesion[sesion]) {
+							let kpi = kpiPorSesion[sesion][idKPI];
+							let avgScore = kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length;
+							
+							let id_sesion = sesion.split('-')[0];
+							let name_sesion = sesion.split('-')[1];
+
+							resultado.push({
+								idKPI: kpi.idKPI,
+								name: kpi.name,
+								date: name_sesion,
+								score: avgScore,
+								ses_name: name_sesion,
+								range: kpi.range,
+							});
+						}
+					}
+
+					console.log('KPIs agrupados por sesion:', resultado);
+					this.kpis_sesion = resultado;
+
+					this.chartData = [];
+					let kpiData = {};
+
+					this.kpis_sesion.forEach(indicador => {
+						if (!kpiData[indicador.name]) {
+							kpiData[indicador.name] = [];
+						}
+						kpiData[indicador.name].push({
+							time: indicador.date,
+							score: indicador.score
+						});
+					});
+
+					this.kpis_sesion.forEach(indicador => {
+						if (!kpiData[indicador.name]) {
+							kpiData[indicador.name] = [];
+						}
+						kpiData[indicador.name].push({
+							time: "aaaaaa",
+							score: 23
+						});
+					});
+
+					this.kpis_sesion.forEach(indicador => {
+						if (!kpiData[indicador.name]) {
+							kpiData[indicador.name] = [];
+						}
+						kpiData[indicador.name].push({
+							time: "bbbb",
+							score: 31
+						});
+					});
+
+					this.kpis_sesion.forEach(indicador => {
+						if (!kpiData[indicador.name]) {
+							kpiData[indicador.name] = [];
+						}
+						kpiData[indicador.name].push({
+							time: "cccc",
+							score: 28
+						});
+					});
+
+					for (const [key, value] of Object.entries(kpiData)) {
+						console.log(value);
+						this.chartData.push({
+							name: key,
+							data: value
+						});
+						this.chartData.push({
+							name: key,
+							data: value
+						});
+						this.chartData.push({
+							name: key,
+							data: value
+						});
+						this.chartData.push({
+							name: key,
+							data: value
+						});
+						this.chartData.push({
+							name: key,
+							data: value
+						});
+						this.chartData.push({
+							name: key,
+							data: value
+						});
+						this.chartData.push({
+							name: key,
+							data: value
+						});
+					}
+				});
+			});
+		},
+	},
+	created() {
+		try{
+			this.cargarGraficos();
+		}
+		catch(error){
+			console.error(error);
+		}
+    }
+}
 </script>
   
 <style scoped>
@@ -218,12 +406,10 @@ import { mapGetters } from 'vuex';
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-	}
-
-	.chart img {
-		max-width: 100%;
+		max-width: 400px;
 		height: auto;
 		border-radius: 10px;
+		border: solid 1px black;
 	}
 
 	.add-chart-button {
