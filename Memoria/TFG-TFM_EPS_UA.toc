@@ -1,0 +1,76 @@
+\selectlanguage *[]{spanish}
+\contentsline {chapter}{\numberline {1}Introducción}{1}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Marco Teórico}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Estudio del mercado}{3}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Bcoach}{3}{subsection.2.1.1}%
+\contentsline {subparagraph}{\nonumberline Bcoach - Licencia Tablet/Ipad (2,99€/mes)}{3}{subparagraph*.6}%
+\contentsline {subparagraph}{\nonumberline Bcoach Cloud - Licencia Multiplataforma (5,99€/mes)}{3}{subparagraph*.8}%
+\contentsline {subparagraph}{\nonumberline Bcoach Pro - Licencia + Asesoramiento(299,99€/mes)}{3}{subparagraph*.10}%
+\contentsline {subsubsection}{\numberline {2.1.1.1}Manejo de estadísticas e indicadores de rendimiento}{4}{subsubsection.2.1.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Football tactical Board}{5}{subsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.2.1}Manejo de estadísticas e indicadores de rendimiento}{5}{subsubsection.2.1.2.1}%
+\contentsline {subsection}{\numberline {2.1.3}Sportlyzer Players App}{6}{subsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.3.1}Entrenadores}{6}{subsubsection.2.1.3.1}%
+\contentsline {subparagraph}{\nonumberline Horarios y Tareas}{6}{subparagraph*.15}%
+\contentsline {subparagraph}{\nonumberline Disponibilidad}{7}{subparagraph*.17}%
+\contentsline {subparagraph}{\nonumberline Asistencia}{7}{subparagraph*.19}%
+\contentsline {subparagraph}{\nonumberline Retroalimentación}{7}{subparagraph*.21}%
+\contentsline {subparagraph}{\nonumberline Planificación y análisis}{7}{subparagraph*.23}%
+\contentsline {subparagraph}{\nonumberline Evaluación y prueba de jugadores}{7}{subparagraph*.25}%
+\contentsline {subparagraph}{\nonumberline Mensajería}{7}{subparagraph*.27}%
+\contentsline {subsubsection}{\numberline {2.1.3.2}Clubes}{7}{subsubsection.2.1.3.2}%
+\contentsline {subparagraph}{\nonumberline Base de datos}{7}{subparagraph*.29}%
+\contentsline {subparagraph}{\nonumberline Horarios y deberes de equipo}{7}{subparagraph*.31}%
+\contentsline {subparagraph}{\nonumberline Facturas}{7}{subparagraph*.33}%
+\contentsline {subparagraph}{\nonumberline Padres y Jugadores}{8}{subparagraph*.35}%
+\contentsline {subsubsection}{\numberline {2.1.3.3}Precios}{8}{subsubsection.2.1.3.3}%
+\contentsline {subsubsection}{\numberline {2.1.3.4}Manejo de estadísticas e indicadores de rendimiento}{8}{subsubsection.2.1.3.4}%
+\contentsline {subsection}{\numberline {2.1.4}LongoMatch}{8}{subsection.2.1.4}%
+\contentsline {subsubsection}{\numberline {2.1.4.1}Manejo de estadísticas e indicadores de rendimiento}{9}{subsubsection.2.1.4.1}%
+\contentsline {subsection}{\numberline {2.1.5}Picco: Estadísticas y rendimiento}{9}{subsection.2.1.5}%
+\contentsline {subsubsection}{\numberline {2.1.5.1}Manejo de estadísticas e indicadores de rendimiento}{10}{subsubsection.2.1.5.1}%
+\contentsline {subsection}{\numberline {2.1.6}Teamtag}{10}{subsection.2.1.6}%
+\contentsline {subsubsection}{\numberline {2.1.6.1}Manejo de estadísticas e indicadores de rendimiento}{11}{subsubsection.2.1.6.1}%
+\contentsline {subsection}{\numberline {2.1.7}Conclusiones}{11}{subsection.2.1.7}%
+\contentsline {subsubsection}{\numberline {2.1.7.1}Manejo de estadísticas e indicadores de rendimiento}{12}{subsubsection.2.1.7.1}%
+\contentsline {subparagraph}{\nonumberline Bcoach}{12}{subparagraph*.41}%
+\contentsline {subparagraph}{\nonumberline Football Tactical Board}{13}{subparagraph*.43}%
+\contentsline {subparagraph}{\nonumberline Sportlyzer Players App}{13}{subparagraph*.45}%
+\contentsline {subparagraph}{\nonumberline LongoMatch}{13}{subparagraph*.47}%
+\contentsline {subparagraph}{\nonumberline Picco}{13}{subparagraph*.49}%
+\contentsline {subparagraph}{\nonumberline Teamtag}{13}{subparagraph*.51}%
+\contentsline {section}{\numberline {2.2}Tabla comparativa}{14}{section.2.2}%
+\contentsline {chapter}{\numberline {3}Objetivos}{15}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Público objetivo}{15}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Desarrollo de talento}{15}{section.3.2}%
+\contentsline {chapter}{\numberline {4}Metodología}{17}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Historias de usuario}{17}{section.4.1}%
+\contentsline {subparagraph}{\nonumberline Descripción}{17}{subparagraph*.54}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{17}{subparagraph*.56}%
+\contentsline {subparagraph}{\nonumberline Descripción}{18}{subparagraph*.58}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{18}{subparagraph*.60}%
+\contentsline {subparagraph}{\nonumberline Descripción}{18}{subparagraph*.62}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{19}{subparagraph*.64}%
+\contentsline {subparagraph}{\nonumberline Descripción}{19}{subparagraph*.66}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{19}{subparagraph*.68}%
+\contentsline {subparagraph}{\nonumberline Descripción}{20}{subparagraph*.70}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{20}{subparagraph*.72}%
+\contentsline {subparagraph}{\nonumberline Descripción}{20}{subparagraph*.74}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{21}{subparagraph*.76}%
+\contentsline {subparagraph}{\nonumberline Descripción}{21}{subparagraph*.78}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{21}{subparagraph*.80}%
+\contentsline {subparagraph}{\nonumberline Descripción}{22}{subparagraph*.82}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{22}{subparagraph*.84}%
+\contentsline {subparagraph}{\nonumberline Descripción}{22}{subparagraph*.86}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{22}{subparagraph*.88}%
+\contentsline {subparagraph}{\nonumberline Descripción}{23}{subparagraph*.90}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{23}{subparagraph*.92}%
+\contentsline {section}{\numberline {4.2}Elección de las tecnologías y lenguajes de programación}{23}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Git}{24}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Visual Studio Code}{24}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}VueJS}{24}{subsection.4.2.3}%
+\contentsline {subsubsection}{\numberline {4.2.3.1}Dependencias}{24}{subsubsection.4.2.3.1}%
+\contentsline {subsection}{\numberline {4.2.4}MySQL Server}{24}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Framework DAO}{24}{subsection.4.2.5}%
+\contentsline {chapter}{\nonumberline Bibliografía}{25}{chapter*.93}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
