@@ -1,5 +1,5 @@
 # Ignorar todo el contenido de la carpeta Memoria/
-Memoria/**
+# Memoria/**
 
 # Exceptuar el archivo TFG-TFM_EPS_UA.pdf
 
