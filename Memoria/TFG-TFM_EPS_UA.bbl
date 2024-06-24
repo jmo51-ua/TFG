@@ -121,6 +121,54 @@ Hoare, D.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Iconify%
+}{%
+Iconify%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+iconos-iconify}
+\APACinsertmetastar {%
+iconos-iconify}%
+\begin{APACrefauthors}%
+Iconify.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {Biblioteca de iconoes, Iconify.} {Biblioteca de iconoes, iconify.}
+\newblock
+\APAChowpublished {\url{https://icon-sets.iconify.design/}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-21}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Komarnicki%
+}{%
+Komarnicki%
+}{%
+{\protect \APACyear {2023}}%
+}]{%
+VueJSTutorial}
+\APACinsertmetastar {%
+VueJSTutorial}%
+\begin{APACrefauthors}%
+Komarnicki, J.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2023}{}{}.
+\newblock
+\APACrefbtitle {Vue 3 Crash Course | Project From Scratch.} {Vue 3 crash course | project from scratch.}
+\newblock
+\APAChowpublished {\url{https://www.youtube.com/watch?v=KTFH4P8unUQ}}.
+\newblock
+\APACrefnote{Accessed: 2024-05-16}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 LongoMatch%
 }{%
 LongoMatch%
@@ -185,7 +233,7 @@ Parmenter, D.%
 \newblock
 \APACrefYear{2010}.
 \newblock
-\APACrefbtitle {Key Performance Indicators} {Key performance indicators}.
+\APACrefbtitle {Key Performance Indicators: Developing, Implementing, and Using Winning KPIs} {Key performance indicators: Developing, implementing, and using winning kpis}.
 \newblock
 \APACaddressPublisher{}{Wiley}.
 \PrintBackRefs{\CurrentBib}

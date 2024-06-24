@@ -41,7 +41,7 @@ CREATE TABLE `exercise_has_session_has_actor` (
 
 LOCK TABLES `exercise_has_session_has_actor` WRITE;
 /*!40000 ALTER TABLE `exercise_has_session_has_actor` DISABLE KEYS */;
-INSERT INTO `exercise_has_session_has_actor` VALUES (1,1,1,NULL),(1,2,1,NULL),(1,3,1,NULL),(4,4,13,'Será un crack si sabe controlar su caracter. O no????? Nunca lo sabremos'),(4,4,14,NULL),(4,4,15,'Que grande es!!!'),(4,4,16,NULL),(4,4,17,NULL),(4,4,18,NULL),(4,4,19,NULL),(4,4,20,NULL),(4,4,21,NULL),(5,4,13,'Pedro pedro pedro pedro pe'),(5,4,14,'javiiii'),(5,4,15,NULL),(5,4,16,NULL),(5,4,17,NULL),(5,4,18,NULL),(5,4,19,NULL),(5,4,20,NULL),(5,4,21,NULL),(6,4,13,NULL),(6,4,14,NULL),(6,4,15,NULL),(6,4,16,NULL),(6,4,17,NULL),(6,4,18,NULL),(6,4,19,NULL),(6,4,20,NULL),(6,4,21,NULL),(7,4,13,NULL),(7,4,14,NULL),(7,4,15,NULL),(7,4,16,NULL),(7,4,17,NULL),(7,4,18,NULL),(7,4,19,NULL),(7,4,20,NULL),(7,4,21,NULL);
+INSERT INTO `exercise_has_session_has_actor` VALUES (1,1,1,NULL),(1,2,1,NULL),(1,3,1,NULL),(4,4,13,'Será un crack si sabe controlar su caracter. O no????? Nunca lo sabremos'),(4,4,14,NULL),(4,4,15,'Que grande es!!!'),(4,4,16,NULL),(4,4,17,NULL),(4,4,18,NULL),(4,4,19,NULL),(4,4,20,NULL),(4,4,21,NULL),(5,4,13,'Pedro pedro pedro pedro pe'),(5,4,14,'javiiii'),(5,4,15,NULL),(5,4,16,NULL),(5,4,17,NULL),(5,4,18,NULL),(5,4,19,NULL),(5,4,20,NULL),(5,4,21,NULL),(6,4,13,NULL),(6,4,14,NULL),(6,4,15,NULL),(6,4,16,NULL),(6,4,17,NULL),(6,4,18,NULL),(6,4,19,NULL),(6,4,20,NULL),(6,4,21,NULL),(7,4,13,NULL),(7,4,14,NULL),(7,4,15,NULL),(7,4,16,NULL),(7,4,17,NULL),(7,4,18,NULL),(7,4,19,NULL),(7,4,20,NULL),(7,4,21,NULL),(3,5,14,'Jorge ha puesto esto');
 /*!40000 ALTER TABLE `exercise_has_session_has_actor` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

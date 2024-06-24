@@ -66,11 +66,17 @@
 \contentsline {subparagraph}{\nonumberline Descripción}{23}{subparagraph*.90}%
 \contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{23}{subparagraph*.92}%
 \contentsline {section}{\numberline {4.2}Elección de las tecnologías y lenguajes de programación}{23}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Git}{24}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.1}Git}{23}{subsection.4.2.1}%
 \contentsline {subsection}{\numberline {4.2.2}Visual Studio Code}{24}{subsection.4.2.2}%
 \contentsline {subsection}{\numberline {4.2.3}VueJS}{24}{subsection.4.2.3}%
 \contentsline {subsubsection}{\numberline {4.2.3.1}Dependencias}{24}{subsubsection.4.2.3.1}%
-\contentsline {subsection}{\numberline {4.2.4}MySQL Server}{24}{subsection.4.2.4}%
-\contentsline {subsection}{\numberline {4.2.5}Framework DAO}{24}{subsection.4.2.5}%
-\contentsline {chapter}{\nonumberline Bibliografía}{25}{chapter*.93}%
+\contentsline {subparagraph}{\nonumberline Iconify}{24}{subparagraph*.94}%
+\contentsline {subparagraph}{\nonumberline ViteJS}{25}{subparagraph*.97}%
+\contentsline {subparagraph}{\nonumberline ChartJS}{25}{subparagraph*.99}%
+\contentsline {subparagraph}{\nonumberline Vue-router}{27}{subparagraph*.102}%
+\contentsline {subparagraph}{\nonumberline Vuex}{27}{subparagraph*.104}%
+\contentsline {subsection}{\numberline {4.2.4}MySQL Server}{27}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Framework DAO}{27}{subsection.4.2.5}%
+\contentsline {chapter}{\numberline {5}Desarrollo}{29}{chapter.5}%
+\contentsline {chapter}{\nonumberline Bibliografía}{31}{chapter*.105}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

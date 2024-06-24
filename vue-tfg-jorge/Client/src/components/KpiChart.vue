@@ -68,7 +68,7 @@ export default {
           }
         });
       } else {
-        console.error('No chart data available');
+        console.error('No hay datos para la grafica');
       }
     }
     catch(error){

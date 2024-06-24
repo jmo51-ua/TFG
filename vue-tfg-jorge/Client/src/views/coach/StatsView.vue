@@ -257,7 +257,7 @@ import { mapGetters } from 'vuex';
 					for (let sesion in kpiPorSesion) {
 						for (let idKPI in kpiPorSesion[sesion]) {
 							let kpi = kpiPorSesion[sesion][idKPI];
-							let avgScore = kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length;
+							let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
 							
 							let id_sesion = sesion.split('-')[0];
 							let name_sesion = sesion.split('-')[1];
@@ -289,62 +289,8 @@ import { mapGetters } from 'vuex';
 						});
 					});
 
-					this.kpis_sesion.forEach(indicador => {
-						if (!kpiData[indicador.name]) {
-							kpiData[indicador.name] = [];
-						}
-						kpiData[indicador.name].push({
-							time: "aaaaaa",
-							score: 23
-						});
-					});
-
-					this.kpis_sesion.forEach(indicador => {
-						if (!kpiData[indicador.name]) {
-							kpiData[indicador.name] = [];
-						}
-						kpiData[indicador.name].push({
-							time: "bbbb",
-							score: 31
-						});
-					});
-
-					this.kpis_sesion.forEach(indicador => {
-						if (!kpiData[indicador.name]) {
-							kpiData[indicador.name] = [];
-						}
-						kpiData[indicador.name].push({
-							time: "cccc",
-							score: 28
-						});
-					});
-
 					for (const [key, value] of Object.entries(kpiData)) {
 						console.log(value);
-						this.chartData.push({
-							name: key,
-							data: value
-						});
-						this.chartData.push({
-							name: key,
-							data: value
-						});
-						this.chartData.push({
-							name: key,
-							data: value
-						});
-						this.chartData.push({
-							name: key,
-							data: value
-						});
-						this.chartData.push({
-							name: key,
-							data: value
-						});
-						this.chartData.push({
-							name: key,
-							data: value
-						});
 						this.chartData.push({
 							name: key,
 							data: value

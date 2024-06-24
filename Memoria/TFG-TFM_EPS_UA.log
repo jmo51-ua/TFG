@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.4.7)  4 JUN 2024 15:36
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.4.7)  21 JUN 2024 18:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1471,6 +1471,21 @@ LaTeX Warning: Label `sistemass2' multiply defined.
 
 LaTeX Warning: Label `sistemass2' multiply defined.
 
+
+LaTeX Warning: Label `PHP-color_code' multiply defined.
+
+
+LaTeX Warning: Label `sistemass2' multiply defined.
+
+
+LaTeX Warning: Label `Consola_code' multiply defined.
+
+
+LaTeX Warning: Label `PHP-color_code' multiply defined.
+
+
+LaTeX Warning: Label `sistemass2' multiply defined.
+
 )
 \openout1 = `TFG-TFM_EPS_UA.aux'.
 
@@ -2056,7 +2071,40 @@ chapter 4.
 [17
 
 
-] [18] [19] [20] [21] [22]
+] [18] [19] [20] [21] [22] [23]
+LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <8> not available
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 216.
+
+
+Package inputenc Warning: inputenc package ignored with utf8 based engines.
+
+(c:/Users/Jorge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2024/03/11 1.10a listings language file
+) (c:/Users/Jorge/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/listings/lstlang2.sty
+File: lstlang2.sty 2024/03/11 1.10a listings language file
+)
+
+Package inputenc Warning: inputenc package ignored with utf8 based engines.
+
+
+Package inputenc Warning: inputenc package ignored with utf8 based engines.
+
+File: archivos/tfg_jorge/icoco_grafico_iconify.png Graphic file (type bmp)
+<archivos/tfg_jorge/icoco_grafico_iconify.png>
+[24]
+
+Package inputenc Warning: inputenc package ignored with utf8 based engines.
+
+
+Package inputenc Warning: inputenc package ignored with utf8 based engines.
+
+[25]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [26]
+File: archivos/tfg_jorge/chartjs_ejemplo.png Graphic file (type bmp)
+<archivos/tfg_jorge/chartjs_ejemplo.png>
+
 
 Package inputenc Warning: inputenc package ignored with utf8 based engines.
 
@@ -2067,26 +2115,28 @@ Package inputenc Warning: inputenc package ignored with utf8 based engines.
 Package inputenc Warning: inputenc package ignored with utf8 based engines.
 
 
-Overfull \hbox (85.52193pt too wide) in paragraph at lines 213--214
+Overfull \hbox (85.52193pt too wide) in paragraph at lines 354--355
 []\TU/lmr/m/n/10.95 Cambiar en database.js [][][][][][] por [][][], compatible con el método [][][],
  []
 
-) (./TFG-TFM_EPS_UA.bbl
-Underfull \vbox (badness 10000) has occurred while \output is active []
+) (./capitulos/desarrollo.tex [27] [28
 
- [23] [24]
+
+]
+chapter 5.
+) (./TFG-TFM_EPS_UA.bbl [29] [30
+
+
+]
 chapter without number
 
 Underfull \hbox (badness 3189) in paragraph at lines 110--122
 []\TU/lmr/m/n/10.95 Hoare, D.  (1999).  \TU/lmr/m/it/10.95 Seminario internacional de detección de talentos deporti-
  []
 
-)
+[31])
 No file TFG-TFM_EPS_UA.acr.
-[25
-
-
-] (./TFG-TFM_EPS_UA.aux)
+[32] (./TFG-TFM_EPS_UA.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -2099,12 +2149,12 @@ Package rerunfilecheck Info: File `TFG-TFM_EPS_UA.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 61920 strings out of 474760
- 1510747 string characters out of 5750819
- 2246405 words of memory out of 5000000
- 82908 multiletter control sequences out of 15000+600000
- 570528 words of font info for 116 fonts, out of 8000000 for 9000
+ 64014 strings out of 474760
+ 1548063 string characters out of 5750819
+ 2591163 words of memory out of 5000000
+ 84985 multiletter control sequences out of 15000+600000
+ 570552 words of font info for 119 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 114i,20n,134p,11006b,1019s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 114i,21n,134p,11006b,3051s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on TFG-TFM_EPS_UA.pdf (37 pages).
+Output written on TFG-TFM_EPS_UA.pdf (44 pages).

@@ -694,7 +694,6 @@ export default {
     margin: 3px 0;
     padding: 5px;
     border-radius: 5px;
-    background: rgb(225, 238, 44);
     border: 1px solid grey;
   }
  

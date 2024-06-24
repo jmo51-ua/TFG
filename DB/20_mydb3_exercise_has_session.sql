@@ -44,7 +44,7 @@ CREATE TABLE `exercise_has_session` (
 
 LOCK TABLES `exercise_has_session` WRITE;
 /*!40000 ALTER TABLE `exercise_has_session` DISABLE KEYS */;
-INSERT INTO `exercise_has_session` VALUES (1,1,1,1,'A'),(1,2,1,1,'A'),(1,3,1,1,'A'),(4,4,10,1,'B'),(5,4,10,1,'B'),(6,4,10,1,'B'),(7,4,10,1,'B'),(8,5,10,2,'A');
+INSERT INTO `exercise_has_session` VALUES (1,1,1,1,'A'),(1,2,1,1,'A'),(1,3,1,1,'A'),(4,4,10,1,'B'),(5,4,10,1,'B'),(6,4,10,1,'B'),(7,4,10,1,'B'),(8,5,10,2,'A'),(3,5,10,1,'B');
 /*!40000 ALTER TABLE `exercise_has_session` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -198,6 +198,8 @@ Para que el seguimiento de los resultados sea lo mas eficaz y eficiente posible,
 A continuación, detallamos las razones específicas para la elección de las siguientes herramientas como componentes clave del desarrollo.
 
 \subsection{Git}
+Git es un software de control de versiones gratis y de código abierto, funciona como un rastreador de contenido permitiendo a los desarrolladores revertir y regresar a una versión anterior de su código. Con Git, cada desarrollador tiene una copia completa del repositorio, lo que permite trabajar sin conexión y realizar operaciones localmente. Además, Git soporta la creación de ramas para trabajar en nuevas características o correcciones de errores de manera independiente, que luego pueden fusionarse en la rama principal. Su uso de algoritmos de hashing garantiza la integridad de los datos, y su rendimiento superior permite manejar grandes cantidades de datos y cambios de manera eficiente.
+
 
 \subsection{Visual Studio Code}
 
@@ -217,22 +219,129 @@ Iconify es un proyecto de código abierto que proporciona una forma sencillade u
 
 Para agregar los iconos que ofrece Iconify debemos importar el componente Icon del paquete en nuestros componentes de Vue. Lo haremos con el siguiente fragmento de código:
 
-\begin{lstlisting}[style=Javascript-color, caption={Importar el componente Icon en Vue},label=Javascript_code-color]
+\begin{lstlisting}[style=PHP-color, caption={Importar el componente Icon en Vue},label=PHP-color_code]
 	<script setup>
 		import { Icon } from '@iconify/vue'
 	</script>
 \end{lstlisting}
 
-Para agregar iconos debemos buscar los que queramos en la página web de Iconify 
+Para agregar iconos debemos buscar los que queramos en la página web de Iconify en \citep{iconos-iconify}. Una vez hayamos elegido el estilo del icono, podemos copiar el código del componente en la página web, por ejemplo:
 
+\begin{lstlisting}[style=PHP-color, caption={Código para agregar un icono a la página},label=PHP-color_code]
+	<template>
+		<Icon icon="streamline:graph-dot-solid" />
+	</template>
+\end{lstlisting}
+
+Dando como resultado:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=3cm]{archivos/tfg_jorge/icoco_grafico_iconify}
+    \caption{Icono de gráfico importado desde la biblioteca de Iconify}\label{sistemass2}
+\end{figure}
 
 \subparagraph{ViteJS}
+ViteJS es una herramienta de construcción de frontend que ofrece una experiencia de desarrollo moderna, rápida y eficiente para proyectos web.
+Gracias a su recarga instantánea podemos mejorar considerablemente la productividad a medida que desarrollamos el proyecto. Nuestro proyecto principal de Vue lo crearemos con esta herramienta:
 
-\subparagraph{Sass}
-
-\subparagraph{UID}
+\begin{lstlisting}[style=Consola, caption={Instalación del paquete iconify},label=Consola_code]
+	npm init @vitejs/app
+\end{lstlisting}
 
 \subparagraph{ChartJS}
+Una biblioteca de JavaScript que permite crear gráficos interactivos y visualizaciones de datos en aplicaciones web. Es fácil de usar y compatible con múltiples tipos de gráficos, como barras, líneas, etc. Gracias a su sencillez para integrarla en nuestro proyecto de Vue podremos usarla con total normalidad.
+
+Para usarla, crearemos un componente para la creación de una gráfica que podremos usar en todas las vistas que queramos:
+
+\begin{lstlisting}[style=PHP-color, caption={Código para agregar un icono a la página},label=PHP-color_code]
+<template>
+  <div class="chart-container">
+    <canvas :id="chartId"></canvas>
+  </div>
+</template>
+
+
+<script>
+import Chart from 'chart.js/auto';
+
+export default {
+  name: 'KpiChart',
+  props: {
+    chartData: {
+      type: Array,
+      required: true
+    },
+    chartId: {
+      type: String,
+      required: true
+    },
+    chartName: {
+      type: String,
+      required: true
+    }
+  },
+  mounted() {
+
+    try{
+      const ctx = document.getElementById(this.chartId);
+      if (this.chartData && this.chartData.length > 0) {
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: this.chartData.map(row => row.time),
+            datasets: [
+              {
+                label: this.chartName,
+                data: this.chartData.map(row => row.score)
+              }
+            ]
+          },
+          options: {
+            animation: {
+              duration: 1500, // milisegundos
+              easing: 'easeOutCubic', // Tipo de animación
+              onProgress(animation) {
+                const chartInstance = animation.chart;
+                const ctx = chartInstance.ctx;
+                const dataset = chartInstance.data.datasets[0];
+                const meta = chartInstance.getDatasetMeta(0);
+                meta.data.forEach((bar, index) => {
+                  const data = dataset.data[index];
+                  ctx.fillText(data, bar.x, bar.y - 5);
+                });
+              },
+              onComplete(animation) {
+                const chartInstance = animation.chart;
+                const ctx = chartInstance.ctx;
+                const dataset = chartInstance.data.datasets[0];
+                const meta = chartInstance.getDatasetMeta(0);
+                meta.data.forEach((bar, index) => {
+                  const data = dataset.data[index];
+                  ctx.fillText(data, bar.x, bar.y - 5);
+                });
+              }
+            },
+          }
+        });
+      } else {
+        console.error('No hay datos para la grafica');
+      }
+    }
+    catch(error){
+      console.error("Error:",error)
+    }
+  }
+};
+</script>
+\end{lstlisting}
+
+Como resultado de una de nuestras gráficas:
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{archivos/tfg_jorge/chartjs_ejemplo}
+    \caption{Gráfico generado con ChartJS}
+    \label{sistemass2}
+\end{figure}
 
 \subparagraph{Vue-router}
 
