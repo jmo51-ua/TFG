@@ -1,6 +1,30 @@
 \begin{thebibliography}{}
 
 \bibitem [\protect \citeauthoryear {%
+Agilest%
+}{%
+Agilest%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+why_scrum}
+\APACinsertmetastar {%
+why_scrum}%
+\begin{APACrefauthors}%
+Agilest.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {Why Does Scrum Work?} {Why does scrum work?}
+\newblock
+\APAChowpublished {\url{https://www.agilest.org/scrum/why-does-scrum-work/}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-25}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Bcoach%
 }{%
 Bcoach%
@@ -70,6 +94,30 @@ Bcoach.%
 \APAChowpublished {\url{https://bcoach.app/aplicaciones-para-entrenadores-de-futbol/}}.
 \newblock
 \APACrefnote{Accessed: 2024-03-24}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Flores%
+}{%
+Flores%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+def_vscode}
+\APACinsertmetastar {%
+def_vscode}%
+\begin{APACrefauthors}%
+Flores, F.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {Qué es Visual Studio Code y qué ventajas ofrece.} {Qué es visual studio code y qué ventajas ofrece.}
+\newblock
+\APAChowpublished {\url{https://openwebinars.net/blog/que-es-visual-studio-code-y-que-ventajas-ofrece/}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-25}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -145,6 +193,30 @@ Iconify.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Imagina%
+}{%
+Imagina%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+vue_route}
+\APACinsertmetastar {%
+vue_route}%
+\begin{APACrefauthors}%
+Imagina.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {¿Qué es Vue Router y Por qué es Necesario?} {¿qué es vue router y por qué es necesario?}
+\newblock
+\APAChowpublished {\url{https://imaginaformacion.com/tutoriales/que-es-vue-router-y-por-que-es-necesario}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-25}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Komarnicki%
 }{%
 Komarnicki%
@@ -217,6 +289,52 @@ LongoMatch.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
+Maida%
+}{%
+Maida%
+}{%
+{\protect \APACyear {2015}}%
+}]{%
+def_metodologia}
+\APACinsertmetastar {%
+def_metodologia}%
+\begin{APACrefauthors}%
+Maida, J., Esteban Gabriel ;~Pacienzia.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYear{2015}.
+\newblock
+\APACrefbtitle {Metodologías de desarrollo de software} {Metodologías de desarrollo de software}.
+\newblock
+\APACaddressPublisher{}{Cátedra: Seminario de Sistemas}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Montiel%
+}{%
+Montiel%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+def_git}
+\APACinsertmetastar {%
+def_git}%
+\begin{APACrefauthors}%
+Montiel, O.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {La guía para principiantes de Git y Github.} {La guía para principiantes de git y github.}
+\newblock
+\APAChowpublished {\url{https://www.freecodecamp.org/espanol/news/guia-para-principiantes-de-git-y-github/}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-25}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Parmenter%
 }{%
 Parmenter%
@@ -236,6 +354,30 @@ Parmenter, D.%
 \APACrefbtitle {Key Performance Indicators: Developing, Implementing, and Using Winning KPIs} {Key performance indicators: Developing, implementing, and using winning kpis}.
 \newblock
 \APACaddressPublisher{}{Wiley}.
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Rrehkof%
+}{%
+Rrehkof%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+def_sprints}
+\APACinsertmetastar {%
+def_sprints}%
+\begin{APACrefauthors}%
+Rrehkof, M.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {Scrum sprints.} {Scrum sprints.}
+\newblock
+\APAChowpublished {\url{https://www.atlassian.com/agile/scrum/sprints}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-25}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -260,6 +402,78 @@ Sportlyzer.%
 \APAChowpublished {\url{https://www.sportlyzer.com/en/features/player-app}}.
 \newblock
 \APACrefnote{Accessed: 2024-03-24}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+VueJS%
+}{%
+VueJS%
+}{%
+{\protect \APACyear {2024}}%
+{\protect \APACexlab {{\protect \BCnt {1}}}}}]{%
+comparar_vue}
+\APACinsertmetastar {%
+comparar_vue}%
+\begin{APACrefauthors}%
+VueJS.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024{\protect \BCnt {1}}}{}{}.
+\newblock
+\APACrefbtitle {Comparison with Other Frameworks.} {Comparison with other frameworks.}
+\newblock
+\APAChowpublished {\url{https://v2.vuejs.org/v2/guide/comparison.html}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-25}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+VueJS%
+}{%
+VueJS%
+}{%
+{\protect \APACyear {2024}}%
+{\protect \APACexlab {{\protect \BCnt {2}}}}}]{%
+def_vue}
+\APACinsertmetastar {%
+def_vue}%
+\begin{APACrefauthors}%
+VueJS.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024{\protect \BCnt {2}}}{}{}.
+\newblock
+\APACrefbtitle {¿Qué es Vue.js?} {¿qué es vue.js?}
+\newblock
+\APAChowpublished {\url{https://es.vuejs.org/v2/guide/#%C2%BFQue-es-Vue-js}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-25}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Walsh%
+}{%
+Walsh%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+def_github}
+\APACinsertmetastar {%
+def_github}%
+\begin{APACrefauthors}%
+Walsh, D.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {Qué es GitHub y para qué sirve.} {Qué es github y para qué sirve.}
+\newblock
+\APAChowpublished {\url{https://blog.hubspot.es/website/que-es-github#que-es}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-25}
 \PrintBackRefs{\CurrentBib}
 
 \end{thebibliography}

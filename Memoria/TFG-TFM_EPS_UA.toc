@@ -41,42 +41,64 @@
 \contentsline {subparagraph}{\nonumberline Teamtag}{13}{subparagraph*.51}%
 \contentsline {section}{\numberline {2.2}Tabla comparativa}{14}{section.2.2}%
 \contentsline {chapter}{\numberline {3}Objetivos}{15}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Público objetivo}{15}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Desarrollo de talento}{15}{section.3.2}%
+\contentsline {section}{\numberline {3.1}Objetivos generales}{15}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Objetivos específicos}{16}{section.3.2}%
 \contentsline {chapter}{\numberline {4}Metodología}{17}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Historias de usuario}{17}{section.4.1}%
-\contentsline {subparagraph}{\nonumberline Descripción}{17}{subparagraph*.54}%
-\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{17}{subparagraph*.56}%
-\contentsline {subparagraph}{\nonumberline Descripción}{18}{subparagraph*.58}%
-\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{18}{subparagraph*.60}%
-\contentsline {subparagraph}{\nonumberline Descripción}{18}{subparagraph*.62}%
-\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{19}{subparagraph*.64}%
-\contentsline {subparagraph}{\nonumberline Descripción}{19}{subparagraph*.66}%
-\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{19}{subparagraph*.68}%
-\contentsline {subparagraph}{\nonumberline Descripción}{20}{subparagraph*.70}%
-\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{20}{subparagraph*.72}%
-\contentsline {subparagraph}{\nonumberline Descripción}{20}{subparagraph*.74}%
-\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{21}{subparagraph*.76}%
-\contentsline {subparagraph}{\nonumberline Descripción}{21}{subparagraph*.78}%
-\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{21}{subparagraph*.80}%
-\contentsline {subparagraph}{\nonumberline Descripción}{22}{subparagraph*.82}%
-\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{22}{subparagraph*.84}%
-\contentsline {subparagraph}{\nonumberline Descripción}{22}{subparagraph*.86}%
-\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{22}{subparagraph*.88}%
-\contentsline {subparagraph}{\nonumberline Descripción}{23}{subparagraph*.90}%
-\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{23}{subparagraph*.92}%
-\contentsline {section}{\numberline {4.2}Elección de las tecnologías y lenguajes de programación}{23}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Git}{23}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Visual Studio Code}{24}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}VueJS}{24}{subsection.4.2.3}%
-\contentsline {subsubsection}{\numberline {4.2.3.1}Dependencias}{24}{subsubsection.4.2.3.1}%
-\contentsline {subparagraph}{\nonumberline Iconify}{24}{subparagraph*.94}%
-\contentsline {subparagraph}{\nonumberline ViteJS}{25}{subparagraph*.97}%
-\contentsline {subparagraph}{\nonumberline ChartJS}{25}{subparagraph*.99}%
-\contentsline {subparagraph}{\nonumberline Vue-router}{27}{subparagraph*.102}%
-\contentsline {subparagraph}{\nonumberline Vuex}{27}{subparagraph*.104}%
-\contentsline {subsection}{\numberline {4.2.4}MySQL Server}{27}{subsection.4.2.4}%
-\contentsline {subsection}{\numberline {4.2.5}Framework DAO}{27}{subsection.4.2.5}%
-\contentsline {chapter}{\numberline {5}Desarrollo}{29}{chapter.5}%
-\contentsline {chapter}{\nonumberline Bibliografía}{31}{chapter*.105}%
+\contentsline {section}{\numberline {4.1}Metodología de realización}{17}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Elección de las herramientas}{17}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Github}{18}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Visual Studio Code}{19}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Draw.io}{19}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Moqups}{20}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Vue.js}{20}{subsection.4.2.5}%
+\contentsline {subsubsection}{\numberline {4.2.5.1}Dependencias}{21}{subsubsection.4.2.5.1}%
+\contentsline {subparagraph}{\nonumberline Iconify}{21}{subparagraph*.59}%
+\contentsline {subparagraph}{\nonumberline ViteJS}{21}{subparagraph*.62}%
+\contentsline {subparagraph}{\nonumberline ChartJS}{22}{subparagraph*.64}%
+\contentsline {subparagraph}{\nonumberline Vue-router}{24}{subparagraph*.67}%
+\contentsline {subparagraph}{\nonumberline Vuex}{24}{subparagraph*.69}%
+\contentsline {subsection}{\numberline {4.2.6}MySQL}{25}{subsection.4.2.6}%
+\contentsline {subsection}{\numberline {4.2.7}Framework DAO}{25}{subsection.4.2.7}%
+\contentsline {chapter}{\numberline {5}Desarrollo}{27}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Requisitos}{27}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Funcionales}{27}{subsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.1.1}Generales}{27}{subsubsection.5.1.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.1.2}Entrenamientos}{28}{subsubsection.5.1.1.2}%
+\contentsline {subsubsection}{\numberline {5.1.1.3}Seguimiento y Evaluación del Rendimiento}{28}{subsubsection.5.1.1.3}%
+\contentsline {subsubsection}{\numberline {5.1.1.4}Equipo}{28}{subsubsection.5.1.1.4}%
+\contentsline {subsubsection}{\numberline {5.1.1.5}Intervalos de tiempo}{28}{subsubsection.5.1.1.5}%
+\contentsline {subsubsection}{\numberline {5.1.1.6}Actores}{29}{subsubsection.5.1.1.6}%
+\contentsline {subsection}{\numberline {5.1.2}No Funcionales}{29}{subsection.5.1.2}%
+\contentsline {subsubsection}{\numberline {5.1.2.1}Rendimiento}{29}{subsubsection.5.1.2.1}%
+\contentsline {subsubsection}{\numberline {5.1.2.2}Seguridad}{29}{subsubsection.5.1.2.2}%
+\contentsline {subsubsection}{\numberline {5.1.2.3}Usabilidad}{30}{subsubsection.5.1.2.3}%
+\contentsline {subsubsection}{\numberline {5.1.2.4}Escalabilidad}{30}{subsubsection.5.1.2.4}%
+\contentsline {subsubsection}{\numberline {5.1.2.5}Compatibilidad}{30}{subsubsection.5.1.2.5}%
+\contentsline {subsubsection}{\numberline {5.1.2.6}Fiabilidad}{30}{subsubsection.5.1.2.6}%
+\contentsline {section}{\numberline {5.2}Análisis funcional del sistema}{30}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Historias de usuario}{30}{subsection.5.2.1}%
+\contentsline {subparagraph}{\nonumberline Descripción}{31}{subparagraph*.72}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{31}{subparagraph*.74}%
+\contentsline {subparagraph}{\nonumberline Descripción}{31}{subparagraph*.76}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{32}{subparagraph*.78}%
+\contentsline {subparagraph}{\nonumberline Descripción}{32}{subparagraph*.80}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{32}{subparagraph*.82}%
+\contentsline {subparagraph}{\nonumberline Descripción}{33}{subparagraph*.84}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{33}{subparagraph*.86}%
+\contentsline {section}{\numberline {5.3}Implementación}{33}{section.5.3}%
+\contentsline {subparagraph}{\nonumberline Descripción}{33}{subparagraph*.88}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{34}{subparagraph*.90}%
+\contentsline {subparagraph}{\nonumberline Descripción}{34}{subparagraph*.92}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{34}{subparagraph*.94}%
+\contentsline {subparagraph}{\nonumberline Descripción}{35}{subparagraph*.96}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{35}{subparagraph*.98}%
+\contentsline {subparagraph}{\nonumberline Descripción}{35}{subparagraph*.100}%
+\contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{35}{subparagraph*.102}%
+\contentsline {subsection}{\numberline {5.3.1}Matriz DAFO}{36}{subsection.5.3.1}%
+\contentsline {subsubsection}{\numberline {5.3.1.1}Promedio GPA}{36}{subsubsection.5.3.1.1}%
+\contentsline {subsubsection}{\numberline {5.3.1.2}Desviación estándar}{36}{subsubsection.5.3.1.2}%
+\contentsline {subsubsection}{\numberline {5.3.1.3}Pendiente de tendencia}{36}{subsubsection.5.3.1.3}%
+\contentsline {subsubsection}{\numberline {5.3.1.4}Cambios positivos y negativos entre los intervalos de tiempo}{36}{subsubsection.5.3.1.4}%
+\contentsline {chapter}{\numberline {6}Conclusiones}{37}{chapter.6}%
+\contentsline {chapter}{\nonumberline Bibliografía}{39}{chapter*.103}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

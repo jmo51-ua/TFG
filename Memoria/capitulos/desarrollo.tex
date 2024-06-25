@@ -7,4 +7,283 @@
 
 \chapter{Desarrollo}
 \label{desarrollo}
+\section{Requisitos}
+En esta sección realizaremos una toma de los requisitos generales del sistema, seguidos de requisitos específicos.
+\subsection{Funcionales}
+Los requisitos funcionales son especificaciones que definen las funciones o características que un sistema debe poseer. Estos describen el comportamiento del sistema bajo ciertas condiciones y definen lo que el sistema debe hacer.
 
+\subsubsection{Generales}
+\begin{itemize}
+    \item \textbf{R1:} Cada uno de los usuarios tendrá acceso a una información específica, pudiendo acceder solamente a los datos y funciones a los que tenga permiso ver.
+    
+    \item \textbf{R2:} Cada uno de los usuarios tendrá acceso a una información específica, pudiendo acceder solamente a los datos y funciones a los que tenga permiso ver.
+    
+    \item \textbf{R3:} Se podrán generar informes de rendimiento para los jugadores y el equipo técnico.
+    
+    \item \textbf{R4:} Cada entrenador de una organización podrá acceder a la información de todos los actores que forman parte de la organización.
+    
+    \item \textbf{R5:} Los entrenadores tendrán acceso a todas las sesiones de entrenamiento y a estadísticas individuales y grupales de cada jugador.    
+\end{itemize}
+
+\subsubsection{Entrenamientos}
+\begin{itemize}
+    \item \textbf{R6:} Los usuarios tendrán un apartado para acceder a un calendario, que mostrará cada sesión.
+    \item \textbf{R7:} Para cada sesión, se mostará específicamente el nombre de ésta, el dia y la hora de inicio y fin de la sesión.
+    
+\end{itemize}
+
+\subsubsection{Seguimiento y Evaluación del Rendimiento}
+\begin{itemize}
+    \item \textbf{R8:} Evaluar el rendimiento de los jugadores mediante la recolección de estadísticas durante los entrenamientos y partidos.
+    
+    \item \textbf{R9:} Mostrar el historial de puntuaciones dadas por el entrenador por cada intervalo de  tiempo definido.
+    
+    \item \textbf{R9:} Elaborar gráficos de las puntuaciones de los KPIs para todo el equipo para que se pueda apreciar la evolución del equipo en un conjunto.
+    
+    \item \textbf{R10:} Elaborar gráficos de las puntuaciones de los KPIs para cada jugador, pudiendo apreciarse la evolución individual.
+    
+    \item \textbf{R11:} Desarrollar un algoritmo estadístico para generar una matriz DAFO (debilidades, Amenazas, Fortalezas y Debilidades) que permitan al entrenador analizar de una manera más precisa las necesidades de sus jugadores.
+    
+\end{itemize}
+
+\subsubsection{Equipo}
+\begin{itemize}
+    \item \textbf{R12:} El entrenador podrá ver toda la información detallada del equipo
+    
+    \item \textbf{R13:} El entrenador podrá ver toda la información detallada de cada jugador individualmente
+    
+\end{itemize}
+
+\subsubsection{Intervalos de tiempo}
+\begin{itemize}
+    \item \textbf{R14:} Los usuarios podrán acceder a un histórico de los datos en un intervalo de tiempo correspondiente a una sesión.
+    
+    \item \textbf{R15:} Los usuarios podrán acceder a un histórico de los datos en un intervalo de tiempo correspondiente a un mes.
+    
+    \item \textbf{R16:} Los usuarios podrán acceder a un histórico de los datos en un intervalo de tiempo correspondiente a un trimestre.
+    
+\end{itemize}
+
+\subsubsection{Actores}
+\begin{itemize}
+    \item \textbf{R17:} Los entrenadores podrán acceder a la información de los actores que componen la organización y sean jugadores.
+    
+    \item \textbf{R18:} Cada ventana del actor tendrá su información correspondiente al seguimiento de dicho actor.
+    
+\end{itemize}
+
+\subsection{No Funcionales}
+Los requisitos no funcionales describen cómo el sistema debe comportarse. Estos incluyen aspectos como el rendimiento, la seguridad, la usabilidad, la escalabilidad y la disponibilidad del sistema.
+
+\subsubsection{Rendimiento}
+\begin{itemize}
+    \item \textbf{Capacidad de carga:} La plataforma debe ser capaz de manejar una cantidad considerable de usuarios simultáneos sin afectar al rendimiento.
+    
+    \item \textbf{Tiempo de Respuesta:} La carga de los datos debe completarse en un tiempo rápido.
+    
+    \item \textbf{Optimización:} Las consultas a la base de datos deben de estar optimizadas para minimizar el tiempo de espera.
+    
+\end{itemize}
+
+\subsubsection{Seguridad}
+\begin{itemize}
+    \item \textbf{Autenticación:} Las operaciones de carga de datos no se realizarán hasta que el usuario no se haya autenticado correctamente.
+    
+    \item \textbf{Protección de datos:} Los datos personales de los usuarios deben ser almacenados y procesados conforme a las normativas de protección de datos.
+    
+\end{itemize}
+
+\subsubsection{Usabilidad}
+\begin{itemize}
+    \item \textbf{Interfaz intuitiva:} La interfaz de usuario debe ser intuitiva y fácil de usar, permitiendo a los usuarios utilizar la plataforma desde cero sin tener que formarse para ello.
+    
+    \item \textbf{Documentación:} Los usuarios deben poder acceder a una documentación clara para usar la plataforma.
+    
+\end{itemize}
+
+\subsubsection{Escalabilidad}
+\begin{itemize}
+    \item \textbf{Escalabilidad horizontal:} La plataforma debe poder escalar horizontalmente (añadiendo mas servidores) para reducir la carga de éstos y mejorar la experiencia del usuario.
+    
+    \item \textbf{Escalabilidad vertical:} La plataforma debe poder escalar verticalmente (mejorando los servidores) para manejar el aumento de usuarios y la carga de trabajo.
+    
+\end{itemize}
+
+\subsubsection{Compatibilidad}
+\begin{itemize}
+    \item \textbf{Multiplataforma:} La plataforma ser accesible en distintos sistemas operativos, así como desde diferentes tipos de dispositivo (móvil u ordenadores).
+    
+\end{itemize}
+
+\subsubsection{Fiabilidad}
+\begin{itemize}
+    \item \textbf{Tolerancia a fallos:} El sistema debe manejar los errores de una manera adecuada, proporcionando mensajes de error claros para su rápida resolución.
+    
+    \item \textbf{Consistencia de datos:} Los datos deben mantenerse consistentes y libres de errores.
+    
+\end{itemize}
+
+\section{Análisis funcional del sistema}
+
+\subsection{Historias de usuario}
+
+Para la gestión ágil de este proyecto, comenzaremos a describir historias de usuario. Siguiendo una estructura sistemática para reflejar las necesidades de los usuarios que se traducen en requisitos funcionales para el sistema que influirán en el diseño y desarrollo de la plataforma.
+
+%-------------------------------------------------------------------
+\begin{tcolorbox}[title= Añadir KPIs a la pantalla de estadísticas]
+\textbf{Como} \textit{Entrenador/a},\\
+\textbf{Quiero} Poder añadir y quitar KPIs de la pantalla de estadísticas según sea necesario,\\
+\textbf{Para que} Enfocarme en medir y visualizar solo los KPIs específicos que necesito, facilitando la toma de decisiones rápidas y efectivas para mejorar el rendimiento del equipo.
+\end{tcolorbox}
+
+\subparagraph{Descripción}
+La pantalla para evaluar los indicadores de rendimiento debe mostrar a la vez tantos como el entrenador necesite al mismo tiempo, así como eliminar de la vista aquellos que ya no son relevantes en ese momento.
+
+\subparagraph{Criterios de Aceptación}
+\begin{itemize}
+    \item El entrenador debe poder acceder a una interfaz de usuario para ver los KPIs.
+    \item La aplicación debe recomendar algunos KPIs predefinidos en caso de que haya menos de 5 en la pantalla.
+    \item El entrenador debe poder borrar todos los indicadores de una sola vez y limpiar la vista.
+\end{itemize}
+
+%-------------------------------------------------------------------
+\begin{tcolorbox}[title=Creación de nuevos KPIs]
+\textbf{Como} \textit{Entrenador/a},\\
+\textbf{Quiero} Poder crear y eliminar nuevos indicadores de rendimiento con los datos almacenados en la base de datos,\\
+\textbf{Para que} Explotar todos los datos recopilados de una manera eficiente para ver las fortalezas y debilidades del equipo.
+\end{tcolorbox}
+
+\subparagraph{Descripción}
+Después de cada partido o entrenamiento, los datos comunicados por el entrenador serán almacenados en una base de datos. A partir de esos datos y con una fórmula general, el entrenador debe poder elegir dos datos y crear un nuevo indicador de rendimiento para ser evaluado.
+
+\subparagraph{Criterios de Aceptación}
+\begin{itemize}
+    \item El entrenador debe poder acceder a una interfaz de usuario para crear los KPIs.
+    \item En la interfaz se debe poder definir el nuevo nombre del indicador, descripción y los datos que involucra.
+    \item La aplicación no debe permitir nombres repetidos de indicadores.
+    \item La aplicación no debe permitir que dos indicadores involucren los mismos datos de la misma forma.
+    \item El indicador debe poder asignarse a jugadores o equipos.
+\end{itemize}
+
+%-------------------------------------------------------------------
+\begin{tcolorbox}[title=Edición de KPIs]
+\textbf{Como} \textit{Entrenador/a},\\
+\textbf{Quiero} Poder editar los indicadores de rendimiento ya sea por su nombre o por sus parámetros,\\
+\textbf{Para que} Cambiar los indicadores según el progreso que necesiten mis entrenamientos.
+\end{tcolorbox}
+
+\subparagraph{Descripción}
+Una vez haya definido al menos un KPI, el entrenador debe ser capaz de editar el nombre, atributos y descripción del indicador. Este cambio puede ser debido ya sea por el cambio de opinión del entrenador del entrenador, o por una necesidad de utilizar ese nombre o parámetros para otra perspectiva en las sesiones de entrenamiento.
+
+\subparagraph{Criterios de Aceptación}
+\begin{itemize}
+    \item El entrenador debe poder seleccionar un KPI existente en la interfaz para editarlo.
+    \item La interfaz de edición debe poder permitir editar el nombre, parámetros del KPI o jugadores y equipo a los cuales esté asignado este indicador.
+    \item Los cambios deben de ser en cascada, reflejando la modificación en todas las vistas en las que el KPI esté implicado.
+    \item Se debe permitir cancelar la edición si el usuario cambia de idea.
+\end{itemize}
+
+%-------------------------------------------------------------------
+\begin{tcolorbox}[title=Ver estadísticas]
+\textbf{Como} \textit{Jugador/a},\\
+\textbf{Quiero} Poder ver un listado de todas mis estadísticas y mis indicadores de rendimiento,\\
+\textbf{Para que} Poder fijarme en mis puntos débiles e intentar mejorarlos según me dicte el entrenador.
+\end{tcolorbox}
+
+\subparagraph{Descripción}
+Cada jugador debe poder acceder a una interfaz donde se muestren todos los indicadores que el entrenador ha asociado a ese jugador en concreto, también debería ver una gráfica sobre el progreso y la evolución de sus indicadores. Así se podría fomentar la auto-crítica por parte del jugador.
+
+\subparagraph{Criterios de Aceptación}
+\begin{itemize}
+    \item Los jugadores deben poder acceder a un menú propio donde se muestren sus datos.
+    \item El menú debe incluir gráficas con marcas temporales.
+    \item Se de poder filtrar por rango de fechas, seleccionar estadísticas para que solo se muestren esas y por tipos de estadísticas.
+\end{itemize}
+
+%-------------------------------------------------------------------
+\begin{tcolorbox}[title=Ver progreso de los jugadores]
+\textbf{Como} \textit{Entrenador/a},\\
+\textbf{Quiero} Poder generar un informe gráfico que muestre la evolución de los KPIs asociados a jugadores,\\
+\textbf{Para que} Poder evaluar a mis jugadores y darles las indicaciones adecuadas para maximizar el margen de mejora de mi equipo.
+\end{tcolorbox}
+
+\section{Implementación}
+
+\subparagraph{Descripción}
+El entrenador es el primer responsable del equipo y de él depende que los jugadores mejoren y exploten sus capacidades lo máximo posible. Es por ello que debe de ser capaz de generar en la plataforma un informe, ya sea individual de cada jugador o grupal, sobre la evolución de las estadísticas de éstos.
+
+\subparagraph{Criterios de Aceptación}
+\begin{itemize}
+    \item Los entrenadores deben poder seleccionar uno o varios jugadores junto con uno o varios KPIs para generar el informe.
+    \item El menú debe incluir gráficas con marcas temporales.
+    \item La plataforma debe de ser capaz de detectar una mejora o un empeoramiento de las habilidades del jugador.
+\end{itemize}
+
+
+%-------------------------------------------------------------------
+\begin{tcolorbox}[title=Historia de Usuario: Análisis y Reportes Detallados]
+\textbf{Como} \textit{Entrenador/a},\\
+\textbf{Quiero} Generar reportes detallados de rendimiento por jugador y por equipo,\\
+\textbf{Para que} Tener un seguimiento preciso del progreso a lo largo del tiempo.
+\end{tcolorbox}
+
+\subparagraph{Descripción}
+Más allá de un visualizado de estadísticas y gráficas, el entrenador debe se capaz de generar informes completos sobre el desarrollo de los jugadores.
+
+\subparagraph{Criterios de Aceptación}
+\begin{itemize}
+    \item Para generar los informes, se debe poder seleccionar métricas específicas.
+    \item Los informes pueden ser exportados en formatos PDF, Excel o CSV.
+    \item Los informes deben contener gráficas de tendencias y otras comparativas.
+\end{itemize}
+
+%-------------------------------------------------------------------
+\begin{tcolorbox}[title=Historia de Usuario: Acceso a roles de usuario]
+\textbf{Como} \textit{Usuario},\\
+\textbf{Quiero} Poder acceder a los datos a los que tenga acceso,\\
+\textbf{Para que} Realizar el seguimiento siendo o el mismo jugador o el tutor legal de éste.
+\end{tcolorbox}
+
+\subparagraph{Descripción}
+Los padres y tutores también tienen derecho a ver el seguimiento de sus hijos/as, por ello es considerable añadir roles de usuario para que cada persona responsable pueda ver sus propios datos.
+
+\subparagraph{Criterios de Aceptación}
+\begin{itemize}
+    \item La plataforma debe tener definidos claramente los roles de "Entrenador", "Jugador", "Padre/Tutor" y "Administrador".
+    \item Cada rol debe poder acceder únicamente a los datos que le corresponden según las definiciones de permisos.
+    \item Debe existir un sistema de autenticación para los usuarios.
+    \item La plataforma debe cumplir con las normativas locales e internacionales de protección de datos
+\end{itemize}
+
+%-------------------------------------------------------------------
+\begin{tcolorbox}[title=Historia de Usuario: Intervalos Estadísticos para el menú]
+\textbf{Como} \textit{Entrenador/a},\\
+\textbf{Quiero} Poder alternar el intervalo de tiempo en el que se mide la estadística,\\
+\textbf{Para que} Tener un mejor control de la evolución de mis equipos durante el periodo de tiempo que estime útil.
+\end{tcolorbox}
+
+\subparagraph{Descripción}
+Para que el seguimiento de los resultados sea lo mas eficaz y eficiente posible, el entrenador debe poder alternar el intervalo de tiempo en el que se miden los resultados para su propio interés. Si quiere ver resultados a corto plazo, podrá ver la evolución partido a partido, si quiere resultados a largo plazo, oidrá verla mensual o trimestralmente.
+
+\subparagraph{Criterios de Aceptación}
+\begin{itemize}
+    \item La plataforma tendrá un menú superior para alternar el intervalo.
+    \item Cuando se alterna la opción, todas las vistas serán actualizadas para mostrar la evolución de los jugadores dentro del intervalo seleccionado.
+\end{itemize}
+
+%Para Añadir:
+%- Creación de secciones para los KPIs
+%- Intervalos Estadísticos para el menú
+%- DAFO para la ficha de jugadores
+
+
+\subsection{Matriz DAFO}
+\subsubsection{Promedio GPA}
+GPA es un término que se usa mucho en niveles académicos.
+
+\subsubsection{Desviación estándar}
+%https://www.udbvirtual.edu.sv/materiales_didacticos/ESA941/clase4.html#:~:text=La%20interpretaci%C3%B3n%20del%20coeficiente%20de,Ejemplo.
+
+\subsubsection{Pendiente de tendencia}
+
+\subsubsection{Cambios positivos y negativos entre los intervalos de tiempo}

@@ -281,21 +281,27 @@ import { mapGetters } from 'vuex';
 
 					this.kpis_sesion.forEach(indicador => {
 						if (!kpiData[indicador.name]) {
-							kpiData[indicador.name] = [];
+							kpiData[indicador.name] = {
+								data: [],
+								range: indicador.range
+							};
 						}
-						kpiData[indicador.name].push({
+						kpiData[indicador.name].data.push({
 							time: indicador.date,
 							score: indicador.score
 						});
 					});
 
 					for (const [key, value] of Object.entries(kpiData)) {
-						console.log(value);
+						
 						this.chartData.push({
 							name: key,
-							data: value
+							data: value.data,
+							range: value.range
 						});
 					}
+
+					console.log("DATACHART",this.chartData);
 				});
 			});
 		},

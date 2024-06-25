@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.4.7)  21 JUN 2024 18:16
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2024.4.7)  26 JUN 2024 00:43
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1472,6 +1472,21 @@ LaTeX Warning: Label `sistemass2' multiply defined.
 LaTeX Warning: Label `sistemass2' multiply defined.
 
 
+LaTeX Warning: Label `sistemass2' multiply defined.
+
+
+LaTeX Warning: Label `sistemass2' multiply defined.
+
+
+LaTeX Warning: Label `sistemass2' multiply defined.
+
+
+LaTeX Warning: Label `sistemass2' multiply defined.
+
+
+LaTeX Warning: Label `sistemass2' multiply defined.
+
+
 LaTeX Warning: Label `PHP-color_code' multiply defined.
 
 
@@ -1479,6 +1494,12 @@ LaTeX Warning: Label `sistemass2' multiply defined.
 
 
 LaTeX Warning: Label `Consola_code' multiply defined.
+
+
+LaTeX Warning: Label `PHP-color_code' multiply defined.
+
+
+LaTeX Warning: Label `sistemass2' multiply defined.
 
 
 LaTeX Warning: Label `PHP-color_code' multiply defined.
@@ -1915,32 +1936,32 @@ Package scrlayer-scrpage Warning: \footheight to low.
 (scrlayer-scrpage)                in your preamble.
 (scrlayer-scrpage)                I'll also increase \footskip on input line 45.
 
-[5])
+[5] [6])
 \tf@toc=\write8
 \openout8 = `TFG-TFM_EPS_UA.toc'.
 
- [6] (./TFG-TFM_EPS_UA.lof)
+ [7] [8
+
+
+] (./TFG-TFM_EPS_UA.lof)
 \tf@lof=\write9
 \openout9 = `TFG-TFM_EPS_UA.lof'.
 
- [7
-
-
-] [8
+ [9] [10
 
 
 ] (./TFG-TFM_EPS_UA.lot)
 \tf@lot=\write10
 \openout10 = `TFG-TFM_EPS_UA.lot'.
 
- [9] [10
+ [11] [12
 
 
 ] (./TFG-TFM_EPS_UA.lol)
 \tf@lol=\write11
 \openout11 = `TFG-TFM_EPS_UA.lol'.
 
- [11] [12
+ [13] [14
 
 
 ] (./capitulos/Introduccion.tex
@@ -2068,12 +2089,30 @@ chapter 3.
 
 ]) (./capitulos/metodologia.tex [16]
 chapter 4.
+File: archivos/tfg_jorge/logos/github.png Graphic file (type bmp)
+<archivos/tfg_jorge/logos/github.png>
 [17
 
 
-] [18] [19] [20] [21] [22] [23]
+] [18]
+File: archivos/tfg_jorge/logos/vscode.jpg Graphic file (type bmp)
+<archivos/tfg_jorge/logos/vscode.jpg>
+File: archivos/tfg_jorge/logos/drawio.png Graphic file (type bmp)
+<archivos/tfg_jorge/logos/drawio.png>
+File: archivos/tfg_jorge/logos/moqups.png Graphic file (type bmp)
+<archivos/tfg_jorge/logos/moqups.png>
+
+Underfull \vbox (badness 7116) has occurred while \output is active []
+
+ [19]
+File: archivos/tfg_jorge/logos/vuejs.png Graphic file (type bmp)
+<archivos/tfg_jorge/logos/vuejs.png>
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [20]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <8> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 216.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 97.
 
 
 Package inputenc Warning: inputenc package ignored with utf8 based engines.
@@ -2091,23 +2130,27 @@ Package inputenc Warning: inputenc package ignored with utf8 based engines.
 
 File: archivos/tfg_jorge/icoco_grafico_iconify.png Graphic file (type bmp)
 <archivos/tfg_jorge/icoco_grafico_iconify.png>
-[24]
+[21]
 
 Package inputenc Warning: inputenc package ignored with utf8 based engines.
 
 
 Package inputenc Warning: inputenc package ignored with utf8 based engines.
 
-[25]
+[22]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [26]
+ [23]
 File: archivos/tfg_jorge/chartjs_ejemplo.png Graphic file (type bmp)
 <archivos/tfg_jorge/chartjs_ejemplo.png>
 
 
 Package inputenc Warning: inputenc package ignored with utf8 based engines.
 
+[24]
+File: archivos/tfg_jorge/logos/mysql.png Graphic file (type bmp)
+<archivos/tfg_jorge/logos/mysql.png>
+
 
 Package inputenc Warning: inputenc package ignored with utf8 based engines.
 
@@ -2115,28 +2158,36 @@ Package inputenc Warning: inputenc package ignored with utf8 based engines.
 Package inputenc Warning: inputenc package ignored with utf8 based engines.
 
 
-Overfull \hbox (85.52193pt too wide) in paragraph at lines 354--355
+Package inputenc Warning: inputenc package ignored with utf8 based engines.
+
+
+Overfull \hbox (85.52193pt too wide) in paragraph at lines 250--251
 []\TU/lmr/m/n/10.95 Cambiar en database.js [][][][][][] por [][][], compatible con el método [][][],
  []
 
-) (./capitulos/desarrollo.tex [27] [28
+) (./capitulos/desarrollo.tex [25] [26
 
 
 ]
 chapter 5.
-) (./TFG-TFM_EPS_UA.bbl [29] [30
+[27] [28] [29] [30] [31] [32] [33] [34] [35]) (./capitulos/conclusiones.tex [36]
+chapter 6.
+) (./TFG-TFM_EPS_UA.bbl [37
+
+
+] [38
 
 
 ]
 chapter without number
 
-Underfull \hbox (badness 3189) in paragraph at lines 110--122
+Underfull \hbox (badness 3189) in paragraph at lines 158--170
 []\TU/lmr/m/n/10.95 Hoare, D.  (1999).  \TU/lmr/m/it/10.95 Seminario internacional de detección de talentos deporti-
  []
 
-[31])
+[39])
 No file TFG-TFM_EPS_UA.acr.
-[32] (./TFG-TFM_EPS_UA.aux)
+[40] (./TFG-TFM_EPS_UA.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2020/03/25>
@@ -2149,12 +2200,12 @@ Package rerunfilecheck Info: File `TFG-TFM_EPS_UA.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 64014 strings out of 474760
- 1548063 string characters out of 5750819
- 2591163 words of memory out of 5000000
- 84985 multiletter control sequences out of 15000+600000
+ 64204 strings out of 474760
+ 1553645 string characters out of 5750819
+ 2589213 words of memory out of 5000000
+ 85164 multiletter control sequences out of 15000+600000
  570552 words of font info for 119 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  114i,21n,134p,11006b,3051s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
-Output written on TFG-TFM_EPS_UA.pdf (44 pages).
+Output written on TFG-TFM_EPS_UA.pdf (54 pages).

@@ -7,204 +7,85 @@
 
 \chapter{Metodología}
 \label{metodologia}
+Una metodología de desarrollo de software es un marco de trabajo que se usa para estructurar, planificar y controlar el proceso de desarrollo de sistemas de información [\citep{def_metodologia}].
 
-\section{Historias de usuario}
-Para la gestión ágil de este proyecto, comenzaremos a describir historias de usuario. Siguiendo una estructura sistemática para reflejar las necesidades de los usuarios que se traducen en requisitos funcionales para el sistema que influirán en el diseño y desarrollo de la plataforma.
+\section{Metodología de realización}
+Para la  realización de este trabajo, se ha decidido utilizar la metodología SCRUM, basada en las siguientes aspectos [\cite{why_scrum}] :
 
-%-------------------------------------------------------------------
-\begin{tcolorbox}[title=Historia de Usuario 1: Añadir KPIs a la pantalla de estadísticas]
-\textbf{Como} \textit{Entrenador/a},\\
-\textbf{Quiero} Poder añadir y quitar KPIs de la pantalla de estadísticas según sea necesario,\\
-\textbf{Para que} Enfocarme en medir y visualizar solo los KPIs específicos que necesito, facilitando la toma de decisiones rápidas y efectivas para mejorar el rendimiento del equipo.
-\end{tcolorbox}
-
-\subparagraph{Descripción}
-La pantalla para evaluar los indicadores de rendimiento debe mostrar a la vez tantos como el entrenador necesite al mismo tiempo, así como eliminar de la vista aquellos que ya no son relevantes en ese momento.
-
-\subparagraph{Criterios de Aceptación}
 \begin{itemize}
-    \item El entrenador debe poder acceder a una interfaz de usuario para ver los KPIs.
-    \item La aplicación debe recomendar algunos KPIs predefinidos en caso de que haya menos de 5 en la pantalla.
-    \item El entrenador debe poder borrar todos los indicadores de una sola vez y limpiar la vista.
+	\item \textbf{Adaptabilidad}: Los cambios pueden ser implementados en un proyecto en curso. Con Scrum puede variar lo que se debe hacer en un proyecto, pero el tiempo y coste son constantes.
+	\item \textbf{Priorización de Tareas}: Las tareas se priorizan por orden de importancia, lo que generalmente significa que las tareas que se completan primero probablemente afectarán más al trabajo.
+	\item \textbf{Sprints}: Los sprints son períodos delimitados durante el cual el equipo trabaja para completar una cantidad de trabajo [\cite{def_sprints}]. En nuestro caso, las planificación de los sprints se realizaba semanalmente, realizando un seguimiento a lo largo de la semana y presentando el incremento del trabajo al principio de la nueva reunión.
 \end{itemize}
 
-%-------------------------------------------------------------------
-\begin{tcolorbox}[title=Historia de Usuario 2: Creación de nuevos KPIs]
-\textbf{Como} \textit{Entrenador/a},\\
-\textbf{Quiero} Poder crear y eliminar nuevos indicadores de rendimiento con los datos almacenados en la base de datos,\\
-\textbf{Para que} Explotar todos los datos recopilados de una manera eficiente para ver las fortalezas y debilidades del equipo.
-\end{tcolorbox}
-
-\subparagraph{Descripción}
-Después de cada partido o entrenamiento, los datos comunicados por el entrenador serán almacenados en una base de datos. A partir de esos datos y con una fórmula general, el entrenador debe poder elegir dos datos y crear un nuevo indicador de rendimiento para ser evaluado.
-
-\subparagraph{Criterios de Aceptación}
-\begin{itemize}
-    \item El entrenador debe poder acceder a una interfaz de usuario para crear los KPIs.
-    \item En la interfaz se debe poder definir el nuevo nombre del indicador, descripción y los datos que involucra.
-    \item La aplicación no debe permitir nombres repetidos de indicadores.
-    \item La aplicación no debe permitir que dos indicadores involucren los mismos datos de la misma forma.
-    \item El indicador debe poder asignarse a jugadores o equipos.
-\end{itemize}
-
-%-------------------------------------------------------------------
-\begin{tcolorbox}[title=Historia de Usuario 3: Edición de KPIs]
-\textbf{Como} \textit{Entrenador/a},\\
-\textbf{Quiero} Poder editar los indicadores de rendimiento ya sea por su nombre o por sus parámetros,\\
-\textbf{Para que} Cambiar los indicadores según el progreso que necesiten mis entrenamientos.
-\end{tcolorbox}
-
-\subparagraph{Descripción}
-Una vez haya definido al menos un KPI, el entrenador debe ser capaz de editar el nombre, atributos y descripción del indicador. Este cambio puede ser debido ya sea por el cambio de opinión del entrenador del entrenador, o por una necesidad de utilizar ese nombre o parámetros para otra perspectiva en las sesiones de entrenamiento.
-
-\subparagraph{Criterios de Aceptación}
-\begin{itemize}
-    \item El entrenador debe poder seleccionar un KPI existente en la interfaz para editarlo.
-    \item La interfaz de edición debe poder permitir editar el nombre, parámetros del KPI o jugadores y equipo a los cuales esté asignado este indicador.
-    \item Los cambios deben de ser en cascada, reflejando la modificación en todas las vistas en las que el KPI esté implicado.
-    \item Se debe permitir cancelar la edición si el usuario cambia de idea.
-\end{itemize}
-
-%-------------------------------------------------------------------
-\begin{tcolorbox}[title=Historia de Usuario 4: Ver estadísticas]
-\textbf{Como} \textit{Jugador/a},\\
-\textbf{Quiero} Poder ver un listado de todas mis estadísticas y mis indicadores de rendimiento,\\
-\textbf{Para que} Poder fijarme en mis puntos débiles e intentar mejorarlos según me dicte el entrenador.
-\end{tcolorbox}
-
-\subparagraph{Descripción}
-Cada jugador debe poder acceder a una interfaz donde se muestren todos los indicadores que el entrenador ha asociado a ese jugador en concreto, también debería ver una gráfica sobre el progreso y la evolución de sus indicadores. Así se podría fomentar la auto-crítica por parte del jugador.
-
-\subparagraph{Criterios de Aceptación}
-\begin{itemize}
-    \item Los jugadores deben poder acceder a un menú propio donde se muestren sus datos.
-    \item El menú debe incluir gráficas con marcas temporales.
-    \item Se de poder filtrar por rango de fechas, seleccionar estadísticas para que solo se muestren esas y por tipos de estadísticas.
-\end{itemize}
-
-%-------------------------------------------------------------------
-\begin{tcolorbox}[title=Historia de Usuario 5: Ver progreso de los jugadores]
-\textbf{Como} \textit{Entrenador/a},\\
-\textbf{Quiero} Poder generar un informe gráfico que muestre la evolución de los KPIs asociados a jugadores,\\
-\textbf{Para que} Poder evaluar a mis jugadores y darles las indicaciones adecuadas para maximizar el margen de mejora de mi equipo.
-\end{tcolorbox}
-
-\subparagraph{Descripción}
-El entrenador es el primer responsable del equipo y de él depende que los jugadores mejoren y exploten sus capacidades lo máximo posible. Es por ello que debe de ser capaz de generar en la plataforma un informe, ya sea individual de cada jugador o grupal, sobre la evolución de las estadísticas de éstos.
-
-\subparagraph{Criterios de Aceptación}
-\begin{itemize}
-    \item Los entrenadores deben poder seleccionar uno o varios jugadores junto con uno o varios KPIs para generar el informe.
-    \item El menú debe incluir gráficas con marcas temporales.
-    \item La plataforma debe de ser capaz de detectar una mejora o un empeoramiento de las habilidades del jugador.
-\end{itemize}
-
-
-%-------------------------------------------------------------------
-\begin{tcolorbox}[title=Historia de Usuario 6: Alinear jugadores del Equipo]
-\textbf{Como} \textit{Entrenador/a},\\
-\textbf{Quiero} Poder crear nuevas alineaciones con mis jugadores del equipo,\\
-\textbf{Para que} Plantear tácticas, posicionar jugadores y descubrir y fortalecer las buenas posiciones para mis jugadores.
-\end{tcolorbox}
-
-\subparagraph{Descripción}
-Entender las posiciones de los jugadores es una tarea clave para el entrenador, por ello ha de ser capaz de poder crear nuevas alineaciones con sus jugadores para poder entenderlos a la perfección.
-
-\subparagraph{Criterios de Aceptación}
-\begin{itemize}
-    \item Los entrenadores deben poder acceder a un menú dentro de la vista del equipo para la creación de alineaciones.
-    \item Un jugador no puede aparecer dos veces en la misma alineación.
-    \item En la vista de la alineación, se debe poder editar y eliminar toda la alineación.
-    \item Se dispondrá de alineaciones comunes predefinidas, con la posibilidad del entrenador de crear las suyas propias.
-    \item No podrán existir dos alineaciones exactamente iguales (mismos jugadores en la misma posición).
-\end{itemize}
-
-%-------------------------------------------------------------------
-\begin{tcolorbox}[title=Historia de Usuario 7: Análisis y Reportes Detallados]
-\textbf{Como} \textit{Entrenador/a},\\
-\textbf{Quiero} Generar reportes detallados de rendimiento por jugador y por equipo,\\
-\textbf{Para que} Tener un seguimiento preciso del progreso a lo largo del tiempo.
-\end{tcolorbox}
-
-\subparagraph{Descripción}
-Más allá de un visualizado de estadísticas y gráficas, el entrenador debe se capaz de generar informes completos sobre el desarrollo de los jugadores.
-
-\subparagraph{Criterios de Aceptación}
-\begin{itemize}
-    \item Para generar los informes, se debe poder seleccionar métricas específicas.
-    \item Los informes pueden ser exportados en formatos PDF, Excel o CSV.
-    \item Los informes deben contener gráficas de tendencias y otras comparativas.
-\end{itemize}
-
-%-------------------------------------------------------------------
-\begin{tcolorbox}[title=Historia de Usuario 8: Sistema de comunicación]
-\textbf{Como} \textit{Entrenador/a o jugador/a},\\
-\textbf{Quiero} Poder comunicarme con mis jugadores/entrenador,\\
-\textbf{Para que} favorecer la comunicación y mejorar el ambiente del equipo.
-\end{tcolorbox}
-
-\subparagraph{Descripción}
-Además del seguimiento de estadísticas, si ocurren acontecimientos que requieran de una conversación entre el entrenador y el jugador se debería contar con un sistema simple de mensajería. Con este pequeño sistema dentro de la plataforma, es posible fomentar un ambiente de equipo positivo siguiendo las palabras de Sir Alex Ferguson en \cite{TheGuardian} .
-
-\subparagraph{Criterios de Aceptación}
-\begin{itemize}
-    \item Debe de exisitr una interfaz dedicada a la mensajería.
-    \item Las conversaciones permanecerán almacenadas hasta que el usuario decida borrarlas.
-    \item Se debe poder iniciar y borrar conversaciones desde un menú.
-    \item No podrán existir dos chats con la misma persona.
-\end{itemize}
-
-
-%-------------------------------------------------------------------
-\begin{tcolorbox}[title=Historia de Usuario 9: Acceso a roles de usuario]
-\textbf{Como} \textit{Usuario},\\
-\textbf{Quiero} Poder acceder a los datos a los que tenga acceso,\\
-\textbf{Para que} Realizar el seguimiento siendo o el mismo jugador o el tutor legal de éste.
-\end{tcolorbox}
-
-\subparagraph{Descripción}
-Los padres y tutores también tienen derecho a ver el seguimiento de sus hijos/as, por ello es considerable añadir roles de usuario para que cada persona responsable pueda ver sus propios datos.
-
-\subparagraph{Criterios de Aceptación}
-\begin{itemize}
-    \item La plataforma debe tener definidos claramente los roles de "Entrenador", "Jugador", "Padre/Tutor" y "Administrador".
-    \item Cada rol debe poder acceder únicamente a los datos que le corresponden según las definiciones de permisos.
-    \item Debe existir un sistema de autenticación para los usuarios.
-    \item La plataforma debe cumplir con las normativas locales e internacionales de protección de datos
-\end{itemize}
-
-%-------------------------------------------------------------------
-\begin{tcolorbox}[title=Historia de Usuario 10: Intervalos Estadísticos para el menú]
-\textbf{Como} \textit{Entrenador/a},\\
-\textbf{Quiero} Poder alternar el intervalo de tiempo en el que se mide la estadística,\\
-\textbf{Para que} Tener un mejor control de la evolución de mis equipos durante el periodo de tiempo que estime útil.
-\end{tcolorbox}
-
-\subparagraph{Descripción}
-Para que el seguimiento de los resultados sea lo mas eficaz y eficiente posible, el entrenador debe poder alternar el intervalo de tiempo en el que se miden los resultados para su propio interés. Si quiere ver resultados a corto plazo, podrá ver la evolución partido a partido, si quiere resultados a largo plazo, oidrá verla mensual o trimestralmente.
-
-\subparagraph{Criterios de Aceptación}
-\begin{itemize}
-    \item La plataforma tendrá un menú superior para alternar el intervalo.
-    \item Cuando se alterna la opción, todas las vistas serán actualizadas para mostrar la evolución de los jugadores dentro del intervalo seleccionado.
-\end{itemize}
-
-%Para Añadir:
-%- Creación de secciones para los KPIs
-%- Intervalos Estadísticos para el menú
-%- DAFO para la ficha de jugadores
-
-\section{Elección de las tecnologías y lenguajes de programación}
+\section{Elección de las herramientas}
 A continuación, detallamos las razones específicas para la elección de las siguientes herramientas como componentes clave del desarrollo.
 
-\subsection{Git}
-Git es un software de control de versiones gratis y de código abierto, funciona como un rastreador de contenido permitiendo a los desarrolladores revertir y regresar a una versión anterior de su código. Con Git, cada desarrollador tiene una copia completa del repositorio, lo que permite trabajar sin conexión y realizar operaciones localmente. Además, Git soporta la creación de ramas para trabajar en nuevas características o correcciones de errores de manera independiente, que luego pueden fusionarse en la rama principal. Su uso de algoritmos de hashing garantiza la integridad de los datos, y su rendimiento superior permite manejar grandes cantidades de datos y cambios de manera eficiente.
+\subsection{Github}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{archivos/tfg_jorge/logos/github}
+    \caption{Logo de Github}\label{sistemass2}
+\end{figure}
+
+Es una plataforma de online de desarrollo de software que nos facilitará el seguimiento de los cambios, pudiendo retroceder entre las nuevas versiones gracias a la tecnología en la que se basa Github, Git [\cite{def_github}].
+
+Git es un software de control de versiones gratis y de código abierto, funciona como un rastreador de contenido permitiendo a los desarrolladores revertir y regresar a una versión anterior de su código. Con Git, cada desarrollador tiene una copia completa del repositorio, lo que permite trabajar sin conexión y realizar operaciones localmente. Además, Git soporta la creación de ramas para trabajar en nuevas características o correcciones de errores de manera independiente, que luego pueden fusionarse en la rama principal. Su uso de algoritmos de hashing garantiza la integridad de los datos, y su rendimiento superior permite manejar grandes cantidades de datos y cambios de manera eficiente [\cite{def_git}].
+
+Por otro lado, Github ofrece un servicio para la gestión de proyectos, pudiendo definir listas de tareas dentro de un proyecto. Las listas de tareas que hemos considerado son las siguientes.
+
+\begin{itemize}
+	\item \textbf{Pendientes:} En esta lista se encuentran las tareas que se que no se han empezado a trabajar.
+	\item \textbf{Proceso:} En esta lista se encuentran las tareas en las que se está trabajando en ese momento.
+	\item \textbf{Bloqueadas:} En esta lista se encuentran las tareas que no pueden ser completadas debido a que dependen de otra que no se ha completado todavía.
+	\item \textbf{Finalizadas:} En esta lista se encuentran las tareas que ya han sido completadas.
+\end{itemize}
+
+Los documentos compartidos y la planificación de reuniones se realiza mediante una aplicación de mensajería instantánea.
 
 \subsection{Visual Studio Code}
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=4cm]{archivos/tfg_jorge/logos/vscode}
+    \caption{Logo de Visual Studio Code}\label{sistemass2}
+\end{figure}
 
-\subsection{VueJS}
+Un editor de código fuente desarrollado por Microsoft. Es un software libre y multiplataforma disponible para Windows, Linux y macOS. Tiene una buena integración con Git, incluyendo los comandos principales para las acciones en un repositorio remoto. Además, dispone de un gran número de extensiones para escribir y  ejecutar código en cualquier lenguaje de programación [\cite{def_vscode}].
+Por todo esto hemos decidido que este entorno de programación es el más adecuado para llevar a cabo el trabajo.
+
+\subsection{Draw.io}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{archivos/tfg_jorge/logos/drawio}
+    \caption{Logo de Draw.io}\label{sistemass2}
+\end{figure}
+
+Es una herramienta gratuita de diagramas en línea que permite a los usuarios crear una variedad de diagramas, gráficos y diagramas de flujo. Gracias a su interfaz intuitiva y su amplia gama de plantillas y figuras podremos dibujar cualquier diagrama para explicar cualquier estructura.
+
+\subsection{Moqups}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=6cm]{archivos/tfg_jorge/logos/moqups}
+    \caption{Logo de Moqups}\label{sistemass2}
+\end{figure}
+
+Esta herramienta online nos permitirá el diseño de prototipos para crear las interfaces de nuestra aplicación. Está diseñada para facilitar la colaboración en equipo y la visualización rápida de ideas de diseño. Algunas características clave para que podamos usarla incluyen su interfaz intuitiva y su biblioteca de componentes y plantillas, con componentes prediseñados, iconos y plantillas que podemos utilizar para acelerar el proceso de diseño.
+
+\subsection{Vue.js}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{archivos/tfg_jorge/logos/vuejs}
+    \caption{Logo de Vue.js}\label{sistemass2}
+\end{figure}
+
+Es un framework progresivo para construir interfaces de usuario. Está diseñado desde cero para ser utilizado incrementalmente. La librería central está enfocada solo en la capa de visualización, y es fácil de utilizar e integrar con otras librerías o proyectos existentes [\cite{def_vue}].
+Comparándolo con otros frameworks, podemos concluir que Vue.js es el más intuitivo para un usuario que empieza desde cero con los frameworks de desarrollo de interfaces, como Angular o React [\cite{comparar_vue}].
+
 
 \subsubsection{Dependencias}
 \subparagraph{Iconify}
@@ -225,7 +106,7 @@ Para agregar los iconos que ofrece Iconify debemos importar el componente Icon d
 	</script>
 \end{lstlisting}
 
-Para agregar iconos debemos buscar los que queramos en la página web de Iconify en \citep{iconos-iconify}. Una vez hayamos elegido el estilo del icono, podemos copiar el código del componente en la página web, por ejemplo:
+Para agregar iconos debemos buscar los que queramos en la página web de Iconify en [\citep{iconos-iconify}]. Una vez hayamos elegido el estilo del icono, podemos copiar el código del componente en la página web, por ejemplo:
 
 \begin{lstlisting}[style=PHP-color, caption={Código para agregar un icono a la página},label=PHP-color_code]
 	<template>
@@ -338,17 +219,32 @@ export default {
 Como resultado de una de nuestras gráficas:
 \begin{figure}[H]
     \centering
-    \includegraphics[width=6cm]{archivos/tfg_jorge/chartjs_ejemplo}
+    \includegraphics[width=10cm]{archivos/tfg_jorge/chartjs_ejemplo}
     \caption{Gráfico generado con ChartJS}
     \label{sistemass2}
 \end{figure}
 
 \subparagraph{Vue-router}
+La biblioteca oficial de enrutamiento para Vue.js, diseñada para crear aplicaciones de una sola página (SPA). Proporciona una forma estructurada y eficiente de manejar las rutas y la navegación en una aplicación Vue.js [\cite{vue_route}]. Crear rutas para mostrar diferentes interfaces resultará muy sencillo añadiendo las rutas como la siguiente:
+
+\begin{lstlisting}[style=PHP-color, caption={Código para agregar un icono a la página},label=PHP-color_code]
+routes: [
+  { path: '/user/:id', component: User }
+]
+\end{lstlisting}
 
 \subparagraph{Vuex}
+Sirve como un almacén centralizado para todos los componentes de una aplicación, con reglas que garantizan que el estado solo pueda ser mutado de manera predecible. Gracias a esto podremos crear variables globales que compartirán todos los componentes del proyecto de Vue.
 
+\subsection{MySQL}
 
-\subsection{MySQL Server}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=5cm]{archivos/tfg_jorge/logos/mysql}
+    \caption{Logo de MySQL}\label{sistemass2}
+\end{figure}
+
+Es el sistema de gestión de bases de datos relacional más extendido en la actualidad de código abierto que utiliza el lenguaje SQL (Structured Query Language) para acceder y gestionar datos almacenados en tablas. Siendo la elección popular para gestionar datos en entornos tanto pequeños como grandes, usaremos esta herramienta para la gestión de nuestra base de datos.
 
 \subsection{Framework DAO}
 Cambiar en database.js \lstinline|require("mysql")| por \lstinline|mysql2|, compatible con el método \lstinline|auth_caching_sha2_password|, el que viene en MySQL Server 8.4.
