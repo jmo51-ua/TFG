@@ -2,7 +2,7 @@
 	<main id="stats-page">
   
 		<div class="row">
-			<button class="report-button">
+			<button class="report-button" @click="generateReportPDF">
 				Informe de todos los KPIs
 				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M360-460h40v-80h40q17 0 28.5-11.5T480-580v-40q0-17-11.5-28.5T440-660h-80v200Zm40-120v-40h40v40h-40Zm120 120h80q17 0 28.5-11.5T640-500v-120q0-17-11.5-28.5T600-660h-80v200Zm40-40v-120h40v120h-40Zm120 40h40v-80h40v-40h-40v-40h40v-40h-80v200ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"/></svg>
 			</button>
@@ -22,8 +22,6 @@
 			<div v-for="(chart, index) in chartData" :key="index" class="chart">
 				<KpiChart :chartData="chart.data" :chartId="'chart-' + index" :chartName="chart.name" />
 			</div>
-
-			
 		</div>
 
 		<div class="create-kpi" v-if="showCreateKpiForm">
@@ -61,10 +59,37 @@
 import KpiChart from '@/components/KpiChart.vue'
 import { inject } from 'vue';
 import { mapGetters } from 'vuex';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
   export default {
 	components: {
 		KpiChart
+	},
+	computed: {
+		...mapGetters(['teamSelectedID']),
+		...mapGetters(['teamSelectedName']),
+		...mapGetters(['userName']),
+		...mapGetters(['userID']),
+		...mapGetters(['modo']),
+		kpisJugador() {
+			switch (this.modo) {
+				case 'sesion':
+					return this.kpis_sesion;
+				case 'mensual':
+					return this.kpis_mensual;
+				case 'trimestral':
+					return this.kpis_trimestral;
+				default:
+				return [];
+			}
+		},
+    },
+	mounted() {
+		this.$nextTick(() => {
+			const loader = document.querySelector('.loader-container');
+			loader.style.display = 'flex';
+		});
 	},
 	data() {
 		return {
@@ -88,22 +113,12 @@ import { mapGetters } from 'vuex';
 			actoresCompletos: [],
 
 			kpis_sesion: [],
+			kpis_mensual: [],
+			kpis_trimestral: [],
+			kpis_all: [],
 
 			chartData: [],
 		};
-	},
-	computed: {
-      ...mapGetters(['teamSelectedID']),
-      ...mapGetters(['teamSelectedName']),
-      ...mapGetters(['userName']),
-      ...mapGetters(['userID']),
-	  ...mapGetters(['modo']),
-    },
-	mounted() {
-		this.$nextTick(() => {
-			const loader = document.querySelector('.loader-container');
-			loader.style.display = 'flex';
-		});
 	},
 	setup() {
       const app = inject('app');
@@ -128,9 +143,26 @@ import { mapGetters } from 'vuex';
 
 			return `${year}-${month}`;
 		},
+		async generateReportPDF() {
+			const pdf = new jsPDF('p', 'mm', 'a4');
+			const element = document.getElementById('stats-page');
+			const canvas = await html2canvas(element);
+			const imgData = canvas.toDataURL('image/png');
+			
+			const imgProps = pdf.getImageProperties(imgData);
+			const pdfWidth = pdf.internal.pageSize.getWidth();
+			const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+			
+			pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+			pdf.save('KPI-Report.pdf');
+		},
+
+
+
 		async cargarKPIs() {
 			const loader = document.querySelector('.loader-container');
-			loader.style.display = 'flex';
+			if(loader){loader.style.display = 'flex';}
+
 			this.chartData = [];
 
 			const methodName = `cargarKPIs_${this.modo}`;
@@ -141,9 +173,9 @@ import { mapGetters } from 'vuex';
 				console.error(`Method ${methodName} does not exist`);
 			}
 		},
-
-		
 		async cargarKPIs_sesion() {
+			const loader = document.querySelector('.loader-container');
+			if(loader){loader.style.display = 'flex';}
 			let kpiPorSesion = {};
 
 			try {
@@ -196,8 +228,6 @@ import { mapGetters } from 'vuex';
 					for (let idKPI in kpiPorSesion[sesion]) {
 						let kpi = kpiPorSesion[sesion][idKPI];
 						let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-
-						let id_sesion = sesion.split('-')[0];
 						let name_sesion = sesion.split('-')[1];
 
 						resultado.push({
@@ -240,6 +270,202 @@ import { mapGetters } from 'vuex';
 				console.error('Error al cargar KPIs de sesión:', error);
 			}
 		},
+		async cargarKPIs_mensual() {
+			const loader = document.querySelector('.loader-container');
+			if(loader){loader.style.display = 'flex';}
+			let kpiPorSesion = {};
+
+			try {
+				const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+
+				const kpiPromises = this.actorIds.map(async idActor => {
+				const ejerciciosFiltrados = ejercicios.filter(sesion =>
+					sesion.Exercise_has_Session_has_Actor_Actor_idActor == idActor
+				);
+
+				return Promise.all(ejerciciosFiltrados.map(async element => {
+					const indicadores = await this.dao.kpi.read();
+					let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+					indicador.score = element.score;
+
+					const sesiones = await this.dao.session.read();
+					let sesion = sesiones.find(sesion =>
+					sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
+					);
+
+					indicador.ses_date = sesion.date;
+					indicador.ses_name = sesion.name;
+					let distinctSesion = `${sesion.idSession}-${sesion.name}`;
+
+					if (!kpiPorSesion[distinctSesion]) {
+					kpiPorSesion[distinctSesion] = {};
+					}
+
+					if (!kpiPorSesion[distinctSesion][indicador.idKPI]) {
+					kpiPorSesion[distinctSesion][indicador.idKPI] = {
+						idKPI: indicador.idKPI,
+						name: indicador.name,
+						scores: [],
+						range: indicador.range,
+					};
+					}
+
+					kpiPorSesion[distinctSesion][indicador.idKPI].scores.push(indicador.score);
+					console.log("indicador:", indicador);
+
+					return indicador;
+				}));
+				});
+
+				await Promise.all(kpiPromises.flat());
+
+				let resultado = [];
+
+				for (let sesion in kpiPorSesion) {
+					for (let idKPI in kpiPorSesion[sesion]) {
+						let kpi = kpiPorSesion[sesion][idKPI];
+						let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+						let name_sesion = sesion.split('-')[1];
+
+						resultado.push({
+							idKPI: kpi.idKPI,
+							name: kpi.name,
+							date: name_sesion,
+							score: avgScore,
+							ses_name: name_sesion,
+							range: kpi.range,
+						});
+					}
+				}
+				this.kpis_mensual = resultado;
+
+				this.chartData = [];
+				let kpiData = {};
+
+				this.kpis_mensual.forEach(indicador => {
+				if (!kpiData[indicador.name]) {
+					kpiData[indicador.name] = {
+						data: [],
+						range: indicador.range
+					};
+				}
+				kpiData[indicador.name].data.push({
+					time: 'Marzo 2024',
+					score: indicador.score
+				});
+				});
+
+				for (const [key, value] of Object.entries(kpiData)) {
+					this.chartData.push({
+						name: key,
+						data: value.data,
+						range: value.range
+					});
+				}
+
+				console.log(this.chartData);
+
+			} catch (error) {
+				console.error('Error al cargar KPIs de sesión:', error);
+			}
+		},
+		async cargarKPIs_trimestral() {
+			const loader = document.querySelector('.loader-container');
+			if(loader){loader.style.display = 'flex';}
+			let kpiPorSesion = {};
+
+			try {
+				const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+
+				const kpiPromises = this.actorIds.map(async idActor => {
+				const ejerciciosFiltrados = ejercicios.filter(sesion =>
+					sesion.Exercise_has_Session_has_Actor_Actor_idActor == idActor
+				);
+
+				return Promise.all(ejerciciosFiltrados.map(async element => {
+					const indicadores = await this.dao.kpi.read();
+					let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+					indicador.score = element.score;
+
+					const sesiones = await this.dao.session.read();
+					let sesion = sesiones.find(sesion =>
+					sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
+					);
+
+					indicador.ses_date = sesion.date;
+					indicador.ses_name = sesion.name;
+					let distinctSesion = `${sesion.idSession}-${sesion.name}`;
+
+					if (!kpiPorSesion[distinctSesion]) {
+					kpiPorSesion[distinctSesion] = {};
+					}
+
+					if (!kpiPorSesion[distinctSesion][indicador.idKPI]) {
+					kpiPorSesion[distinctSesion][indicador.idKPI] = {
+						idKPI: indicador.idKPI,
+						name: indicador.name,
+						scores: [],
+						range: indicador.range,
+					};
+					}
+
+					kpiPorSesion[distinctSesion][indicador.idKPI].scores.push(indicador.score);
+					console.log("indicador:", indicador);
+
+					return indicador;
+				}));
+				});
+
+				await Promise.all(kpiPromises.flat());
+
+				let resultado = [];
+
+				for (let sesion in kpiPorSesion) {
+					for (let idKPI in kpiPorSesion[sesion]) {
+						let kpi = kpiPorSesion[sesion][idKPI];
+						let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+						let name_sesion = sesion.split('-')[1];
+
+						resultado.push({
+						idKPI: kpi.idKPI,
+						name: kpi.name,
+						date: name_sesion,
+						score: avgScore,
+						ses_name: name_sesion,
+						range: kpi.range,
+						});
+					}
+				}
+				this.kpis_trimestral = resultado;
+
+				this.chartData = [];
+				let kpiData = {};
+
+				this.kpis_trimestral.forEach(indicador => {
+				if (!kpiData[indicador.name]) {
+					kpiData[indicador.name] = {
+					data: [],
+					range: indicador.range
+					};
+				}
+				kpiData[indicador.name].data.push({
+					time: '2024-Q1',
+					score: indicador.score
+				});
+				});
+
+				for (const [key, value] of Object.entries(kpiData)) {
+				this.chartData.push({
+					name: key,
+					data: value.data,
+					range: value.range
+				});
+				}
+
+			} catch (error) {
+				console.error('Error al cargar KPIs de sesión:', error);
+			}
+		},
 		async cargarGraficos() {			
 
 			if (!this.teamSelectedID) {
@@ -264,6 +490,11 @@ import { mapGetters } from 'vuex';
 			} catch (error) {
 				console.error('Error al cargar gráficos:', error);
 			}
+		}
+	},
+	watch: {
+		modo(newModo) {
+			this.cargarKPIs();
 		}
 	},
 	created() {

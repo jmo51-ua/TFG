@@ -108,6 +108,7 @@
 import { inject } from 'vue';
 import KpiChart from '@/components/KpiChart.vue'
 import { mapGetters } from 'vuex';
+import * as ss from 'simple-statistics';
 
 export default {
   name: 'SinglePlayerView',
@@ -476,7 +477,6 @@ export default {
         console.error('Error al cargar KPIs de sesión:', error);
       }
     },
-
     async cargarKPIs_mensual() {
       try {
         const ejerciciosSinFiltrar = await this.dao.exercise_has_session_has_actor_has_kpi.read();
@@ -643,100 +643,176 @@ export default {
         console.error("Error al cargar KPIs mensuales:", error);
       }
     },
-    cargarKPIs_trimestral() {
-      this.dao.exercise_has_session_has_actor_has_kpi.read().then((ejercicios) => {
+    async cargarKPIs_trimestral() {
+      try {
+        const ejerciciosSinFiltrar = await this.dao.exercise_has_session_has_actor_has_kpi.read();
 
-        // Ejercicios que involucran al Jugador
-        ejercicios = ejercicios.filter(sesion =>
+        // Filtrar ejercicios que involucran al Jugador
+        const ejercicios = ejerciciosSinFiltrar.filter(sesion =>
           sesion.Exercise_has_Session_has_Actor_Actor_idActor == this.$route.query.idActor
         );
 
         let kpiPorTrimestre = {};
+        let kpiPorSesion = {};
 
-        let kpiPromises = ejercicios.map(element => {
-          return this.dao.kpi.read().then((indicadores) => {
-            let indicador = indicadores.filter(indic =>
-              indic.idKPI == element.KPI_idKPI
-            )[0];
-            indicador.score = element.score;
+        const kpiPromises = ejercicios.map(async (element) => {
+          const indicadores = await this.dao.kpi.read();
+          let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+          indicador.score = element.score;
 
-            return this.dao.session.read().then((sesiones) => {
-              let sesion = sesiones.filter(sesion =>
-                sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
-              )[0];
-              let mes = this.cogerYearMonth(sesion.date);
-              let trimestre = this.getTrimestre(mes);
+          const sesiones = await this.dao.session.read();
+          let sesion = sesiones.find(sesion =>
+            sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
+          );
 
-              if (!kpiPorTrimestre[trimestre]) {
-                kpiPorTrimestre[trimestre] = {};
+          if (!kpiPorSesion[sesion.idSession]) {
+            kpiPorSesion[sesion.idSession] = {
+              name: sesion.name,
+              date: sesion.date,
+              [indicador.idKPI]: {
+                idKPI: indicador.idKPI,
+                name: indicador.name,
+                scores: [],
+                range: indicador.range,
+                exercises: {}  // Para almacenar los ejercicios
               }
+            };
+          } else {
+            if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
+              kpiPorSesion[sesion.idSession][indicador.idKPI] = {
+                idKPI: indicador.idKPI,
+                name: indicador.name,
+                scores: [],
+                range: indicador.range,
+                exercises: {}  // Para almacenar los ejercicios
+              };
+            }
+          }
 
-              if (!kpiPorTrimestre[trimestre][indicador.idKPI]) {
-                kpiPorTrimestre[trimestre][indicador.idKPI] = {
-                  idKPI: indicador.idKPI,
-                  name: indicador.name,
-                  scores: [],
-                  range: indicador.range,
-                };
-              }
+          const ejerciciosResponse = await this.dao.exercise.read();
+          let ejercicio = ejerciciosResponse.find(ex =>
+            ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
+          );
 
-              kpiPorTrimestre[trimestre][indicador.idKPI].scores.push(indicador.score);
-            });
-          });
+          indicador.ex_name = ejercicio.name;
+
+          if (!kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise]) {
+            kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise] = {
+              id: ejercicio.idExercise,
+              name: ejercicio.name,
+              scores: []
+            };
+          }
+
+          kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise].scores.push(element.score);
+          kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
         });
 
-        Promise.all(kpiPromises).then(() => {
-          // Promedio score para cada KPI por trimestre
-          let resultado = [];
+        await Promise.all(kpiPromises);
+        let resultado = [];
 
-          for (let trimestre in kpiPorTrimestre) {
-            for (let idKPI in kpiPorTrimestre[trimestre]) {
-              let kpi = kpiPorTrimestre[trimestre][idKPI];
-              let avgScore = kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length;
+        // Preparar KPI Por Mes
+        for (let ses in kpiPorSesion) {
+          let sesion = kpiPorSesion[ses];
+          let mes = this.cogerYearMonth(sesion.date);
+          let trimestre = this.getTrimestre(mes);console.log(trimestre);
+          
+          if (!kpiPorTrimestre[trimestre]) {
+            kpiPorTrimestre[trimestre] = {
+              name: trimestre,
+              date: null,
+              [ses]: {
+                idKPI: ses,
+                name: sesion.name,
+                scores: [],
+                range: null,
+                KPIs: {}  // Para almacenar los KPIs
+              }
+            };
+          } else {
+            if (!kpiPorTrimestre[trimestre][ses]) {
+              kpiPorTrimestre[trimestre][ses] = {
+                idKPI: ses,
+                name: sesion.name,
+                scores: [],
+                range: null,
+                KPIs: {}  // Para almacenar los KPIs
+              };
+            }
+          }
 
-              let year = trimestre.split('-')[0];
-              let quarter = trimestre.split('-')[1];
+          for (let idKPI in sesion) {
+            let kpi = sesion[idKPI];
 
-              resultado.push({
-                idKPI: kpi.idKPI,
+            if (kpi.scores) {
+              let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+              kpiPorTrimestre[trimestre][ses].scores.push(parseFloat(avgScoreKPI));
+              
+              kpiPorTrimestre[trimestre][ses].KPIs[idKPI] = {
+                id: idKPI,
                 name: kpi.name,
-                date: trimestre,
-                trimestre: trimestre,
-                score: avgScore,
-                ex_name: quarter,
-                ses_name: year,
+                score: avgScoreKPI,
+                exercises: kpi.exercises,
                 range: kpi.range,
-              });
+              };
             }
           }
 
-          console.log('KPIs agrupados por trimestre:', resultado);
-          this.kpis_jugador_trimestral = resultado;
+          let avgScoreSes = (kpiPorTrimestre[trimestre][ses].scores.reduce((a, b) => a + b, 0) / kpiPorTrimestre[trimestre][ses].scores.length).toFixed(2);
+          resultado.push({
+            ses_name: trimestre, // Nombre del trimestre
+            ses_date: trimestre,
+            score: avgScoreSes,
 
-          this.chartData = [];
-          let kpiData = {};
+            idKPI: kpiPorTrimestre[trimestre][ses].idKPI,
+            name: kpiPorTrimestre[trimestre][ses].name, // Nombre de la sesión
+            range: kpiPorTrimestre[trimestre][ses].range,
 
-          this.kpis_jugador_trimestral.forEach(indicador => {
-            if (!kpiData[indicador.name]) {
-              kpiData[indicador.name] = [];
-            }
-            kpiData[indicador.name].push({
-              time: indicador.date,
-              score: indicador.score
-            });
+            exercises: kpiPorTrimestre[trimestre][ses].KPIs, // KPIs agrupados por trimestre
+            ex_name: kpiPorTrimestre[trimestre][ses].name,
           });
+        }
+        // FIN DE Preparar KPI Por Mes
+        console.log('KPIs agrupados por trimestre:', resultado);
+        this.kpis_jugador_trimestral = resultado;
 
-          for (const [key, value] of Object.entries(kpiData)) {
-            this.chartData.push({
-              name: key,
-              data: value
+        this.chartData = [];
+        const kpiData = {};
+
+        this.kpis_jugador_trimestral.forEach(indicador => {
+          for (const kpiId in indicador.exercises) {
+            const kpi = indicador.exercises[kpiId];
+            
+            if (!kpiData[kpi.name]) {
+              kpiData[kpi.name] = {
+                data: [],
+                range: kpi.range
+              };
+            }
+            kpiData[kpi.name].data.push({
+              time: indicador.ses_name,
+              score: kpi.score
             });
           }
         });
 
-      });
+        for (const [key, value] of Object.entries(kpiData)) {
+          this.chartData.push({
+            name: key,
+            data: value.data,
+            range: value.range
+          });
+        }
+
+        await this.cargarDAFO();
+      } catch (error) {
+        console.error("Error al cargar KPIs trimestrales:", error);
+      }
     },
     async cargarKPIs() {
+      const loader = document.querySelector('.loader-container');
+			if(loader) {loader.style.display = 'flex';}
+
       this.kpis_jugador_sesion= [];
       this.kpis_jugador_mensual= [];
       this.kpis_jugador_trimestral= [];
@@ -761,7 +837,6 @@ export default {
 
     cargarDAFO_promedioGPA(){
       this.chartData.forEach(kpi => {
-        console.log(kpi);
         const puntajes = kpi.data.map(d => parseFloat(d.score));
         const rango = kpi.range;
         const gpa_puntos = puntajes.map(puntaje => this.convertir_a_gpa(puntaje, rango));
@@ -788,7 +863,6 @@ export default {
     },
     cargarDAFO__Desviacion(){
       this.chartData.forEach(kpi => {
-        console.log(kpi);
         const puntajes = [20, 25, 30, 18, 27, 33, 29, 24, 35, 31];
         const rango = kpi.range;
         
@@ -818,10 +892,61 @@ export default {
       });
     },
     cargarDAFO_Pendiente(){
+      this.chartData.forEach(kpi => {
+        const puntajes = kpi.data.map(d => parseFloat(d.score));
+        const tiempos = Array.from({ length: puntajes.length }, (_, i) => i + 1);
 
+        const regression = ss.linearRegression(tiempos.map((time, index) => [time, puntajes[index]]));
+        const slope = regression.m;
+
+        const media = ss.mean(puntajes);
+        const desviacion_estandar = ss.standardDeviation(puntajes);
+
+        // Regla empírica
+        const umbral1 = media + desviacion_estandar;  // 68%
+        const umbral2 = media + 2 * desviacion_estandar;  // 95%
+        const umbral3 = media + 3 * desviacion_estandar;  // 99.7%
+
+        if (slope > 0) {//Creciente
+          if (media > umbral1) {
+            this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Rendimiento en aumento y sólido.`);
+          } else {
+            this.resultados_DAFO.Oportunidades.push(`${kpi.name}: Tendencia de mejora que aún no es fuerte pero tiene potencial.`);
+          }
+        } else {//Decreciente
+          if (media < (media - desviacion_estandar)) {
+            this.resultados_DAFO.Debilidades.push(`${kpi.name}: Rendimiento decreciente y problemático.`);
+          } else {
+            this.resultados_DAFO.Amenazas.push(`${kpi.name}: Tendencia decreciente que aún no es fuerte pero es preocupante.`);
+          }
+        }
+      });
     },
     cargarDAFO_Cambios_Temporales(){
+      this.chartData.forEach(kpi => {
+        const puntajes = kpi.data.map(d => parseFloat(d.score));
 
+        const compararSesiones = (puntajes) => {
+          let cambios = [];
+          for (let i = 1; i < puntajes.length; i++) {
+            const cambio = ((puntajes[i] - puntajes[i - 1]) / puntajes[i - 1]) * 100;
+            cambios.push(cambio);
+          }
+          return cambios;
+        };
+
+        const cambiosSesiones = compararSesiones(puntajes);
+        const cambios_positivos = cambiosSesiones.filter(cambio => cambio > 0);
+        const cambios_negativos = cambiosSesiones.filter(cambio => cambio < 0);
+
+        if (cambios_positivos.length > cambios_negativos.length) {
+          this.resultados_DAFO.Oportunidades.push("Tiende a mejorar entre sesiones");
+        } else if (cambios_positivos.length < cambios_negativos.length){
+          this.resultados_DAFO.Debilidades.push("Tiende a empeorar entre sesiones");
+        } else {
+          this.resultados_DAFO.Amenazas.push("No mejora entre sesiones");
+        }
+      });
     },
     cargarDAFO(){
       this.cargarDAFO_promedioGPA();

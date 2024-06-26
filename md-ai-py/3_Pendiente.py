@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.stats import linregress
 
 # Datos de ejemplo
@@ -40,3 +41,19 @@ else:
 
 print(f"Categoría en la matriz DAFO: {categoria}")
 print(f"Razón: {razon}")
+
+# Graficar los datos, la línea de tendencia y los umbrales
+plt.figure(figsize=(10, 6))
+plt.plot(tiempos, puntajes, 'o', label='Puntajes')
+plt.plot(tiempos, intercept + slope * np.array(tiempos), 'r', label='Tendencia')
+plt.axhline(mean, color='g', linestyle='--', label='Media')
+plt.axhline(umbral1, color='b', linestyle='--', label='Umbral 1 (68%)')
+plt.axhline(umbral2, color='y', linestyle='--', label='Umbral 2 (95%)')
+plt.axhline(umbral3, color='m', linestyle='--', label='Umbral 3 (99.7%)')
+
+plt.xlabel('Tiempo')
+plt.ylabel('Puntajes')
+plt.title('Puntajes, Tendencia y Umbrales')
+plt.legend()
+plt.grid(True)
+plt.show()

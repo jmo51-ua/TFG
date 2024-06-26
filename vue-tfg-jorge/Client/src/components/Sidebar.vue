@@ -72,15 +72,10 @@
 						<input type="radio" id="modo2" name="modo" value="trimestral" v-model="selectedModo" @change="cambiarModo">
 						<label for="modo2">Trimestral</label>
 					</div>
-					<div class="option">
+					<!-- <div class="option">
 						<input type="radio" id="modo2" name="modo" value="todo" v-model="selectedModo" @change="cambiarModo">
 						<label for="modo2">Todo el tiempo</label>
-					</div>
-
-					<!-- Mostrar el modo actual -->
-					<div class="current-modo">
-						Modo actual: {{ modo }}
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div :class="['content', { scrollable: isTeamView }]">
