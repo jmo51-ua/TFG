@@ -1,6 +1,6 @@
 <template>
   <div class="grid-container">
-    <div class="block block1">
+    <div id="equipo-block" class="block block1" @click="goToURL('/equipo')">
       <div class="block-title">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M0-240v-63q0-43 44-70t116-27q13 0 25 .5t23 2.5q-14 21-21 44t-7 48v65H0Zm240 0v-65q0-32 17.5-58.5T307-410q32-20 76.5-30t96.5-10q53 0 97.5 10t76.5 30q32 20 49 46.5t17 58.5v65H240Zm540 0v-65q0-26-6.5-49T754-397q11-2 22.5-2.5t23.5-.5q72 0 116 26.5t44 70.5v63H780Zm-455-80h311q-10-20-55.5-35T480-370q-55 0-100.5 15T325-320ZM160-440q-33 0-56.5-23.5T80-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T160-440Zm640 0q-33 0-56.5-23.5T720-520q0-34 23.5-57t56.5-23q34 0 57 23t23 57q0 33-23 56.5T800-440Zm-320-40q-50 0-85-35t-35-85q0-51 35-85.5t85-34.5q51 0 85.5 34.5T600-600q0 50-34.5 85T480-480Zm0-80q17 0 28.5-11.5T520-600q0-17-11.5-28.5T480-640q-17 0-28.5 11.5T440-600q0 17 11.5 28.5T480-560Zm1 240Zm-1-280Z"/></svg>
         Equipo
@@ -11,9 +11,10 @@
           :key="index"
           :to="{ path: '/singleplayer', query: { player: item.name, idActor: item.idActor } }"
           class="list-item-link"
+          @click.stop
         >
           <div class="list-item player-item">
-            <img :src="item.photo || 'https://ui-avatars.com/api/?name=Default&size=50'" alt="Foto-perfil" class="profile-pic" />
+            <img :src="item.photo || 'https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg'" alt="Foto-perfil" class="profile-pic" />
             <div class="item-details">
               <div class="name number">{{ item.name }} {{ item.surname }}</div>
             </div>
@@ -24,7 +25,7 @@
         </router-link>
       </div>
     </div>
-    <div class="block block2" @click="goToStats">
+    <div id="estadisticas-block" class="block block2" @click="goToURL('/stats')">
       <div class="block-title">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M280-280h80v-280h-80v280Zm160 0h80v-400h-80v400Zm160 0h80v-160h-80v160ZM200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200Zm0-80h560v-560H200v560Zm0-560v560-560Z"/></svg>
         Estadísticas
@@ -33,36 +34,35 @@
         <router-link
           v-for="(item, index) in jugadoresKPIs"
           :key="index"
-          :to="{ path: '/singleplayer', query: { player: item.name } }"
           class="list-item-link"
         >
-          <div class="list-item">
-            <img :src="item.image" alt="Profile" class="profile-pic" />
-            <div class="item-details">
-              <div class="name number">{{ item.name }} - {{ item.kpi_name }}</div>
-            </div>
-            <div :style="{ backgroundColor: calculateColorKPI(item.score, item.target), color: getTextColorKPI(item.score, item.target) }"
-            class="avg"
-            style="display: inline-block; white-space: nowrap; margin-left: 5px;">
-              {{ item.score }} / {{ item.target }}
-            </div>
+        <div  class="list-item">
+          <img :src="item.image" alt="Profile" class="profile-pic" />
+          <div class="item-details">
+            <div class="name number">{{ item.name }} - {{ item.kpi_name }}</div>
           </div>
+          <div :style="{ backgroundColor: calculateColorKPI(item.score, item.target), color: getTextColorKPI(item.score, item.target) }"
+          class="avg"
+          style="display: inline-block; white-space: nowrap; margin-left: 5px;">
+            {{ item.score }} / {{ item.target }}
+          </div>
+        </div>
         </router-link>
       </div>
     </div>
-    <div class="block block3">
+    <div id="otros-equipos-block" class="block block3">
       <div class="block-title">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M350-63q-46 0-82.5-24T211-153q-16 21-40.5 32.5T120-109q-51 0-85.5-35T0-229q0-43 28-77.5T99-346q-14-20-21.5-42.5T70-436q0-40 20.5-75t57.5-57q5 18 13.5 38.5T181-494q-14 11-22 26.5t-8 32.5q0 56 46 69t87 21l19 32q-11 32-19 54.5t-8 40.5q0 30 21.5 52.5T350-143q38 0 63-34t41-80q16-46 24.5-93t13.5-72l78 21q-9 45-22 103t-36.5 110.5Q488-135 449.5-99T350-63ZM120-189q17 0 28.5-11.5T160-229q0-17-11.5-28.5T120-269q-17 0-28.5 11.5T80-229q0 17 11.5 28.5T120-189Zm284-158q-46-41-83.5-76.5t-64.5-69q-27-33.5-41.5-67T200-629q0-65 44.5-109.5T354-783q4 0 7 .5t7 .5q-4-10-6-20t-2-21q0-50 35-85t85-35q50 0 85 35t35 85q0 11-2 20.5t-6 19.5h14q60 0 102 38.5t50 95.5q-18-3-40.5-3t-41.5 2q-7-23-25.5-38T606-703q-35 0-54.5 20.5T498-623h-37q-35-41-54.5-60.5T354-703q-32 0-53 21t-21 53q0 23 13 47.5t36.5 52q23.5 27.5 57 58.5t74.5 67l-57 57Zm76-436q17 0 28.5-11.5T520-823q0-17-11.5-28.5T480-863q-17 0-28.5 11.5T440-823q0 17 11.5 28.5T480-783ZM609-63q-22 0-43.5-6T524-88q11-14 22-33t20-35q11 7 22 10t22 3q32 0 53.5-22.5T685-219q0-19-8-41t-19-54l19-32q42-8 87.5-21t45.5-69q0-40-29.5-58T716-512q-42 0-98 16t-131 41l-21-78q78-25 139-42t112-17q69 0 121 41t52 115q0 25-7.5 47.5T861-346q43 5 71 39.5t28 77.5q0 50-34.5 85T840-109q-26 0-50.5-11.5T749-153q-20 42-56.5 66T609-63Zm232-126q17 0 28-11.5t11-28.5q0-17-11.5-29T840-270q-17 0-28.5 11.5T800-230q0 17 12 29t29 12Zm-721-40Zm360-594Zm360 593Z"/></svg>
         Mis otros equipos
       </div>
     </div>
-    <div class="block block5">
+    <div id="graficos-block" class="block block5" @click="goToURL('/stats')">
       <div class="block-title">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z"/></svg>
         Gráficos
       </div>
     </div>
-    <div class="block block6">
+    <div id="calendario-block" class="block block6">
       <div class="block-title">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm280 240q-17 0-28.5-11.5T440-440q0-17 11.5-28.5T480-480q17 0 28.5 11.5T520-440q0 17-11.5 28.5T480-400Zm-160 0q-17 0-28.5-11.5T280-440q0-17 11.5-28.5T320-480q17 0 28.5 11.5T360-440q0 17-11.5 28.5T320-400Zm320 0q-17 0-28.5-11.5T600-440q0-17 11.5-28.5T640-480q17 0 28.5 11.5T680-440q0 17-11.5 28.5T640-400ZM480-240q-17 0-28.5-11.5T440-280q0-17 11.5-28.5T480-320q17 0 28.5 11.5T520-280q0 17-11.5 28.5T480-240Zm-160 0q-17 0-28.5-11.5T280-280q0-17 11.5-28.5T320-320q17 0 28.5 11.5T360-280q0 17-11.5 28.5T320-240Zm320 0q-17 0-28.5-11.5T600-280q0-17 11.5-28.5T640-320q17 0 28.5 11.5T680-280q0 17-11.5 28.5T640-240Z"/></svg>
         Calendario
@@ -101,12 +101,6 @@
         actoresCompletos: [],
         sessions: [],
         jugadoresKPIs: [],
-        listStats: [
-          { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '41%', target:'90%' },
-          { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4', target:'2.1' },
-          { image: 'https://via.placeholder.com/50', name: 'Rodri', kpi_name: 'Acierto de pases', score: '61%', target:'100%' },
-          { image: 'https://via.placeholder.com/50', name: 'Moi Gomez', kpi_name: 'Apariciones / min', score: '2.4', target:'3.0' },
-        ],
 
         //VUE CALENDAR
         events: [
@@ -152,8 +146,8 @@
       return { app, dao };
     },
     methods: {
-      goToStats() {
-        this.$router.push('/stats');
+      goToURL(url) {
+        this.$router.push(url);
       },
       calculateColor(value,) {
         let red, green;
@@ -223,57 +217,6 @@
 
         return brightness > 128 ? '#000000' : '#FFFFFF';
       },
-      cargarJugadores() {
-        if (!this.teamSelectedID) {
-          console.error('No team selected');
-          return;
-        }
-
-        this.dao.actor_has_actortype.read().then((response) => {
-          this.actores = response.filter(actor =>
-            actor.ActorType_idActorType === 2 &&
-            actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
-          );
-          this.actorIds = this.actores.map(actor => actor.Actor_idActor);
-
-          this.cargarDatosCompletosJugadores();
-        });
-      },
-      cargarDatosCompletosJugadores() {
-        const promises = this.actorIds.map(id => this.dao.actor.read({ idActor: id }));
-        Promise.all(promises).then((responses) => {
-          this.actoresCompletos = responses;
-          console.log('Datos completos de los actores:', this.actoresCompletos);
-        });
-      },
-      cargarSesiones(){
-        this.dao.session.read().then((response) => {
-
-          this.sessions = response
-          .filter(sesion => sesion.date != null)
-          .map(sesion => ({
-            start: new Date(sesion.date),
-            end: new Date(new Date(sesion.date).getTime() + (sesion.duration * 60000)),
-            title: sesion.name
-          }));
-
-          console.log('Sesiones filtradas y convertidas:', this.sessions);
-        });
-      },
-      calculateEndTime(startTime, duration) {
-        var [hours, minutes] = [0, 0];
-        if(startTime != null){
-          [hours, minutes] = startTime.split(':').map(Number);
-        }
-        const endDate = new Date(0, 0, 0, hours, minutes + duration);
-        return endDate.toTimeString().split(' ')[0];
-      },
-      onCellClick({ startDate, endDate }) {
-        console.log(`Clicked on cell from ${startDate} to ${endDate}`);
-      },
-      onEventClick(event) {
-        console.log(`Clicked on event: ${event.title}`);
-      },
       carcularTimeStart(date,time){
         if(!time){
           time = "9:00:00";
@@ -315,37 +258,89 @@
 
         return `${year}-${month}-${day} ${hours}:${minutes}`;
       },
-      cargarSesiones() {
-        let actorID,actores
-        let sesiones;
+      onCellClick({ startDate, endDate }) {
+        console.log(`Clicked on cell from ${startDate} to ${endDate}`);
+      },
+      onEventClick(event) {
+        console.log(`Clicked on event: ${event.title}`);
+      },
 
-        this.dao.actor.read().then((response) => {
-          actores = response.filter(actor =>
-            actor.User_idUser == this.userID
-          );
 
-          actores.forEach(fila => {
-            actorID = fila.idActor;
+      async cargarJugadores() {
+				if (!this.teamSelectedID) {
+					console.error('No team selected');
+					return;
+				}
 
-            this.dao.session.read().then((response) => {
-              sesiones = actorID !== null 
-                ? response.filter(sesion => sesion.Actor_idActor == actorID && sesion.date !=null)
-              : response;
-              
-              sesiones.forEach(element => {
-                this.sessions.push(
-                  {
-                    start: this.carcularTimeStart(element.date.toString(),element.time.toString()),
-                    end: this.carcularTimeEnd(element.date.toString(),element.time.toString(),element.duration),
-                    title: element.name
-                  }
-                );
+				try {
+					const response = await this.dao.actor_has_actortype.read();
+					this.actores = response.filter(actor =>
+					actor.ActorType_idActorType === 2 &&
+					actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
+					);
+					this.actorIds = this.actores.map(actor => actor.Actor_idActor);
+					await this.cargarDatosCompletosJugadores();
+				} catch (error) {
+					console.error('Error al cargar jugadores:', error);
+				}
+			},
+      async cargarDatosCompletosJugadores() {
+				try {
+					const promises = this.actorIds.map(id => this.dao.actor.read({ idActor: id }));
+					this.actoresCompletos = await Promise.all(promises);
+					console.log('Datos completos de los actores:', this.actoresCompletos);
+				} catch (error) {
+					console.error('Error al cargar jugadores completos:', error);
+				}
+			},
+      async cargarSesiones() {
+        try {
+          const actoresResponse = await this.dao.actor.read();
+          const actores = actoresResponse.filter(actor => actor.User_idUser == this.userID);
+
+          for (const fila of actores) {
+            const actorID = fila.idActor;
+
+            const sesionesResponse = await this.dao.session.read();
+            const sesiones = actorID !== null 
+              ? sesionesResponse.filter(sesion => sesion.Actor_idActor == actorID && sesion.date != null)
+              : sesionesResponse;
+
+            sesiones.forEach(element => {
+              this.sessions.push({
+                start: this.carcularTimeStart(element.date.toString(), element.time.toString()),
+                end: this.carcularTimeEnd(element.date.toString(), element.time.toString(), element.duration),
+                title: element.name
               });
             });
-
-          });
-        });
+          }
+        } catch (error) {
+          console.error('Error al cargar sesiones:', error);
+        }
       },
+    },
+    mounted() {
+      const block = this.$el.querySelector('.block1');
+      const listItems = block.querySelectorAll('.list-item');
+      console.log("listItems",listItems);
+
+      block.addEventListener('mouseenter', () => {
+        block.classList.add('hovered');
+      });
+
+      block.addEventListener('mouseleave', () => {
+        block.classList.remove('hovered');
+      });
+
+      listItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          block.classList.remove('hovered');
+        });
+
+        item.addEventListener('mouseleave', () => {
+          block.classList.add('hovered');
+        });
+      });
     },
     created() {
       this.cargarJugadores();
@@ -484,12 +479,13 @@
     display: flex;
     flex-direction: column;
     min-height: 250px;
-    transition: transform 0.1s ease;
+    transition: transform 0.1s ease, background-color 0.5s ease;
   }
 
-  .block1:hover{
+  .block1.hovered {
     transform: scale(1.1);
     cursor: pointer;
+    background-color: #85b4ff;
   }
 
   .block2 {

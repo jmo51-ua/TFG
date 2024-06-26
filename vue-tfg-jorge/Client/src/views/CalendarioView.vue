@@ -111,35 +111,22 @@
 
         return `${year}-${month}-${day} ${hours}:${minutes}`;
       },
-      cargarSesiones() {
-        let actorID,actores
-        let sesiones;
-
-        this.dao.actor.read().then((response) => {
-          actores = response.filter(actor =>
-            actor.User_idUser == this.userID
-          );
-
-          actores.forEach(fila => {
-            actorID = fila.idActor;
-            
-            this.dao.session.read().then((response) => {
-              sesiones = actorID !== null 
-                ? response.filter(sesion => sesion.Actor_idActor == actorID && sesion.date !=null)
-              : response;
-              sesiones.forEach(element => {
-                this.sessions.push(
-                  {
-                    start: this.carcularTimeStart(element.date.toString(),element.time.toString()),
-                    end: this.carcularTimeEnd(element.date.toString(),element.time.toString(),element.duration),
-                    title: element.name
-                  }
-                );
+      async cargarSesiones() {
+        try {
+          const actores = (await this.dao.actor.read()).filter(actor => actor.User_idUser == this.userID);
+          for (const actor of actores) {
+            const sesiones = (await this.dao.session.read()).filter(sesion => sesion.Actor_idActor == actor.idActor && sesion.date != null);
+            for (const element of sesiones) {
+              this.sessions.push({
+                start: this.carcularTimeStart(element.date.toString(), element.time.toString()),
+                end: this.carcularTimeEnd(element.date.toString(), element.time.toString(), element.duration),
+                title: element.name,
               });
-            });
-
-          });
-        });
+            }
+          }
+        } catch (error) {
+          console.error('Error al cargar las sesiones:', error);
+        }
       },
       onCellClick({ startDate, endDate }) {
         console.log(`Clicked on cell from ${startDate} to ${endDate}`);

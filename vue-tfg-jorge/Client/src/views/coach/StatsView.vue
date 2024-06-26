@@ -23,11 +23,7 @@
 				<KpiChart :chartData="chart.data" :chartId="'chart-' + index" :chartName="chart.name" />
 			</div>
 
-			<div class="chart">
-				<button class="add-chart-button button" @click="addChart">
-					Añadir nuevo registro
-				</button>
-			</div>
+			
 		</div>
 
 		<div class="create-kpi" v-if="showCreateKpiForm">
@@ -43,6 +39,20 @@
 				
 				<button type="submit">Crear KPI</button>
 			</form>
+		</div>
+
+		<div class="loader-container">
+			<div class="dot-spinner">
+				<div class="dot-spinner__dot"></div>
+				<div class="dot-spinner__dot"></div>
+				<div class="dot-spinner__dot"></div>
+				<div class="dot-spinner__dot"></div>
+				<div class="dot-spinner__dot"></div>
+				<div class="dot-spinner__dot"></div>
+				<div class="dot-spinner__dot"></div>
+				<div class="dot-spinner__dot"></div>
+			</div>
+			<p>Cargando...</p>
 		</div>
 	</main>
 </template>
@@ -87,7 +97,14 @@ import { mapGetters } from 'vuex';
       ...mapGetters(['teamSelectedName']),
       ...mapGetters(['userName']),
       ...mapGetters(['userID']),
+	  ...mapGetters(['modo']),
     },
+	mounted() {
+		this.$nextTick(() => {
+			const loader = document.querySelector('.loader-container');
+			loader.style.display = 'flex';
+		});
+	},
 	setup() {
       const app = inject('app');
       const dao = inject('dao');
@@ -104,207 +121,150 @@ import { mapGetters } from 'vuex';
 			this.showCreateKpiForm = false; // Ocultar el formulario
 			this.charts.push('https://via.placeholder.com/300');
 		},
-		cargarKPIsPor_sesion() {
-			this.dao.exercise_has_session_has_actor_has_kpi.read().then((ejercicios) => {
+		cogerYearMonth(date){
+			const dateFormat = new Date(date);
+			const year = dateFormat.getFullYear();
+			const month = String(dateFormat.getMonth() + 1).padStart(2, '0');
 
-			ejercicios = ejercicios.filter(sesion =>
-			sesion.Exercise_has_Session_has_Actor_Actor_idActor == this.$route.query.idActor
-			);
+			return `${year}-${month}`;
+		},
+		async cargarKPIs() {
+			const loader = document.querySelector('.loader-container');
+			loader.style.display = 'flex';
+			this.chartData = [];
 
-			const kpiPromises = ejercicios.map(element => {
-			return this.dao.kpi.read().then((indicadores) => {
-				let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
-				indicador.score = element.score;
+			const methodName = `cargarKPIs_${this.modo}`;
+			if (typeof this[methodName] === 'function') {
+				await this[methodName]();
+				loader.style.display = 'none';
+			} else {
+				console.error(`Method ${methodName} does not exist`);
+			}
+		},
 
-				return this.dao.session.read().then((sesiones) => {
-				let sesion = sesiones.find(sesion =>
-					sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
+		
+		async cargarKPIs_sesion() {
+			let kpiPorSesion = {};
+
+			try {
+				const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+
+				const kpiPromises = this.actorIds.map(async idActor => {
+				const ejerciciosFiltrados = ejercicios.filter(sesion =>
+					sesion.Exercise_has_Session_has_Actor_Actor_idActor == idActor
 				);
-				indicador.ses_date = sesion.date;
-				indicador.ses_name = sesion.name;
 
-				return this.dao.exercise.read().then((ejercicios) => {
-					let ejercicio = ejercicios.find(ex =>
-					ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
+				return Promise.all(ejerciciosFiltrados.map(async element => {
+					const indicadores = await this.dao.kpi.read();
+					let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+					indicador.score = element.score;
+
+					const sesiones = await this.dao.session.read();
+					let sesion = sesiones.find(sesion =>
+					sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
 					);
-					indicador.ex_name = ejercicio.name;
+
+					indicador.ses_date = sesion.date;
+					indicador.ses_name = sesion.name;
+					let distinctSesion = `${sesion.idSession}-${sesion.name}`;
+
+					if (!kpiPorSesion[distinctSesion]) {
+					kpiPorSesion[distinctSesion] = {};
+					}
+
+					if (!kpiPorSesion[distinctSesion][indicador.idKPI]) {
+					kpiPorSesion[distinctSesion][indicador.idKPI] = {
+						idKPI: indicador.idKPI,
+						name: indicador.name,
+						scores: [],
+						range: indicador.range,
+					};
+					}
+
+					kpiPorSesion[distinctSesion][indicador.idKPI].scores.push(indicador.score);
+					console.log("indicador:", indicador);
 
 					return indicador;
+				}));
 				});
-				});
-			});
-			});
 
-			Promise.all(kpiPromises).then((result) => {
-				const kpiData = {};
+				await Promise.all(kpiPromises.flat());
 
-				result.forEach(indicador => {
-					if (!kpiData[indicador.name]) {
-					kpiData[indicador.name] = [];
+				let resultado = [];
+
+				for (let sesion in kpiPorSesion) {
+					for (let idKPI in kpiPorSesion[sesion]) {
+						let kpi = kpiPorSesion[sesion][idKPI];
+						let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+
+						let id_sesion = sesion.split('-')[0];
+						let name_sesion = sesion.split('-')[1];
+
+						resultado.push({
+						idKPI: kpi.idKPI,
+						name: kpi.name,
+						date: name_sesion,
+						score: avgScore,
+						ses_name: name_sesion,
+						range: kpi.range,
+						});
 					}
-					kpiData[indicador.name].push({
-					time: this.cogerYearMonth(indicador.ses_date),
+				}
+				this.kpis_sesion = resultado;
+
+				this.chartData = [];
+				let kpiData = {};
+
+				this.kpis_sesion.forEach(indicador => {
+				if (!kpiData[indicador.name]) {
+					kpiData[indicador.name] = {
+					data: [],
+					range: indicador.range
+					};
+				}
+				kpiData[indicador.name].data.push({
+					time: indicador.date,
 					score: indicador.score
-					});
 				});
-				
-				//BORRAR
-				result.forEach(indicador => {
-					if (!kpiData[indicador.name]) {
-					kpiData[indicador.name] = [];
-					}
-					kpiData[indicador.name].push({
-					time: this.cogerYearMonth(indicador.ses_date),
-					score: 10
-					});
-				});
-				//BORRAR
-				result.forEach(indicador => {
-					if (!kpiData[indicador.name]) {
-					kpiData[indicador.name] = [];
-					}
-					kpiData[indicador.name].push({
-					time: this.cogerYearMonth(indicador.ses_date),
-					score: 6
-					});
 				});
 
 				for (const [key, value] of Object.entries(kpiData)) {
-					this.chartData.push({
+				this.chartData.push({
 					name: key,
-					data: value
-					});
+					data: value.data,
+					range: value.range
+				});
 				}
-			});
-		});
-		},
-		cogerYearMonth(date){
-		const dateFormat = new Date(date);
-		const year = dateFormat.getFullYear();
-		const month = String(dateFormat.getMonth() + 1).padStart(2, '0');
 
-		return `${year}-${month}`;
+			} catch (error) {
+				console.error('Error al cargar KPIs de sesión:', error);
+			}
 		},
-		cargarGraficos() {
+		async cargarGraficos() {			
+
 			if (!this.teamSelectedID) {
 				console.error('No team selected');
 				return;
 			}
 
-			this.dao.actor_has_actortype.read().then((response) => {
+			try {
+				const response = await this.dao.actor_has_actortype.read();
 				this.actores = response.filter(actor =>
-					actor.ActorType_idActorType === 2 &&
-					actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
+				actor.ActorType_idActorType === 2 &&
+				actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
 				);
+
 				this.actorIds = this.actores.map(actor => actor.Actor_idActor);
 
 				const promises = this.actorIds.map(id => this.dao.actor.read({ idActor: id }));
-				Promise.all(promises).then((responses) => {
-					this.actoresCompletos = responses;
-					console.log('Datos completos de los actores:', this.actoresCompletos);
-					this.cargarKPIs_sesion();
-				});
-			});
-		},
-		cargarKPIs_sesion() {
-			let kpiPorSesion = {};
+				this.actoresCompletos = await Promise.all(promises);
 
-			this.dao.exercise_has_session_has_actor_has_kpi.read().then((ejercicios) => {
-				const kpiPromises = this.actorIds.map(idActor => {
-					const ejerciciosFiltrados = ejercicios.filter(sesion =>
-						sesion.Exercise_has_Session_has_Actor_Actor_idActor == idActor
-					);
-					return Promise.all(ejerciciosFiltrados.map(element => {
-						return this.dao.kpi.read().then((indicadores) => {
-							let indicador = indicadores.filter(indic =>
-								indic.idKPI == element.KPI_idKPI
-							)[0];
-							indicador.score = element.score;
-
-							return this.dao.session.read().then((sesiones) => {
-								let sesion = sesiones.find(sesion =>
-									sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
-								);
-								indicador.ses_date = sesion.date;
-								indicador.ses_name = sesion.name;
-								let distinctSesion = `${sesion.idSession}-${sesion.name}`;
-
-								if (!kpiPorSesion[distinctSesion]) {
-									kpiPorSesion[distinctSesion] = {};
-								}
-
-								if (!kpiPorSesion[distinctSesion][indicador.idKPI]) {
-									kpiPorSesion[distinctSesion][indicador.idKPI] = {
-										idKPI: indicador.idKPI,
-										name: indicador.name,
-										scores: [],
-										range: indicador.range,
-									};
-								}
-
-								kpiPorSesion[distinctSesion][indicador.idKPI].scores.push(indicador.score);
-								console.log("indicador:", indicador);
-
-								return indicador;
-							});
-						});
-					}));
-				});
-
-				Promise.all(kpiPromises.flat()).then((result) => {
-					let resultado = [];
-
-					for (let sesion in kpiPorSesion) {
-						for (let idKPI in kpiPorSesion[sesion]) {
-							let kpi = kpiPorSesion[sesion][idKPI];
-							let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-							
-							let id_sesion = sesion.split('-')[0];
-							let name_sesion = sesion.split('-')[1];
-
-							resultado.push({
-								idKPI: kpi.idKPI,
-								name: kpi.name,
-								date: name_sesion,
-								score: avgScore,
-								ses_name: name_sesion,
-								range: kpi.range,
-							});
-						}
-					}
-
-					console.log('KPIs agrupados por sesion:', resultado);
-					this.kpis_sesion = resultado;
-
-					this.chartData = [];
-					let kpiData = {};
-
-					this.kpis_sesion.forEach(indicador => {
-						if (!kpiData[indicador.name]) {
-							kpiData[indicador.name] = {
-								data: [],
-								range: indicador.range
-							};
-						}
-						kpiData[indicador.name].data.push({
-							time: indicador.date,
-							score: indicador.score
-						});
-					});
-
-					for (const [key, value] of Object.entries(kpiData)) {
-						
-						this.chartData.push({
-							name: key,
-							data: value.data,
-							range: value.range
-						});
-					}
-
-					console.log("DATACHART",this.chartData);
-				});
-			});
-		},
+				console.log('Datos completos de los actores:', this.actoresCompletos);
+				await this.cargarKPIs();
+			} catch (error) {
+				console.error('Error al cargar gráficos:', error);
+			}
+		}
 	},
 	created() {
 		try{
@@ -474,4 +434,129 @@ import { mapGetters } from 'vuex';
 	}
 
 </style>
-  
+
+<style>
+.loader-container {
+  width: 300px;
+  height: 300px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  display: flex;
+}
+.loader-container p {
+  margin-top: 100px;
+  font-weight: bold;
+}
+.dot-spinner {
+  --uib-size: 2.8rem;
+  --uib-speed: .9s;
+  --uib-color: #183153;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: var(--uib-size);
+  width: var(--uib-size);
+}
+
+.dot-spinner__dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+}
+
+.dot-spinner__dot::before {
+  content: '';
+  height: 20%;
+  width: 20%;
+  border-radius: 50%;
+  background-color: var(--uib-color);
+  transform: scale(0);
+  opacity: 0.5;
+  animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(18, 31, 53, 0.3);
+}
+
+.dot-spinner__dot:nth-child(2) {
+  transform: rotate(45deg);
+}
+
+.dot-spinner__dot:nth-child(2)::before {
+  animation-delay: calc(var(--uib-speed) * -0.875);
+}
+
+.dot-spinner__dot:nth-child(3) {
+  transform: rotate(90deg);
+}
+
+.dot-spinner__dot:nth-child(3)::before {
+  animation-delay: calc(var(--uib-speed) * -0.75);
+}
+
+.dot-spinner__dot:nth-child(4) {
+  transform: rotate(135deg);
+}
+
+.dot-spinner__dot:nth-child(4)::before {
+  animation-delay: calc(var(--uib-speed) * -0.625);
+}
+
+.dot-spinner__dot:nth-child(5) {
+  transform: rotate(180deg);
+}
+
+.dot-spinner__dot:nth-child(5)::before {
+  animation-delay: calc(var(--uib-speed) * -0.5);
+}
+
+.dot-spinner__dot:nth-child(6) {
+  transform: rotate(225deg);
+}
+
+.dot-spinner__dot:nth-child(6)::before {
+  animation-delay: calc(var(--uib-speed) * -0.375);
+}
+
+.dot-spinner__dot:nth-child(7) {
+  transform: rotate(270deg);
+}
+
+.dot-spinner__dot:nth-child(7)::before {
+  animation-delay: calc(var(--uib-speed) * -0.25);
+}
+
+.dot-spinner__dot:nth-child(8) {
+  transform: rotate(315deg);
+}
+
+.dot-spinner__dot:nth-child(8)::before {
+  animation-delay: calc(var(--uib-speed) * -0.125);
+}
+
+@keyframes pulse0112 {
+  0%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+</style>

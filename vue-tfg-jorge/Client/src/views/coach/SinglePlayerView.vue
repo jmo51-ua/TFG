@@ -87,6 +87,20 @@
         </div>
       </div>
     </div>
+
+    <div class="loader-container">
+      <div class="dot-spinner">
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+        <div class="dot-spinner__dot"></div>
+      </div>
+      <p>Cargando...</p>
+    </div>
   </div>
 </template>
 
@@ -119,6 +133,12 @@ export default {
       }
     }
   },
+  mounted() {
+		this.$nextTick(() => {
+			const loader = document.querySelector('.loader-container');
+			loader.style.display = 'flex';
+		});
+	},
   data() {
     return {
       dafo: [
@@ -146,10 +166,6 @@ export default {
       kpis_jugador_trimestral: [],
       kpis_jugador_all: [],
       chartData: [],
-      chartData_sesion: [],
-      chartData_mensual: [],
-      chartData_trimestral: [],
-      chartData_all: [],
 
       openSessions: [],
       openKpis: [],
@@ -189,7 +205,6 @@ export default {
     isKpiDropdownOpen(sessionIndex, kpiIndex) {
       return this.openKpis.includes(`${sessionIndex}-${kpiIndex}`);
     },
-
     getColorForPercentage(pct) {
       var percentColors = [
         { pct: 0.0, color: { r: 0xff, g: 0x00, b: 0 } },
@@ -243,244 +258,12 @@ export default {
 
       return brightness > 128 ? '#000000' : '#FFFFFF';
     },
-    getPlayerInfo(){
-      this.dao.actor.read().then((response) => {
-        this.informacion_jugador = response.filter(actor =>
-          actor.idActor == this.$route.query.idActor
-        )[0];
-        
-        console.log('Info Jugador: ', this.informacion_jugador.idActor);
-      });
-    },
-
-    cargarKPIs_sesion() {
-
-      this.dao.exercise_has_session_has_actor_has_kpi.read().then((ejercicios) => {
-        ejercicios = ejercicios.filter(sesion =>
-          sesion.Exercise_has_Session_has_Actor_Actor_idActor == this.$route.query.idActor
-        );
-
-        let kpiPorSesion = {};
-
-        const kpiPromises = ejercicios.map(element => {
-          return this.dao.kpi.read().then((indicadores) => {
-            let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
-            indicador.score = element.score;
-
-            return this.dao.session.read().then((sesiones) => {
-              let sesion = sesiones.find(sesion =>
-                sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
-              );
-              indicador.ses_date = sesion.date;
-              indicador.ses_name = sesion.name;
-
-              if (!kpiPorSesion[sesion.idSession]) {
-                kpiPorSesion[sesion.idSession] = {};
-                kpiPorSesion[sesion.idSession].name = sesion.name;
-                kpiPorSesion[sesion.idSession].date = sesion.date;
-              }
-
-              if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
-                kpiPorSesion[sesion.idSession][indicador.idKPI] = {
-                  idKPI: indicador.idKPI,
-                  name: indicador.name,
-                  scores: [],
-                  range: indicador.range,
-                };
-              }
-
-              return this.dao.exercise.read().then((ejercicios) => {
-                let ejercicio = ejercicios.find(ex =>
-                  ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
-                );
-
-                indicador.ex_name = ejercicio.name;
-
-                if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
-                  kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise] = {
-                    id: ejercicio.idExercise,
-                    name: ejercicio.name,
-                    score: element.score,
-                  };
-                }
-                kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
-              });
-            });
-          });
-        });
-
-        Promise.all(kpiPromises).then((result) => {
-          // promedio score para cada KPI
-          let resultado = [];
-
-          for (let sesion in kpiPorSesion) {
-            
-            for (let idKPI in kpiPorSesion[sesion]) {
-              let kpi = kpiPorSesion[sesion][idKPI];
-              
-              if(kpi.scores){
-                let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-                let exercises = {};
-
-                for (let ex in kpi) {
-                  let ejercicio = kpi[ex];
-                  if(ejercicio.name){
-
-                    if(!exercises[ejercicio.id]){
-                      exercises[ejercicio.id]={
-                        name: ejercicio.name,
-                        score: ejercicio.score,
-                      };
-                    }
-                  }
-                }
-
-                resultado.push({
-                  ses_name: kpiPorSesion[sesion].name, //Nombre Sesion, Mes, Trimestre (sesion, mensual, trimestral)
-                  ses_date: kpiPorSesion[sesion].date,
-                  score: avgScore,
-
-                  idKPI: kpi.idKPI,
-                  name: kpi.name, //Nombre KPI, Sesion o Mes (sesion, mensual, trimestral)
-                  range: kpi.range,
-
-                  exercises: exercises, //Ejercicios, KPIs o Sesiones (sesion, mensual, trimestral)
-
-                  ex_name: kpiPorSesion[sesion].name,
-                });
-              }
-            }
-          }
-          this.kpis_jugador_sesion = resultado;
-
-          this.chartData = [];
-          const kpiData = {};
-
-          this.kpis_jugador_sesion.forEach(indicador => {
-            if (!kpiData[indicador.name]) {
-                kpiData[indicador.name] = {
-                    data: [],
-                    range: indicador.range
-                };
-            }
-            kpiData[indicador.name].data.push({
-                time: indicador.ses_name,
-                score: indicador.score
-            });
-          });
-
-          for (const [key, value] of Object.entries(kpiData)) {
-              this.chartData.push({
-                  name: key,
-                  data: value.data,
-                  range: value.range
-              });
-          }
-
-          this.cargarDAFO();
-        });
-      });
-    },
     cogerYearMonth(date){
       const dateFormat = new Date(date);
       const year = dateFormat.getFullYear();
       const month = String(dateFormat.getMonth() + 1).padStart(2, '0');
 
       return `${year}-${month}`;
-    },
-    cargarKPIs_mensual(){
-
-      this.dao.exercise_has_session_has_actor_has_kpi.read().then((ejercicios) => {
-
-        //Ejercicios que involucran al Jugador
-        ejercicios = ejercicios.filter(sesion =>
-          sesion.Exercise_has_Session_has_Actor_Actor_idActor == this.$route.query.idActor
-        );
-        
-
-        let kpiPorMes = {};
-
-        let kpiPromises = ejercicios.map(element => {
-          return this.dao.kpi.read().then((indicadores) => {
-            let indicador = indicadores.filter(indic =>
-              indic.idKPI == element.KPI_idKPI
-            )[0];
-            indicador.score = element.score;
-
-            return this.dao.session.read().then((sesiones) => {
-              let sesion = sesiones.filter(sesion =>
-                sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
-              )[0];
-              let mes = this.cogerYearMonth(sesion.date);
-
-              if (!kpiPorMes[mes]) {
-                kpiPorMes[mes] = {};
-              }
-
-              if (!kpiPorMes[mes][indicador.idKPI]) {
-                kpiPorMes[mes][indicador.idKPI] = {
-                  idKPI: indicador.idKPI,
-                  name: indicador.name,
-                  scores: [],
-                  range: indicador.range,
-                };
-              }
-
-              kpiPorMes[mes][indicador.idKPI].scores.push(indicador.score);
-              
-            });
-          });
-        });
-        
-        Promise.all(kpiPromises).then(() => {
-          // promedio score para cada KPI
-          let resultado = [];
-
-          for (let mes in kpiPorMes) {
-            for (let idKPI in kpiPorMes[mes]) {
-              let kpi = kpiPorMes[mes][idKPI];
-              let avgScore = kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length;
-
-              let year = mes.split('-')[0];
-              let month = mes.split('-')[1];
-
-              resultado.push({
-                idKPI: kpi.idKPI,
-                name: kpi.name,
-                date: mes,
-                score: avgScore,
-                ex_name: month,
-                ses_name: year,
-                range: kpi.range,
-              });
-            }
-          }
-
-          console.log('KPIs agrupados por mes:', resultado);
-          this.kpis_jugador_mensual = resultado;
-
-          this.chartData = [];
-          let kpiData = {};
-
-          this.kpis_jugador_mensual.forEach(indicador => {
-            if (!kpiData[indicador.name]) {
-              kpiData[indicador.name] = [];
-            }
-            kpiData[indicador.name].push({
-              time: indicador.date,
-              score: indicador.score
-            });
-          });
-
-
-          for (const [key, value] of Object.entries(kpiData)) {
-            this.chartData.push({
-              name: key,
-              data: value
-            });
-          }
-        });
-      });
     },
     getTrimestre(mes) {
       const month = parseInt(mes.split('-')[1], 10);
@@ -492,6 +275,372 @@ export default {
         return `${mes.split('-')[0]}-Q3`;
       } else if (month >= 10 && month <= 12) {
         return `${mes.split('-')[0]}-Q4`;
+      }
+    },
+    convertir_a_gpa(puntaje, rango) {
+        if (puntaje >= 0.75 * rango) {
+            return 4.0; // A (Fortaleza)
+        } else if (puntaje >= 0.50 * rango) {
+            return 3.0; // B (Oportunidad)
+        } else if (puntaje >= 0.25 * rango) {
+            return 2.0; // C (Amenaza)
+        } else {
+            return 1.0; // D (Debilidad)
+        }
+    },
+    desviacion_estandar(arr) {
+      let mean = arr.reduce((acc, curr) => {
+        return acc + curr
+      }, 0) / arr.length;
+
+      arr = arr.map((k) => {
+        return (k - mean) ** 2
+      });
+
+      let sum = arr.reduce((acc, curr) => acc + curr, 0);
+
+      let variance = sum / arr.length
+
+      return Math.sqrt(sum / arr.length)
+    },
+    determinarTramo(porcentaje, representatividad) {
+      for (const [limite, descripcion] of Object.entries(representatividad)) {
+        
+        if (porcentaje <= limite) {
+          return descripcion;
+        }
+      }
+      return "Tramo no encontrado";
+    },
+    obtenerNombreMes(numeroMes) {
+      const meses = [
+        "Enero",
+        "Febrero",
+        "Marzo",
+        "Abril",
+        "Mayo",
+        "Junio",
+        "Julio",
+        "Agosto",
+        "Septiembre",
+        "Octubre",
+        "Noviembre",
+        "Diciembre"
+      ];
+      const mesIndex = parseInt(numeroMes, 10) - 1;
+
+      if (mesIndex >= 0 && mesIndex < meses.length) {
+        return meses[mesIndex];
+      } else {
+        return "Mes inválido";
+      }
+    },
+
+    
+    async getPlayerInfo() {
+      try {
+        const response = await this.dao.actor.read();
+        this.informacion_jugador = response.find(actor => actor.idActor == this.$route.query.idActor);
+        
+        if (this.informacion_jugador) {
+          console.log('Info Jugador: ', this.informacion_jugador.idActor);
+        } else {
+          console.log('No se encontró información para el jugador con id:', this.$route.query.idActor);
+        }
+      } catch (error) {
+        console.error('Error al obtener la información del jugador:', error);
+      }
+    },
+    async cargarKPIs_sesion() {
+      try {
+        const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+        const ejerciciosFiltrados = ejercicios.filter(sesion =>
+          sesion.Exercise_has_Session_has_Actor_Actor_idActor == this.$route.query.idActor
+        );
+
+        let kpiPorSesion = {};
+
+        const kpiPromises = ejerciciosFiltrados.map(async element => {
+          const indicadores = await this.dao.kpi.read();
+          let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+          indicador.score = element.score;
+
+          const sesiones = await this.dao.session.read();
+          let sesion = sesiones.find(sesion =>
+            sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
+          );
+          indicador.ses_date = sesion.date;
+          indicador.ses_name = sesion.name;
+
+          if (!kpiPorSesion[sesion.idSession]) {
+            kpiPorSesion[sesion.idSession] = {
+              name: sesion.name,
+              date: sesion.date,
+              [indicador.idKPI]: {
+                idKPI: indicador.idKPI,
+                name: indicador.name,
+                scores: [],
+                range: indicador.range,
+              }
+            };
+          }
+
+          const ejerciciosResponse = await this.dao.exercise.read();
+          let ejercicio = ejerciciosResponse.find(ex =>
+            ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
+          );
+
+          indicador.ex_name = ejercicio.name;
+
+          if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
+            kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise] = {
+              id: ejercicio.idExercise,
+              name: ejercicio.name,
+              score: element.score,
+            };
+          }
+
+          kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
+        });
+
+        await Promise.all(kpiPromises);
+
+        // promedio score para cada KPI
+        let resultado = [];
+
+        for (let sesion in kpiPorSesion) {
+          for (let idKPI in kpiPorSesion[sesion]) {
+            let kpi = kpiPorSesion[sesion][idKPI];
+
+            if (kpi.scores) {
+              let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+              let exercises = {};
+
+              for (let ex in kpi) {
+                let ejercicio = kpi[ex];
+                if (ejercicio.name) {
+                  if (!exercises[ejercicio.id]) {
+                    exercises[ejercicio.id] = {
+                      name: ejercicio.name,
+                      score: ejercicio.score,
+                    };
+                  }
+                }
+              }
+
+              resultado.push({
+                ses_name: kpiPorSesion[sesion].name, // Nombre Sesion, Mes, Trimestre (sesion, mensual, trimestral)
+                ses_date: kpiPorSesion[sesion].date,
+                score: avgScore,
+
+                idKPI: kpi.idKPI,
+                name: kpi.name, // Nombre KPI, Sesion o Mes (sesion, mensual, trimestral)
+                range: kpi.range,
+
+                exercises: exercises, // Ejercicios, KPIs o Sesiones (sesion, mensual, trimestral)
+
+                ex_name: kpiPorSesion[sesion].name,
+              });
+            }
+          }
+        }
+        console.log('KPIs agrupados por sesion:', resultado);
+        this.kpis_jugador_sesion = resultado;
+
+        this.chartData = [];
+        const kpiData = {};
+
+        this.kpis_jugador_sesion.forEach(indicador => {
+          if (!kpiData[indicador.name]) {
+            kpiData[indicador.name] = {
+              data: [],
+              range: indicador.range
+            };
+          }
+          kpiData[indicador.name].data.push({
+            time: indicador.ses_name,
+            score: indicador.score
+          });
+        });
+
+        for (const [key, value] of Object.entries(kpiData)) {
+          this.chartData.push({
+            name: key,
+            data: value.data,
+            range: value.range
+          });
+        }
+
+        await this.cargarDAFO();
+      } catch (error) {
+        console.error('Error al cargar KPIs de sesión:', error);
+      }
+    },
+
+    async cargarKPIs_mensual() {
+      try {
+        const ejerciciosSinFiltrar = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+
+        // Filtrar ejercicios que involucran al Jugador
+        const ejercicios = ejerciciosSinFiltrar.filter(sesion =>
+          sesion.Exercise_has_Session_has_Actor_Actor_idActor == this.$route.query.idActor
+        );
+
+        let kpiPorMes = {};
+        let kpiPorSesion = {};
+
+        const kpiPromises = ejercicios.map(async (element) => {
+          const indicadores = await this.dao.kpi.read();
+          let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+          indicador.score = element.score;
+
+          const sesiones = await this.dao.session.read();
+          let sesion = sesiones.find(sesion =>
+            sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
+          );
+
+          if (!kpiPorSesion[sesion.idSession]) {
+            kpiPorSesion[sesion.idSession] = {
+              name: sesion.name,
+              date: sesion.date,
+              [indicador.idKPI]: {
+                idKPI: indicador.idKPI,
+                name: indicador.name,
+                scores: [],
+                range: indicador.range,
+                exercises: {}  // Para almacenar los ejercicios
+              }
+            };
+          } else {
+            if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
+              kpiPorSesion[sesion.idSession][indicador.idKPI] = {
+                idKPI: indicador.idKPI,
+                name: indicador.name,
+                scores: [],
+                range: indicador.range,
+                exercises: {}  // Para almacenar los ejercicios
+              };
+            }
+          }
+
+          const ejerciciosResponse = await this.dao.exercise.read();
+          let ejercicio = ejerciciosResponse.find(ex =>
+            ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
+          );
+
+          indicador.ex_name = ejercicio.name;
+
+          if (!kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise]) {
+            kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise] = {
+              id: ejercicio.idExercise,
+              name: ejercicio.name,
+              scores: []
+            };
+          }
+
+          kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise].scores.push(element.score);
+          kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
+        });
+
+        await Promise.all(kpiPromises);
+        let resultado = [];
+
+        // Preparar KPI Por Mes
+        for (let ses in kpiPorSesion) {
+          let sesion = kpiPorSesion[ses];
+          let mes = this.cogerYearMonth(sesion.date);
+          let month_name = this.obtenerNombreMes(mes.split('-')[1]) + ` ${mes.split('-')[0]}`;
+
+          if (!kpiPorMes[mes]) {
+            kpiPorMes[mes] = {
+              name: month_name,
+              date: null,
+              [ses]: {
+                idKPI: ses,
+                name: sesion.name,
+                scores: [],
+                range: null,
+                KPIs: {}  // Para almacenar los KPIs
+              }
+            };
+          } else {
+            if (!kpiPorMes[mes][ses]) {
+              kpiPorMes[mes][ses] = {
+                idKPI: ses,
+                name: sesion.name,
+                scores: [],
+                range: null,
+                KPIs: {}  // Para almacenar los KPIs
+              };
+            }
+          }
+
+          for (let idKPI in sesion) {
+            let kpi = sesion[idKPI];
+
+            if (kpi.scores) {
+              let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+              kpiPorMes[mes][ses].scores.push(parseFloat(avgScoreKPI));
+              
+              kpiPorMes[mes][ses].KPIs[idKPI] = {
+                id: idKPI,
+                name: kpi.name,
+                score: avgScoreKPI,
+                exercises: kpi.exercises,
+                range: kpi.range,
+              };
+            }
+          }
+
+          let avgScoreSes = (kpiPorMes[mes][ses].scores.reduce((a, b) => a + b, 0) / kpiPorMes[mes][ses].scores.length).toFixed(2);
+          resultado.push({
+            ses_name: month_name, // Nombre del mes
+            ses_date: month_name,
+            score: avgScoreSes,
+
+            idKPI: kpiPorMes[mes][ses].idKPI,
+            name: kpiPorMes[mes][ses].name, // Nombre de la sesión
+            range: kpiPorMes[mes][ses].range,
+
+            exercises: kpiPorMes[mes][ses].KPIs, // KPIs agrupados por mes
+            ex_name: kpiPorMes[mes][ses].name,
+          });
+        }
+
+        console.log('KPIs agrupados por mes:', resultado);
+        this.kpis_jugador_mensual = resultado;
+
+        this.chartData = [];
+        const kpiData = {};
+
+        this.kpis_jugador_mensual.forEach(indicador => {
+          for (const kpiId in indicador.exercises) {
+            const kpi = indicador.exercises[kpiId];
+            
+            if (!kpiData[kpi.name]) {
+              kpiData[kpi.name] = {
+                data: [],
+                range: kpi.range
+              };
+            }
+            kpiData[kpi.name].data.push({
+              time: indicador.ses_name,
+              score: kpi.score
+            });
+          }
+        });
+
+        for (const [key, value] of Object.entries(kpiData)) {
+          this.chartData.push({
+            name: key,
+            data: value.data,
+            range: value.range
+          });
+        }
+
+        await this.cargarDAFO();
+      } catch (error) {
+        console.error("Error al cargar KPIs mensuales:", error);
       }
     },
     cargarKPIs_trimestral() {
@@ -587,7 +736,7 @@ export default {
 
       });
     },
-    cargarKPIs() {
+    async cargarKPIs() {
       this.kpis_jugador_sesion= [];
       this.kpis_jugador_mensual= [];
       this.kpis_jugador_trimestral= [];
@@ -600,53 +749,14 @@ export default {
         "Amenazas": []
       };
 
-      this.chartData_sesion= [];
-      this.chartData_mensual= [];
-      this.chartData_trimestral= [];
-      this.chartData_all= [];
-
       const methodName = `cargarKPIs_${this.modo}`;
       if (typeof this[methodName] === 'function') {
-        this[methodName]();
+        await this[methodName]();
+        const loader = document.querySelector('.loader-container');
+			  loader.style.display = 'none';
       } else {
         console.error(`Method ${methodName} does not exist`);
       }
-    },
-
-    convertir_a_gpa(puntaje, rango) {
-        if (puntaje >= 0.75 * rango) {
-            return 4.0; // A (Fortaleza)
-        } else if (puntaje >= 0.50 * rango) {
-            return 3.0; // B (Oportunidad)
-        } else if (puntaje >= 0.25 * rango) {
-            return 2.0; // C (Amenaza)
-        } else {
-            return 1.0; // D (Debilidad)
-        }
-    },
-    desviacion_estandar(arr) {
-      let mean = arr.reduce((acc, curr) => {
-        return acc + curr
-      }, 0) / arr.length;
-
-      arr = arr.map((k) => {
-        return (k - mean) ** 2
-      });
-
-      let sum = arr.reduce((acc, curr) => acc + curr, 0);
-
-      let variance = sum / arr.length
-
-      return Math.sqrt(sum / arr.length)
-    },
-    determinarTramo(porcentaje, representatividad) {
-      for (const [limite, descripcion] of Object.entries(representatividad)) {
-        
-        if (porcentaje <= limite) {
-          return descripcion;
-        }
-      }
-      return "Tramo no encontrado";
     },
 
     cargarDAFO_promedioGPA(){
@@ -660,20 +770,15 @@ export default {
         const promedio_gpa = total / gpa_puntos.length;
 
         if (promedio_gpa >= 3.5) {
-            this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Promedio GPA alto (Fortaleza)`);
+            this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Promedio GPA alto`);
         } else if (promedio_gpa >= 2.5) {
-          this.resultados_DAFO.Oportunidades.push(`${kpi.name}: Promedio GPA moderado (Oportunidad)`);
+          this.resultados_DAFO.Oportunidades.push(`${kpi.name}: Promedio GPA moderado`);
         } else if (promedio_gpa >= 1.5) {
-          this.resultados_DAFO.Amenazas.push(`${kpi.name}: Promedio GPA bajo (Amenaza)`);
+          this.resultados_DAFO.Amenazas.push(`${kpi.name}: Promedio GPA bajo`);
         } else {
-          this.resultados_DAFO.Debilidades.push(`${kpi.name}: Promedio GPA muy bajo (Debilidad)`);
+          this.resultados_DAFO.Debilidades.push(`${kpi.name}: Promedio GPA muy bajo`);
         }
 
-        console.log(`KPI: ${kpi.name}`);
-        console.log(`Puntajes: ${puntajes}`);
-        console.log(`GPA Puntos: ${gpa_puntos}`);
-        console.log(`Promedio GPA: ${promedio_gpa}`);
-        console.log("Resultados DAFO:");
         for (const [campo, resultados] of Object.entries(this.resultados_DAFO)) {
             console.log(`  ${campo}: ${resultados.join(', ')}`);
         }
@@ -708,12 +813,7 @@ export default {
             this.resultados_DAFO.Oportunidades.push(`${kpi.name}: ${tramoDesviacion.split(':')[1]}`);
         } else if (tramoDesviacion.startsWith("Amenaza")) {
             this.resultados_DAFO.Amenazas.push(`${kpi.name}: ${tramoDesviacion.split(':')[1]}`);
-        }
-
-        // Imprimir los resultados
-        console.log(`Desviación Estándar: ${desviacionEstandar.toFixed(2)}`);
-        console.log(`Porcentaje de Desviación respecto al rango total: ${porcentajeDesviacion.toFixed(2)}%`);
-        console.log(`Tramo asociado: ${tramoDesviacion}`);       
+        }      
 
       });
     },
