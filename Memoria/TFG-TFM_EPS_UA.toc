@@ -85,20 +85,33 @@
 \contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{32}{subparagraph*.82}%
 \contentsline {subparagraph}{\nonumberline Descripción}{33}{subparagraph*.84}%
 \contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{33}{subparagraph*.86}%
-\contentsline {section}{\numberline {5.3}Implementación}{33}{section.5.3}%
 \contentsline {subparagraph}{\nonumberline Descripción}{33}{subparagraph*.88}%
 \contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{34}{subparagraph*.90}%
 \contentsline {subparagraph}{\nonumberline Descripción}{34}{subparagraph*.92}%
 \contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{34}{subparagraph*.94}%
-\contentsline {subparagraph}{\nonumberline Descripción}{35}{subparagraph*.96}%
+\contentsline {subparagraph}{\nonumberline Descripción}{34}{subparagraph*.96}%
 \contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{35}{subparagraph*.98}%
 \contentsline {subparagraph}{\nonumberline Descripción}{35}{subparagraph*.100}%
 \contentsline {subparagraph}{\nonumberline Criterios de Aceptación}{35}{subparagraph*.102}%
-\contentsline {subsection}{\numberline {5.3.1}Matriz DAFO}{36}{subsection.5.3.1}%
-\contentsline {subsubsection}{\numberline {5.3.1.1}Promedio GPA}{36}{subsubsection.5.3.1.1}%
-\contentsline {subsubsection}{\numberline {5.3.1.2}Desviación estándar}{36}{subsubsection.5.3.1.2}%
-\contentsline {subsubsection}{\numberline {5.3.1.3}Pendiente de tendencia}{36}{subsubsection.5.3.1.3}%
-\contentsline {subsubsection}{\numberline {5.3.1.4}Cambios positivos y negativos entre los intervalos de tiempo}{36}{subsubsection.5.3.1.4}%
-\contentsline {chapter}{\numberline {6}Conclusiones}{37}{chapter.6}%
-\contentsline {chapter}{\nonumberline Bibliografía}{39}{chapter*.103}%
+\contentsline {subsection}{\numberline {5.2.2}Análisis de entidades de negocio}{35}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Análisis de interfaces}{36}{subsection.5.2.3}%
+\contentsline {subsection}{\numberline {5.2.4}Análisis de servicios}{36}{subsection.5.2.4}%
+\contentsline {section}{\numberline {5.3}Diseño del sistema}{36}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Arquitectura general}{36}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Diseño de interfaces de usuario}{36}{subsection.5.3.2}%
+\contentsline {subsection}{\numberline {5.3.3}Diseño lógico de la base de datos}{36}{subsection.5.3.3}%
+\contentsline {subsection}{\numberline {5.3.4}Diseño de servicios}{36}{subsection.5.3.4}%
+\contentsline {section}{\numberline {5.4}Implementación}{36}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Arquitectura técnica}{36}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}Implementación de interfaces de usuario}{36}{subsection.5.4.2}%
+\contentsline {subsection}{\numberline {5.4.3}Esquema físico de la base de datos}{37}{subsection.5.4.3}%
+\contentsline {subsection}{\numberline {5.4.4}Implementación de servicios}{37}{subsection.5.4.4}%
+\contentsline {subsubsection}{\numberline {5.4.4.1}Matriz DAFO}{37}{subsubsection.5.4.4.1}%
+\contentsline {subsubsection}{\numberline {5.4.4.2}Promedio GPA}{37}{subsubsection.5.4.4.2}%
+\contentsline {subsubsection}{\numberline {5.4.4.3}Desviación estándar}{37}{subsubsection.5.4.4.3}%
+\contentsline {subsubsection}{\numberline {5.4.4.4}Pendiente de tendencia}{37}{subsubsection.5.4.4.4}%
+\contentsline {subsubsection}{\numberline {5.4.4.5}Cambios positivos y negativos entre los intervalos de tiempo}{37}{subsubsection.5.4.4.5}%
+\contentsline {section}{\numberline {5.5}Pruebas y validación}{37}{section.5.5}%
+\contentsline {chapter}{\numberline {6}Conclusiones}{39}{chapter.6}%
+\contentsline {chapter}{\nonumberline Bibliografía}{41}{chapter*.103}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
