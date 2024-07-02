@@ -5,7 +5,7 @@
 		"userId": ".userId ~ =entity.id",
 		"email": "@string !",
 		"nick": "@string",
-		"password": "@password",
+		"password": "@string",
 		"image": "@blob"
 	},
 	"lists": {
@@ -27,9 +27,4 @@
 	"urlList": "/user",
 	"urlItem": "/user/:userId"
 }
-
-
-
-
-
 

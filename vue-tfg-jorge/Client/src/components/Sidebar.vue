@@ -311,7 +311,7 @@
 		display: flex;
 		flex-direction: column;
 		height: 100vh;
-		background-color: #cbd5e0;
+		background-color: #ffffff;
 		width: 100%;
 	}
 
@@ -376,16 +376,17 @@
 		.button-29 {
 			align-items: center;
 			appearance: none;
-			background-image: radial-gradient(100% 100% at 100% 0, #5adaff 0, #5468ff 100%);
+			background-color: var(--dark);
 			border: 0;
 			border-radius: 6px;
-			box-shadow: rgba(45, 35, 66, .4) 0 2px 4px,rgba(45, 35, 66, .3) 0 7px 13px -3px,rgba(58, 65, 111, .5) 0 -3px 0 inset;
 			box-sizing: border-box;
 			color: #fff;
 			cursor: pointer;
 			display: inline-flex;
-			font-family: "JetBrains Mono",monospace;
-			height: 48px;
+			font-family: "Fira sans", sans-serif;
+			font-weight: bold;
+			height: 32px;
+			width: 130px;
 			justify-content: center;
 			line-height: 1;
 			list-style: none;
@@ -396,7 +397,7 @@
 			position: relative;
 			text-align: left;
 			text-decoration: none;
-			transition: box-shadow .15s,transform .15s;
+			transition: box-shadow .15s,transform .15s, background-color .5s ease;
 			user-select: none;
 			-webkit-user-select: none;
 			touch-action: manipulation;
@@ -405,13 +406,8 @@
 			font-size: 16px;
 		}
 
-		.button-29:focus {
-			box-shadow: #3c4fe0 0 0 0 1.5px inset, rgba(45, 35, 66, .4) 0 2px 4px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
-		}
-
 		.button-29:hover {
-			box-shadow: rgba(45, 35, 66, .4) 0 4px 8px, rgba(45, 35, 66, .3) 0 7px 13px -3px, #3c4fe0 0 -3px 0 inset;
-			transform: translateY(-2px);
+			background-color: #1c6ff5;
 		}
 
 		.button-29:active {
@@ -454,6 +450,7 @@
 		display: flex;
 		justify-content: center;
 		box-sizing: border-box;
+		margin-bottom: 50px;
 	}
 	
 </style>

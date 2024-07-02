@@ -12,6 +12,7 @@
 <script>
   import { inject, ref } from 'vue';
   import { useStore } from 'vuex';
+  import Swal from 'sweetalert2';
 
   export default {
     setup() {
@@ -26,20 +27,30 @@
             app.login({ email: email.value, password: password.value }).then(
                 () => {
                     dao.user.read().then((response) => {
-                        console.log('Users:', response);
                         let usuario = response.filter(user =>
-                            user.email == email.value //&&
-                            //user.password == password.value
+                            user.email == email.value &&
+                            user.password == password.value
                         )[0];
 
-                        if(usuario.length != 0){
-                            console.log('Usuario encontrado:', usuario);
+                        if(usuario){
                             store.dispatch('actualizarLogged', true);
                             store.dispatch('actualizarUserID', usuario.id);
                             store.dispatch('actualizarUserName', usuario.nick);
                         }
+                        else{
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: 'Usuario no encontrado',
+                            });
+                        }
                     }).catch((error) => {
-                        console.error('Error reading users:', error);
+                        console.error('Error leyendo los usuarios:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Error leyendo los usuarios',
+                        });
                     });
                 },
                 () => {

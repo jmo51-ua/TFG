@@ -6,14 +6,14 @@
 				Informe de todos los KPIs
 				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M360-460h40v-80h40q17 0 28.5-11.5T480-580v-40q0-17-11.5-28.5T440-660h-80v200Zm40-120v-40h40v40h-40Zm120 120h80q17 0 28.5-11.5T640-500v-120q0-17-11.5-28.5T600-660h-80v200Zm40-40v-120h40v120h-40Zm120 40h40v-80h40v-40h-40v-40h40v-40h-80v200ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"/></svg>
 			</button>
-			<button class="report-button">
+			<button class="report-button" @click="exportToCSV">
 				Informe de todos los KPIs
 				<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24px" height="24px" viewBox="0 0 48 48">
 					<path fill="#169154" d="M29,6H15.744C14.781,6,14,6.781,14,7.744v7.259h15V6z"></path><path fill="#18482a" d="M14,33.054v7.202C14,41.219,14.781,42,15.743,42H29v-8.946H14z"></path><path fill="#0c8045" d="M14 15.003H29V24.005000000000003H14z"></path><path fill="#17472a" d="M14 24.005H29V33.055H14z"></path><g><path fill="#29c27f" d="M42.256,6H29v9.003h15V7.744C44,6.781,43.219,6,42.256,6z"></path><path fill="#27663f" d="M29,33.054V42h13.257C43.219,42,44,41.219,44,40.257v-7.202H29z"></path><path fill="#19ac65" d="M29 15.003H44V24.005000000000003H29z"></path><path fill="#129652" d="M29 24.005H44V33.055H29z"></path></g><path fill="#0c7238" d="M22.319,34H5.681C4.753,34,4,33.247,4,32.319V15.681C4,14.753,4.753,14,5.681,14h16.638 C23.247,14,24,14.753,24,15.681v16.638C24,33.247,23.247,34,22.319,34z"></path><path fill="#fff" d="M9.807 19L12.193 19 14.129 22.754 16.175 19 18.404 19 15.333 24 18.474 29 16.123 29 14.013 25.07 11.912 29 9.526 29 12.719 23.982z"></path>
 				</svg>
 			</button>
 			<button class="report-button">
-				Informe de ún solo los KPI
+				Informe de ún solo KPI
 				<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EA3323"><path d="M360-460h40v-80h40q17 0 28.5-11.5T480-580v-40q0-17-11.5-28.5T440-660h-80v200Zm40-120v-40h40v40h-40Zm120 120h80q17 0 28.5-11.5T640-500v-120q0-17-11.5-28.5T600-660h-80v200Zm40-40v-120h40v120h-40Zm120 40h40v-80h40v-40h-40v-40h40v-40h-80v200ZM320-240q-33 0-56.5-23.5T240-320v-480q0-33 23.5-56.5T320-880h480q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H320Zm0-80h480v-480H320v480ZM160-80q-33 0-56.5-23.5T80-160v-560h80v560h560v80H160Zm160-720v480-480Z"/></svg>
 			</button>
 		</div>
@@ -88,7 +88,7 @@ import html2canvas from 'html2canvas';
 	mounted() {
 		this.$nextTick(() => {
 			const loader = document.querySelector('.loader-container');
-			loader.style.display = 'flex';
+			if(loader){loader.style.display = 'flex';}
 		});
 	},
 	data() {
@@ -143,18 +143,84 @@ import html2canvas from 'html2canvas';
 
 			return `${year}-${month}`;
 		},
+		obtenerNombreMes(numeroMes) {
+			const meses = [
+				"Enero",
+				"Febrero",
+				"Marzo",
+				"Abril",
+				"Mayo",
+				"Junio",
+				"Julio",
+				"Agosto",
+				"Septiembre",
+				"Octubre",
+				"Noviembre",
+				"Diciembre"
+			];
+			const mesIndex = parseInt(numeroMes, 10) - 1;
+
+			if (mesIndex >= 0 && mesIndex < meses.length) {
+				return meses[mesIndex];
+			} else {
+				return "Mes inválido";
+			}
+		},
+		getTrimestre(mes) {
+			const month = parseInt(mes.split('-')[1], 10);
+			if (month >= 1 && month <= 3) {
+				return `${mes.split('-')[0]} T1`;
+			} else if (month >= 4 && month <= 6) {
+				return `${mes.split('-')[0]} T2`;
+			} else if (month >= 7 && month <= 9) {
+				return `${mes.split('-')[0]} T3`;
+			} else if (month >= 10 && month <= 12) {
+				return `${mes.split('-')[0]} T4`;
+			}
+		},
 		async generateReportPDF() {
-			const pdf = new jsPDF('p', 'mm', 'a4');
-			const element = document.getElementById('stats-page');
-			const canvas = await html2canvas(element);
-			const imgData = canvas.toDataURL('image/png');
+
+			try{
+				const pdf = new jsPDF('p', 'mm', 'a4');
+				const element = document.getElementById('graficos');
+
+				const canvas = await html2canvas(element, {
+					scale: 2
+				});
+				const imgData = canvas.toDataURL('image/png');
+				
+				const imgProps = pdf.getImageProperties(imgData);
+				const pdfWidth = pdf.internal.pageSize.getWidth();
+				const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+				
+				pdf.addImage(imgData, 'PNG', 0, 20, pdfWidth, pdfHeight);
+				pdf.save('KPI-Report.pdf');
+			}catch(error){
+				console.error("Error al crear el PDF:",error);
+			}
+		},
+		exportToCSV() {
+			const header = 'Indicador,Time,Score\n';
+			let csv = header;
+
+			this.chartData.forEach(indicador => {
+				indicador.data.forEach(item => {
+					csv += `${indicador.name},${item.time},${item.score}\n`;
+				});
+			});
+
+			const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+			const url = window.URL.createObjectURL(blob);
 			
-			const imgProps = pdf.getImageProperties(imgData);
-			const pdfWidth = pdf.internal.pageSize.getWidth();
-			const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-			
-			pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-			pdf.save('KPI-Report.pdf');
+			const a = document.createElement('a');
+			a.style.display = 'none';
+			a.href = url;
+			a.download = 'KPI-Report.csv';
+			document.body.appendChild(a);
+			a.click();
+
+			window.URL.revokeObjectURL(url);
+			document.body.removeChild(a);
 		},
 
 
@@ -201,16 +267,16 @@ import html2canvas from 'html2canvas';
 					let distinctSesion = `${sesion.idSession}-${sesion.name}`;
 
 					if (!kpiPorSesion[distinctSesion]) {
-					kpiPorSesion[distinctSesion] = {};
+						kpiPorSesion[distinctSesion] = {};
 					}
 
 					if (!kpiPorSesion[distinctSesion][indicador.idKPI]) {
-					kpiPorSesion[distinctSesion][indicador.idKPI] = {
-						idKPI: indicador.idKPI,
-						name: indicador.name,
-						scores: [],
-						range: indicador.range,
-					};
+						kpiPorSesion[distinctSesion][indicador.idKPI] = {
+							idKPI: indicador.idKPI,
+							name: indicador.name,
+							scores: [],
+							range: indicador.range,
+						};
 					}
 
 					kpiPorSesion[distinctSesion][indicador.idKPI].scores.push(indicador.score);
@@ -273,17 +339,17 @@ import html2canvas from 'html2canvas';
 		async cargarKPIs_mensual() {
 			const loader = document.querySelector('.loader-container');
 			if(loader){loader.style.display = 'flex';}
+
+			let kpiPorMes = {};
 			let kpiPorSesion = {};
 
 			try {
 				const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
-
-				const kpiPromises = this.actorIds.map(async idActor => {
 				const ejerciciosFiltrados = ejercicios.filter(sesion =>
-					sesion.Exercise_has_Session_has_Actor_Actor_idActor == idActor
+					this.actorIds.includes(sesion.Exercise_has_Session_has_Actor_Actor_idActor)
 				);
 
-				return Promise.all(ejerciciosFiltrados.map(async element => {
+				const kpiPromises = ejerciciosFiltrados.map(async element => {
 					const indicadores = await this.dao.kpi.read();
 					let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
 					indicador.score = element.score;
@@ -292,97 +358,183 @@ import html2canvas from 'html2canvas';
 					let sesion = sesiones.find(sesion =>
 					sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
 					);
-
 					indicador.ses_date = sesion.date;
 					indicador.ses_name = sesion.name;
-					let distinctSesion = `${sesion.idSession}-${sesion.name}`;
 
-					if (!kpiPorSesion[distinctSesion]) {
-					kpiPorSesion[distinctSesion] = {};
-					}
-
-					if (!kpiPorSesion[distinctSesion][indicador.idKPI]) {
-					kpiPorSesion[distinctSesion][indicador.idKPI] = {
+					if (!kpiPorSesion[sesion.idSession]) {
+					kpiPorSesion[sesion.idSession] = {
+						name: sesion.name,
+						date: sesion.date,
+						[indicador.idKPI]: {
 						idKPI: indicador.idKPI,
 						name: indicador.name,
 						scores: [],
 						range: indicador.range,
+						exercises: {}
+						}
+					};
+					} else if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
+						kpiPorSesion[sesion.idSession][indicador.idKPI] = {
+							idKPI: indicador.idKPI,
+							name: indicador.name,
+							scores: [],
+							range: indicador.range,
+							exercises: {}
+						};
+					}
+
+					const ejerciciosResponse = await this.dao.exercise.read();
+					let ejercicio = ejerciciosResponse.find(ex =>
+					ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
+					);
+					indicador.ex_name = ejercicio.name;
+
+					if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
+					kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise] = {
+						id: ejercicio.idExercise,
+						name: ejercicio.name,
+						score: element.score,
 					};
 					}
 
-					kpiPorSesion[distinctSesion][indicador.idKPI].scores.push(indicador.score);
-					console.log("indicador:", indicador);
-
-					return indicador;
-				}));
+					kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
 				});
 
-				await Promise.all(kpiPromises.flat());
+				await Promise.all(kpiPromises);
 
 				let resultado = [];
 
-				for (let sesion in kpiPorSesion) {
-					for (let idKPI in kpiPorSesion[sesion]) {
-						let kpi = kpiPorSesion[sesion][idKPI];
-						let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-						let name_sesion = sesion.split('-')[1];
+				// Preparar KPI Por Mes
+				for (let ses in kpiPorSesion) {
+					let sesion = kpiPorSesion[ses];
+					let mes = this.cogerYearMonth(sesion.date);
+					let month_name = this.obtenerNombreMes(mes.split('-')[1]) + ` ${mes.split('-')[0]}`;
 
-						resultado.push({
-							idKPI: kpi.idKPI,
-							name: kpi.name,
-							date: name_sesion,
-							score: avgScore,
-							ses_name: name_sesion,
-							range: kpi.range,
-						});
+					if (!kpiPorMes[mes]) {
+					kpiPorMes[mes] = {
+						name: month_name,
+						sessions: {}
+					};
+					}
+
+					if (!kpiPorMes[mes].sessions[ses]) {
+					kpiPorMes[mes].sessions[ses] = {
+						idKPI: ses,
+						name: sesion.name,
+						date: sesion.date,
+						scores: [],
+						KPIs: {}  // Para almacenar los KPIs
+					};
+					}
+
+					for (let idKPI in sesion) {
+					let kpi = sesion[idKPI];
+
+					if (kpi.scores) {
+						let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+						
+						kpiPorMes[mes].sessions[ses].KPIs[idKPI] = {
+						id: idKPI,
+						name: kpi.name,
+						score: avgScoreKPI,
+						exercises: kpi.exercises,
+						range: kpi.range,
+						};
+
+						kpiPorMes[mes].sessions[ses].scores.push(parseFloat(avgScoreKPI));
+					}
 					}
 				}
-				this.kpis_mensual = resultado;
 
-				this.chartData = [];
-				let kpiData = {};
 
-				this.kpis_mensual.forEach(indicador => {
-				if (!kpiData[indicador.name]) {
-					kpiData[indicador.name] = {
-						data: [],
-						range: indicador.range
-					};
-				}
-				kpiData[indicador.name].data.push({
-					time: 'Marzo 2024',
-					score: indicador.score
-				});
-				});
+				for (let mes in kpiPorMes) {
+					let month = kpiPorMes[mes];
+					let sessions = [];
 
-				for (const [key, value] of Object.entries(kpiData)) {
-					this.chartData.push({
-						name: key,
-						data: value.data,
-						range: value.range
+					for (let ses in month.sessions) {
+					let session = month.sessions[ses];
+					let KPIs = [];
+
+					for (let idKPI in session.KPIs) {
+						KPIs.push(session.KPIs[idKPI]);
+					}
+
+					let avgScore = (KPIs.reduce((acc, kpi) => acc + parseFloat(kpi.score), 0) / KPIs.length).toFixed(2);
+
+					sessions.push({
+						idKPI: session.idKPI,
+						name: session.name,
+						range: null,
+						score: avgScore,
+						exercises: KPIs
+					});
+					}
+
+					resultado.push({
+						ses_name: month.name, // Nombre del Mes
+						ses_date: month.name,
+						ses_id: mes,
+
+						KPIs: sessions // Sesiones
 					});
 				}
 
-				console.log(this.chartData);
+				this.kpis_mensual = resultado;
+
+				this.chartData = [];
+				const exerciseData = {};
+				console.log(resultado);
+				resultado.forEach(mes => {
+					mes.KPIs.forEach(kpi => {
+						kpi.exercises.forEach(exercise => {
+							if (!exerciseData[exercise.name]) {
+								exerciseData[exercise.name] = {};
+							}
+
+							if (!exerciseData[exercise.name][mes.ses_name]) {
+								exerciseData[exercise.name][mes.ses_name] = [];
+							}
+
+							exerciseData[exercise.name][mes.ses_name].push(parseFloat(exercise.score));
+						});
+					});
+				});
+
+				for (const [exerciseName, months] of Object.entries(exerciseData)) {
+					const data = [];
+
+					for (const [month, scores] of Object.entries(months)) {
+						const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+						data.push({
+							time: month,
+							score: avgScore.toFixed(2)
+						});
+					}
+
+					this.chartData.push({
+						name: exerciseName,
+						data: data,
+					});
+				}
 
 			} catch (error) {
-				console.error('Error al cargar KPIs de sesión:', error);
+				console.error('Error al cargar KPIs mensuales:', error);
 			}
 		},
 		async cargarKPIs_trimestral() {
 			const loader = document.querySelector('.loader-container');
 			if(loader){loader.style.display = 'flex';}
+
+			let kpiPorMes = {};
 			let kpiPorSesion = {};
 
 			try {
 				const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
-
-				const kpiPromises = this.actorIds.map(async idActor => {
 				const ejerciciosFiltrados = ejercicios.filter(sesion =>
-					sesion.Exercise_has_Session_has_Actor_Actor_idActor == idActor
+					this.actorIds.includes(sesion.Exercise_has_Session_has_Actor_Actor_idActor)
 				);
 
-				return Promise.all(ejerciciosFiltrados.map(async element => {
+				const kpiPromises = ejerciciosFiltrados.map(async element => {
 					const indicadores = await this.dao.kpi.read();
 					let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
 					indicador.score = element.score;
@@ -391,79 +543,167 @@ import html2canvas from 'html2canvas';
 					let sesion = sesiones.find(sesion =>
 					sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
 					);
-
 					indicador.ses_date = sesion.date;
 					indicador.ses_name = sesion.name;
-					let distinctSesion = `${sesion.idSession}-${sesion.name}`;
 
-					if (!kpiPorSesion[distinctSesion]) {
-					kpiPorSesion[distinctSesion] = {};
-					}
-
-					if (!kpiPorSesion[distinctSesion][indicador.idKPI]) {
-					kpiPorSesion[distinctSesion][indicador.idKPI] = {
+					if (!kpiPorSesion[sesion.idSession]) {
+					kpiPorSesion[sesion.idSession] = {
+						name: sesion.name,
+						date: sesion.date,
+						[indicador.idKPI]: {
 						idKPI: indicador.idKPI,
 						name: indicador.name,
 						scores: [],
 						range: indicador.range,
+						exercises: {}
+						}
+					};
+					} else if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
+						kpiPorSesion[sesion.idSession][indicador.idKPI] = {
+							idKPI: indicador.idKPI,
+							name: indicador.name,
+							scores: [],
+							range: indicador.range,
+							exercises: {}
+						};
+					}
+
+					const ejerciciosResponse = await this.dao.exercise.read();
+					let ejercicio = ejerciciosResponse.find(ex =>
+					ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
+					);
+					indicador.ex_name = ejercicio.name;
+
+					if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
+					kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise] = {
+						id: ejercicio.idExercise,
+						name: ejercicio.name,
+						score: element.score,
 					};
 					}
 
-					kpiPorSesion[distinctSesion][indicador.idKPI].scores.push(indicador.score);
-					console.log("indicador:", indicador);
-
-					return indicador;
-				}));
+					kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
 				});
 
-				await Promise.all(kpiPromises.flat());
+				await Promise.all(kpiPromises);
 
 				let resultado = [];
 
-				for (let sesion in kpiPorSesion) {
-					for (let idKPI in kpiPorSesion[sesion]) {
-						let kpi = kpiPorSesion[sesion][idKPI];
-						let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-						let name_sesion = sesion.split('-')[1];
+				// Preparar KPI Por Mes
+				for (let ses in kpiPorSesion) {
+					let sesion = kpiPorSesion[ses];
+					let mes = this.cogerYearMonth(sesion.date);
+					let trimestre = this.getTrimestre(mes);
 
-						resultado.push({
-						idKPI: kpi.idKPI,
-						name: kpi.name,
-						date: name_sesion,
-						score: avgScore,
-						ses_name: name_sesion,
-						range: kpi.range,
-						});
+					if (!kpiPorMes[trimestre]) {
+						kpiPorMes[trimestre] = {
+							name: trimestre,
+							sessions: {}
+						};
+					}
+
+					if (!kpiPorMes[trimestre].sessions[ses]) {
+						kpiPorMes[trimestre].sessions[ses] = {
+							idKPI: ses,
+							name: sesion.name,
+							date: sesion.date,
+							scores: [],
+							KPIs: {}  // Para almacenar los KPIs
+						};
+					}
+
+					for (let idKPI in sesion) {
+						let kpi = sesion[idKPI];
+
+						if (kpi.scores) {
+							let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+							
+							kpiPorMes[trimestre].sessions[ses].KPIs[idKPI] = {
+								id: idKPI,
+								name: kpi.name,
+								score: avgScoreKPI,
+								exercises: kpi.exercises,
+								range: kpi.range,
+							};
+
+							kpiPorMes[trimestre].sessions[ses].scores.push(parseFloat(avgScoreKPI));
+						}
 					}
 				}
+
+
+				for (let mes in kpiPorMes) {
+					let month = kpiPorMes[mes];
+					let sessions = [];
+
+					for (let ses in month.sessions) {
+						let session = month.sessions[ses];
+						let KPIs = [];
+
+						for (let idKPI in session.KPIs) {
+							KPIs.push(session.KPIs[idKPI]);
+						}
+
+						let avgScore = (KPIs.reduce((acc, kpi) => acc + parseFloat(kpi.score), 0) / KPIs.length).toFixed(2);
+
+						sessions.push({
+							idKPI: session.idKPI,
+							name: session.name,
+							range: null,
+							score: avgScore,
+							exercises: KPIs
+						});
+					}
+
+					resultado.push({
+						ses_name: month.name, // Nombre del Trimestre
+						ses_date: month.name,
+						ses_id: mes,
+
+						KPIs: sessions // Sesiones
+					});
+				}
+
 				this.kpis_trimestral = resultado;
 
 				this.chartData = [];
-				let kpiData = {};
+				const exerciseData = {};
 
-				this.kpis_trimestral.forEach(indicador => {
-				if (!kpiData[indicador.name]) {
-					kpiData[indicador.name] = {
-					data: [],
-					range: indicador.range
-					};
-				}
-				kpiData[indicador.name].data.push({
-					time: '2024-Q1',
-					score: indicador.score
-				});
+				resultado.forEach(mes => {
+					mes.KPIs.forEach(kpi => {
+						kpi.exercises.forEach(exercise => {
+							if (!exerciseData[exercise.name]) {
+								exerciseData[exercise.name] = {};
+							}
+
+							if (!exerciseData[exercise.name][mes.ses_name]) {
+								exerciseData[exercise.name][mes.ses_name] = [];
+							}
+
+							exerciseData[exercise.name][mes.ses_name].push(parseFloat(exercise.score));
+						});
+					});
 				});
 
-				for (const [key, value] of Object.entries(kpiData)) {
-				this.chartData.push({
-					name: key,
-					data: value.data,
-					range: value.range
-				});
+				for (const [exerciseName, months] of Object.entries(exerciseData)) {
+					const data = [];
+
+					for (const [month, scores] of Object.entries(months)) {
+						const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+						data.push({
+							time: month,
+							score: avgScore.toFixed(2)
+						});
+					}
+
+					this.chartData.push({
+						name: exerciseName,
+						data: data,
+					});
 				}
 
 			} catch (error) {
-				console.error('Error al cargar KPIs de sesión:', error);
+				console.error('Error al cargar KPIs mensuales:', error);
 			}
 		},
 		async cargarGraficos() {			
@@ -525,7 +765,7 @@ import html2canvas from 'html2canvas';
 		align-items: center;
 		margin: 10px;
 		padding: 10px 20px;
-		background-color: #007bff;
+		background-color: #85b4ff;
 		color: white;
 		border: none;
 		border-radius: 5px;

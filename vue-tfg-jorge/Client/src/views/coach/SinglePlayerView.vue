@@ -12,6 +12,7 @@
         <p class="player-data-line"><b>Número de teléfono: </b>{{ informacion_jugador.phoneNumber || 'XXX' }}</p>
       </div>
     </div>
+    
     <div class="block kpis-container">
       <div class="block-title">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z"/></svg>
@@ -19,20 +20,33 @@
       </div>
 
       <div class="list-container">
-        <div v-for="(session, sessionIndex) in kpisJugador" :key="'session-' + sessionIndex">
+        <div v-for="(session, sessionIndex) in kpisJugador"
+          :key="'session-' + sessionIndex"
+        >
           <div @click="toggleDropdown(sessionIndex)" class="session-name">
             {{ session.ses_name }}
           </div>
           <transition name="dropdown">
             <div v-if="isDropdownOpen(sessionIndex)" class="kpi-dropdown">
-              <div v-for="(kpi, kpiIndex) in kpisJugador" :key="'kpi-' + sessionIndex + '-' + kpiIndex">
-                <div @click="toggleKpiDropdown(sessionIndex, kpiIndex)" class="kpi-name">
-                  {{ kpi.name }} - {{ kpi.score }}
+              <div v-for="(kpi, kpiIndex) in session.KPIs"
+                :key="'kpi-' + sessionIndex + '-' + kpiIndex"
+              >
+                <div
+                  @click="toggleKpiDropdown(sessionIndex, kpiIndex)"
+                  class="kpi-name"
+                  :style="computedKPIStyle(kpi)"
+                >
+                {{ kpi.name }} - {{ kpi.score }}<span v-if="kpi.range"> / {{ kpi.range }}</span>
                 </div>
                 <transition name="dropdown">
                   <div v-if="isKpiDropdownOpen(sessionIndex, kpiIndex)" class="exercise-dropdown">
-                    <div v-for="(exercise, exerciseIndex) in kpi.exercises" :key="'exercise-' + sessionIndex + '-' + kpiIndex + '-' + exerciseIndex" class="exercise-item">
-                      {{ exercise.name }} - {{ exercise.score }}
+                    <div
+                      v-for="(exercise, exerciseIndex) in Object.values(kpi.exercises)"
+                      :key="'exercise-' + sessionIndex + '-' + kpiIndex + '-' + exerciseIndex"
+                      class="exercise-item"
+                      :style="computedKPIStyle(exercise)"
+                    >
+                      {{ exercise.name }} - {{ exercise.score }}<span v-if="exercise.range"> / {{ exercise.range }}</span>
                     </div>
                   </div>
                 </transition>
@@ -49,71 +63,93 @@
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M240-40q-50 0-85-35t-35-85q0-50 35-85t85-35q14 0 26 3t23 8l57-71q-28-31-39-70t-5-78l-81-27q-17 25-43 40t-58 15q-50 0-85-35T0-580q0-50 35-85t85-35q50 0 85 35t35 85v8l81 28q20-36 53.5-61t75.5-32v-87q-39-11-64.5-42.5T360-840q0-50 35-85t85-35q50 0 85 35t35 85q0 42-26 73.5T510-724v87q42 7 75.5 32t53.5 61l81-28v-8q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-32 0-58.5-15T739-515l-81 27q6 39-5 77.5T614-340l57 70q11-5 23-7.5t26-2.5q50 0 85 35t35 85q0 50-35 85t-85 35q-50 0-85-35t-35-85q0-20 6.5-38.5T624-232l-57-71q-41 23-87.5 23T392-303l-56 71q11 15 17.5 33.5T360-160q0 50-35 85t-85 35ZM120-540q17 0 28.5-11.5T160-580q0-17-11.5-28.5T120-620q-17 0-28.5 11.5T80-580q0 17 11.5 28.5T120-540Zm120 420q17 0 28.5-11.5T280-160q0-17-11.5-28.5T240-200q-17 0-28.5 11.5T200-160q0 17 11.5 28.5T240-120Zm240-680q17 0 28.5-11.5T520-840q0-17-11.5-28.5T480-880q-17 0-28.5 11.5T440-840q0 17 11.5 28.5T480-800Zm0 440q42 0 71-29t29-71q0-42-29-71t-71-29q-42 0-71 29t-29 71q0 42 29 71t71 29Zm240 240q17 0 28.5-11.5T760-160q0-17-11.5-28.5T720-200q-17 0-28.5 11.5T680-160q0 17 11.5 28.5T720-120Zm120-420q17 0 28.5-11.5T880-580q0-17-11.5-28.5T840-620q-17 0-28.5 11.5T800-580q0 17 11.5 28.5T840-540ZM480-840ZM120-580Zm360 120Zm360-120ZM240-160Zm480 0Z"/></svg>
         DAFO
       </div>
+
       <div class="dafo-stats">
-        <div class="debilidades">
-          <h3>Debilidades</h3>
-          <div class="dafo-list">
-            <div v-for="(item, index) in resultados_DAFO.Debilidades" :key="index" class="dafo-item weakness">{{ item }}</div>
-          </div>
-        </div>
-        <div class="amenazas">
-          <h3>Amenazas</h3>
-          <div class="dafo-list">
-            <div v-for="(item, index) in resultados_DAFO.Amenazas" :key="index" class="dafo-item threat">{{ item }}</div>
-          </div>
-        </div>
-        <div class="fortalezas">
-          <h3>Fortalezas</h3>
-          <div class="dafo-list">
-            <div v-for="(item, index) in resultados_DAFO.Fortalezas" :key="index" class="dafo-item strength">{{ item }}</div>
-          </div>
-        </div>
-        <div class="oportunidades">
-          <h3>Oportunidades</h3>
-          <div class="dafo-list">
-            <div v-for="(item, index) in resultados_DAFO.Oportunidades" :key="index" class="dafo-item opportunity">{{ item }}</div>
-          </div>
+        <div v-for="(item, key) in resultados_DAFO"
+          :key="key"
+          :id="key"
+          class="dropdown-container"
+          :class="{ 'expanded': activeItems[key] }"
+        >
+          <label :for="'touch-' + key"><span>{{ key }}</span></label>
+          <input type="checkbox" :id="'touch-' + key" v-model="activeItems[key]" :value="key">
+
+          <ul class="slide">
+            <li v-for="(dafoItem, index) in item" :key="index" class="dafo-item" :id="key">{{ dafoItem }}</li>
+          </ul>
         </div>
       </div>
     </div>
+
     <div class="block charts-container">
       <div class="block-title">
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#5f6368"><path d="M120-120v-80l80-80v160h-80Zm160 0v-240l80-80v320h-80Zm160 0v-320l80 81v239h-80Zm160 0v-239l80-80v319h-80Zm160 0v-400l80-80v480h-80ZM120-327v-113l280-280 160 160 280-280v113L560-447 400-607 120-327Z"/></svg>
         Gráficos
       </div>
-      <div class="list-container">
-        <div v-for="(chart, index) in chartData" :key="index" class="chart-item">
-          <KpiChart :chartData="chart.data" :chartId="'chart-' + index" :chartName="chart.name" />
-        </div>
-      </div>
-    </div>
+      <div class="swiper-container">
+        <swiper
+          :slides-per-view="1"
+          navigation
+          pagination
+          :observer="true"
+          :observe-parents="true"
+          :parallax="true"
+        >
+          <swiper-slide v-for="(chart, index) in chartData"
+            :key="index"
+            class="chart-item">
+            <KpiChart
+              :chartData="chart.data"
+              :chartId="'chart-' + index"
+              :chartName="chart.name">
+            </KpiChart>
+          </swiper-slide>
 
-    <div class="loader-container">
-      <div class="dot-spinner">
-        <div class="dot-spinner__dot"></div>
-        <div class="dot-spinner__dot"></div>
-        <div class="dot-spinner__dot"></div>
-        <div class="dot-spinner__dot"></div>
-        <div class="dot-spinner__dot"></div>
-        <div class="dot-spinner__dot"></div>
-        <div class="dot-spinner__dot"></div>
-        <div class="dot-spinner__dot"></div>
+          <div class="swiper-pagination"></div>
+          <SwiperNavButtons />
+        </swiper>
       </div>
-      <p>Cargando...</p>
     </div>
+  </div>
+
+  <div class="loader-container">
+    <div class="dot-spinner">
+      <div class="dot-spinner__dot"></div>
+      <div class="dot-spinner__dot"></div>
+      <div class="dot-spinner__dot"></div>
+      <div class="dot-spinner__dot"></div>
+      <div class="dot-spinner__dot"></div>
+      <div class="dot-spinner__dot"></div>
+      <div class="dot-spinner__dot"></div>
+      <div class="dot-spinner__dot"></div>
+    </div>
+    <p>Cargando...</p>
   </div>
 </template>
 
 <script>
+import '@/assets/loader.css'
 import { inject } from 'vue';
 import KpiChart from '@/components/KpiChart.vue'
 import { mapGetters } from 'vuex';
 import * as ss from 'simple-statistics';
 
+//swiper
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import 'swiper/swiper-bundle.css';
+import { Navigation, Pagination } from 'swiper/modules';
+import SwiperCore from 'swiper';
+import SwiperNavButtons from '@/components/SwiperNavButtons.vue';
+
+SwiperCore.use([Navigation, Pagination]);
+
 export default {
   name: 'SinglePlayerView',
   components: {
-    KpiChart
+    Swiper,
+    SwiperSlide,
+    SwiperNavButtons,
+    KpiChart,
   },
   computed: {
     ...mapGetters(['modo']),
@@ -123,7 +159,6 @@ export default {
     kpisJugador() {
       switch (this.modo) {
         case 'sesion':
-          console.log(this.kpis_jugador_sesion)
           return this.kpis_jugador_sesion;
         case 'mensual':
           return this.kpis_jugador_mensual;
@@ -176,7 +211,13 @@ export default {
         "Debilidades": [],
         "Oportunidades": [],
         "Amenazas": []
-      }      
+      },
+      activeItems: {
+        Debilidades: false,
+        Amenazas: false,
+        Fortalezas: false,
+        Oportunidades: false
+      },
     };
   },
   setup() {
@@ -194,6 +235,18 @@ export default {
     },
     isDropdownOpen(index) {
       return this.openSessions.includes(index);
+    },
+    computedKPIStyle(kpi) {
+      if (kpi.score && kpi.range ) {
+        return {
+          backgroundColor: this.calculateColorKPI(kpi.score.toString(), kpi.range.toString()) + ' !important',
+          color: this.getTextColorKPI(kpi.score.toString(), kpi.range.toString()) + ' !important'
+        };
+      }
+      return {
+        backgroundColor: 'white' + ' !important',
+        color: 'black' + ' !important',
+      };
     },
     toggleKpiDropdown(sessionIndex, kpiIndex) {
       const key = `${sessionIndex}-${kpiIndex}`;
@@ -269,13 +322,13 @@ export default {
     getTrimestre(mes) {
       const month = parseInt(mes.split('-')[1], 10);
       if (month >= 1 && month <= 3) {
-        return `${mes.split('-')[0]}-Q1`;
+        return `${mes.split('-')[0]}-T1`;
       } else if (month >= 4 && month <= 6) {
-        return `${mes.split('-')[0]}-Q2`;
+        return `${mes.split('-')[0]}-T2`;
       } else if (month >= 7 && month <= 9) {
-        return `${mes.split('-')[0]}-Q3`;
+        return `${mes.split('-')[0]}-T3`;
       } else if (month >= 10 && month <= 12) {
-        return `${mes.split('-')[0]}-Q4`;
+        return `${mes.split('-')[0]}-T4`;
       }
     },
     convertir_a_gpa(puntaje, rango) {
@@ -352,6 +405,32 @@ export default {
         console.error('Error al obtener la información del jugador:', error);
       }
     },
+
+    async cargarKPIs() {
+      const loader = document.querySelector('.loader-container');
+			if(loader) {loader.style.display = 'flex';}
+
+      this.kpis_jugador_sesion= [];
+      this.kpis_jugador_mensual= [];
+      this.kpis_jugador_trimestral= [];
+      this.kpis_jugador_all= [];
+      this.chartData= [];
+      this.resultados_DAFO = {
+        "Fortalezas": [],
+        "Debilidades": [],
+        "Oportunidades": [],
+        "Amenazas": []
+      };
+
+      const methodName = `cargarKPIs_${this.modo}`;
+      if (typeof this[methodName] === 'function') {
+        await this[methodName]();
+        const loader = document.querySelector('.loader-container');
+			  if(loader){loader.style.display = 'none';}
+      } else {
+        console.error(`Method ${methodName} does not exist`);
+      }
+    },
     async cargarKPIs_sesion() {
       try {
         const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
@@ -377,6 +456,7 @@ export default {
             kpiPorSesion[sesion.idSession] = {
               name: sesion.name,
               date: sesion.date,
+              ses_id: sesion.idSession,
               [indicador.idKPI]: {
                 idKPI: indicador.idKPI,
                 name: indicador.name,
@@ -384,6 +464,16 @@ export default {
                 range: indicador.range,
               }
             };
+          } else {
+            if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
+              kpiPorSesion[sesion.idSession][indicador.idKPI] = {
+                idKPI: indicador.idKPI,
+                name: indicador.name,
+                scores: [],
+                range: indicador.range,
+                exercises: {} 
+              };
+            }
           }
 
           const ejerciciosResponse = await this.dao.exercise.read();
@@ -410,6 +500,7 @@ export default {
         let resultado = [];
 
         for (let sesion in kpiPorSesion) {
+          let KPIs = [];
           for (let idKPI in kpiPorSesion[sesion]) {
             let kpi = kpiPorSesion[sesion][idKPI];
 
@@ -429,38 +520,45 @@ export default {
                 }
               }
 
-              resultado.push({
-                ses_name: kpiPorSesion[sesion].name, // Nombre Sesion, Mes, Trimestre (sesion, mensual, trimestral)
-                ses_date: kpiPorSesion[sesion].date,
-                score: avgScore,
-
+              KPIs.push({
                 idKPI: kpi.idKPI,
                 name: kpi.name, // Nombre KPI, Sesion o Mes (sesion, mensual, trimestral)
                 range: kpi.range,
-
+                score: avgScore,
                 exercises: exercises, // Ejercicios, KPIs o Sesiones (sesion, mensual, trimestral)
-
-                ex_name: kpiPorSesion[sesion].name,
               });
             }
           }
+
+          resultado.push({
+            ses_name: kpiPorSesion[sesion].name, // Nombre Sesion, Mes, Trimestre (sesion, mensual, trimestral)
+            ses_date: kpiPorSesion[sesion].date,
+            ses_id: kpiPorSesion[sesion].ses_id,
+
+            KPIs: KPIs
+          });
         }
-        console.log('KPIs agrupados por sesion:', resultado);
+
+        console.log('KPIs agrupados por kpis_jugador_sesion:', resultado);
         this.kpis_jugador_sesion = resultado;
 
         this.chartData = [];
         const kpiData = {};
 
-        this.kpis_jugador_sesion.forEach(indicador => {
-          if (!kpiData[indicador.name]) {
-            kpiData[indicador.name] = {
-              data: [],
-              range: indicador.range
-            };
-          }
-          kpiData[indicador.name].data.push({
-            time: indicador.ses_name,
-            score: indicador.score
+        this.kpis_jugador_sesion.forEach(session => {
+          session.KPIs.forEach(kpi => {
+
+            if (!kpiData[kpi.name]) {
+              kpiData[kpi.name] = {
+                data: [],
+                range: kpi.range
+              };
+            }
+
+            kpiData[kpi.name].data.push({
+              time: session.ses_name,
+              score: kpi.score
+            });
           });
         });
 
@@ -479,17 +577,15 @@ export default {
     },
     async cargarKPIs_mensual() {
       try {
-        const ejerciciosSinFiltrar = await this.dao.exercise_has_session_has_actor_has_kpi.read();
-
-        // Filtrar ejercicios que involucran al Jugador
-        const ejercicios = ejerciciosSinFiltrar.filter(sesion =>
+        const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+        const ejerciciosFiltrados = ejercicios.filter(sesion =>
           sesion.Exercise_has_Session_has_Actor_Actor_idActor == this.$route.query.idActor
         );
 
         let kpiPorMes = {};
         let kpiPorSesion = {};
 
-        const kpiPromises = ejercicios.map(async (element) => {
+        const kpiPromises = ejerciciosFiltrados.map(async element => {
           const indicadores = await this.dao.kpi.read();
           let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
           indicador.score = element.score;
@@ -498,17 +594,19 @@ export default {
           let sesion = sesiones.find(sesion =>
             sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
           );
+          indicador.ses_date = sesion.date;
+          indicador.ses_name = sesion.name;
 
           if (!kpiPorSesion[sesion.idSession]) {
             kpiPorSesion[sesion.idSession] = {
               name: sesion.name,
               date: sesion.date,
+              ses_id: sesion.idSession,
               [indicador.idKPI]: {
                 idKPI: indicador.idKPI,
                 name: indicador.name,
                 scores: [],
                 range: indicador.range,
-                exercises: {}  // Para almacenar los ejercicios
               }
             };
           } else {
@@ -518,7 +616,7 @@ export default {
                 name: indicador.name,
                 scores: [],
                 range: indicador.range,
-                exercises: {}  // Para almacenar los ejercicios
+                exercises: {} 
               };
             }
           }
@@ -530,15 +628,14 @@ export default {
 
           indicador.ex_name = ejercicio.name;
 
-          if (!kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise]) {
-            kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise] = {
+          if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
+            kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise] = {
               id: ejercicio.idExercise,
               name: ejercicio.name,
-              scores: []
+              score: element.score,
             };
           }
 
-          kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise].scores.push(element.score);
           kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
         });
 
@@ -554,25 +651,18 @@ export default {
           if (!kpiPorMes[mes]) {
             kpiPorMes[mes] = {
               name: month_name,
-              date: null,
-              [ses]: {
-                idKPI: ses,
-                name: sesion.name,
-                scores: [],
-                range: null,
-                KPIs: {}  // Para almacenar los KPIs
-              }
+              sessions: {}
             };
-          } else {
-            if (!kpiPorMes[mes][ses]) {
-              kpiPorMes[mes][ses] = {
-                idKPI: ses,
-                name: sesion.name,
-                scores: [],
-                range: null,
-                KPIs: {}  // Para almacenar los KPIs
-              };
-            }
+          }
+
+          if (!kpiPorMes[mes].sessions[ses]) {
+            kpiPorMes[mes].sessions[ses] = {
+              idKPI: ses,
+              name: sesion.name,
+              date: sesion.date,
+              scores: [],
+              KPIs: {}  // Para almacenar los KPIs
+            };
           }
 
           for (let idKPI in sesion) {
@@ -580,54 +670,75 @@ export default {
 
             if (kpi.scores) {
               let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-              kpiPorMes[mes][ses].scores.push(parseFloat(avgScoreKPI));
               
-              kpiPorMes[mes][ses].KPIs[idKPI] = {
+              kpiPorMes[mes].sessions[ses].KPIs[idKPI] = {
                 id: idKPI,
                 name: kpi.name,
                 score: avgScoreKPI,
                 exercises: kpi.exercises,
                 range: kpi.range,
               };
+
+              kpiPorMes[mes].sessions[ses].scores.push(parseFloat(avgScoreKPI));
             }
           }
-
-          let avgScoreSes = (kpiPorMes[mes][ses].scores.reduce((a, b) => a + b, 0) / kpiPorMes[mes][ses].scores.length).toFixed(2);
-          resultado.push({
-            ses_name: month_name, // Nombre del mes
-            ses_date: month_name,
-            score: avgScoreSes,
-
-            idKPI: kpiPorMes[mes][ses].idKPI,
-            name: kpiPorMes[mes][ses].name, // Nombre de la sesión
-            range: kpiPorMes[mes][ses].range,
-
-            exercises: kpiPorMes[mes][ses].KPIs, // KPIs agrupados por mes
-            ex_name: kpiPorMes[mes][ses].name,
-          });
         }
 
-        console.log('KPIs agrupados por mes:', resultado);
+        for (let mes in kpiPorMes) {
+          let month = kpiPorMes[mes];
+          let sessions = [];
+
+          for (let ses in month.sessions) {
+            let session = month.sessions[ses];
+            let KPIs = [];
+
+            for (let idKPI in session.KPIs) {
+              KPIs.push(session.KPIs[idKPI]);
+            }
+
+            let avgScore = (KPIs.reduce((acc, kpi) => acc + parseFloat(kpi.score), 0) / KPIs.length).toFixed(2);
+
+            console.log(avgScore);
+
+            sessions.push({
+              idKPI: session.idKPI,
+              name: session.name,
+              range: null,
+              score: avgScore,
+              exercises: KPIs
+            });
+          }
+
+          resultado.push({
+            ses_name: month.name, // Nombre del Mes
+            ses_date: month.name,
+            ses_id: mes,
+
+            KPIs: sessions // Sesiones
+          });
+
+        }
+
         this.kpis_jugador_mensual = resultado;
 
         this.chartData = [];
         const kpiData = {};
 
-        this.kpis_jugador_mensual.forEach(indicador => {
-          for (const kpiId in indicador.exercises) {
-            const kpi = indicador.exercises[kpiId];
-            
+        this.kpis_jugador_mensual.forEach(mes => {
+          mes.KPIs.forEach(kpi => {
+
             if (!kpiData[kpi.name]) {
               kpiData[kpi.name] = {
                 data: [],
                 range: kpi.range
               };
             }
+
             kpiData[kpi.name].data.push({
-              time: indicador.ses_name,
+              time: mes.ses_name,
               score: kpi.score
             });
-          }
+          });
         });
 
         for (const [key, value] of Object.entries(kpiData)) {
@@ -645,17 +756,15 @@ export default {
     },
     async cargarKPIs_trimestral() {
       try {
-        const ejerciciosSinFiltrar = await this.dao.exercise_has_session_has_actor_has_kpi.read();
-
-        // Filtrar ejercicios que involucran al Jugador
-        const ejercicios = ejerciciosSinFiltrar.filter(sesion =>
+        const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+        const ejerciciosFiltrados = ejercicios.filter(sesion =>
           sesion.Exercise_has_Session_has_Actor_Actor_idActor == this.$route.query.idActor
         );
 
         let kpiPorTrimestre = {};
         let kpiPorSesion = {};
 
-        const kpiPromises = ejercicios.map(async (element) => {
+        const kpiPromises = ejerciciosFiltrados.map(async element => {
           const indicadores = await this.dao.kpi.read();
           let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
           indicador.score = element.score;
@@ -664,17 +773,19 @@ export default {
           let sesion = sesiones.find(sesion =>
             sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
           );
+          indicador.ses_date = sesion.date;
+          indicador.ses_name = sesion.name;
 
           if (!kpiPorSesion[sesion.idSession]) {
             kpiPorSesion[sesion.idSession] = {
               name: sesion.name,
               date: sesion.date,
+              ses_id: sesion.idSession,
               [indicador.idKPI]: {
                 idKPI: indicador.idKPI,
                 name: indicador.name,
                 scores: [],
                 range: indicador.range,
-                exercises: {}  // Para almacenar los ejercicios
               }
             };
           } else {
@@ -684,7 +795,7 @@ export default {
                 name: indicador.name,
                 scores: [],
                 range: indicador.range,
-                exercises: {}  // Para almacenar los ejercicios
+                exercises: {} 
               };
             }
           }
@@ -696,49 +807,41 @@ export default {
 
           indicador.ex_name = ejercicio.name;
 
-          if (!kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise]) {
-            kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise] = {
+          if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
+            kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise] = {
               id: ejercicio.idExercise,
               name: ejercicio.name,
-              scores: []
+              score: element.score,
             };
           }
 
-          kpiPorSesion[sesion.idSession][indicador.idKPI].exercises[ejercicio.idExercise].scores.push(element.score);
           kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
         });
 
         await Promise.all(kpiPromises);
         let resultado = [];
 
-        // Preparar KPI Por Mes
+        // Preparar KPI Por Trimestre
         for (let ses in kpiPorSesion) {
           let sesion = kpiPorSesion[ses];
           let mes = this.cogerYearMonth(sesion.date);
-          let trimestre = this.getTrimestre(mes);console.log(trimestre);
-          
+          let trimestre = this.getTrimestre(mes);
+
           if (!kpiPorTrimestre[trimestre]) {
             kpiPorTrimestre[trimestre] = {
               name: trimestre,
-              date: null,
-              [ses]: {
-                idKPI: ses,
-                name: sesion.name,
-                scores: [],
-                range: null,
-                KPIs: {}  // Para almacenar los KPIs
-              }
+              sessions: {}
             };
-          } else {
-            if (!kpiPorTrimestre[trimestre][ses]) {
-              kpiPorTrimestre[trimestre][ses] = {
-                idKPI: ses,
-                name: sesion.name,
-                scores: [],
-                range: null,
-                KPIs: {}  // Para almacenar los KPIs
-              };
-            }
+          }
+
+          if (!kpiPorTrimestre[trimestre].sessions[ses]) {
+            kpiPorTrimestre[trimestre].sessions[ses] = {
+              idKPI: ses,
+              name: sesion.name,
+              date: sesion.date,
+              scores: [],
+              KPIs: {}  // Para almacenar los KPIs
+            };
           }
 
           for (let idKPI in sesion) {
@@ -746,54 +849,75 @@ export default {
 
             if (kpi.scores) {
               let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-              kpiPorTrimestre[trimestre][ses].scores.push(parseFloat(avgScoreKPI));
               
-              kpiPorTrimestre[trimestre][ses].KPIs[idKPI] = {
+              kpiPorTrimestre[trimestre].sessions[ses].KPIs[idKPI] = {
                 id: idKPI,
                 name: kpi.name,
                 score: avgScoreKPI,
                 exercises: kpi.exercises,
                 range: kpi.range,
               };
+
+              kpiPorTrimestre[trimestre].sessions[ses].scores.push(parseFloat(avgScoreKPI));
             }
           }
-
-          let avgScoreSes = (kpiPorTrimestre[trimestre][ses].scores.reduce((a, b) => a + b, 0) / kpiPorTrimestre[trimestre][ses].scores.length).toFixed(2);
-          resultado.push({
-            ses_name: trimestre, // Nombre del trimestre
-            ses_date: trimestre,
-            score: avgScoreSes,
-
-            idKPI: kpiPorTrimestre[trimestre][ses].idKPI,
-            name: kpiPorTrimestre[trimestre][ses].name, // Nombre de la sesión
-            range: kpiPorTrimestre[trimestre][ses].range,
-
-            exercises: kpiPorTrimestre[trimestre][ses].KPIs, // KPIs agrupados por trimestre
-            ex_name: kpiPorTrimestre[trimestre][ses].name,
-          });
         }
-        // FIN DE Preparar KPI Por Mes
-        console.log('KPIs agrupados por trimestre:', resultado);
+
+        for (let trimestre in kpiPorTrimestre) {
+          let quarter = kpiPorTrimestre[trimestre];
+          let sessions = [];
+
+          for (let ses in quarter.sessions) {
+            let session = quarter.sessions[ses];
+            let KPIs = [];
+
+            for (let idKPI in session.KPIs) {
+              KPIs.push(session.KPIs[idKPI]);
+            }
+
+            let avgScore = (KPIs.reduce((acc, kpi) => acc + parseFloat(kpi.score), 0) / KPIs.length).toFixed(2);
+
+            console.log(avgScore);
+
+            sessions.push({
+              idKPI: session.idKPI,
+              name: session.name,
+              range: null,
+              score: avgScore,
+              exercises: KPIs
+            });
+          }
+
+          resultado.push({
+            ses_name: quarter.name, // Nombre del Mes
+            ses_date: quarter.name,
+            ses_id: trimestre,
+
+            KPIs: sessions // Sesiones
+          });
+
+        }
+
         this.kpis_jugador_trimestral = resultado;
 
         this.chartData = [];
         const kpiData = {};
 
-        this.kpis_jugador_trimestral.forEach(indicador => {
-          for (const kpiId in indicador.exercises) {
-            const kpi = indicador.exercises[kpiId];
-            
+        this.kpis_jugador_trimestral.forEach(trimestre => {
+          trimestre.KPIs.forEach(kpi => {
+
             if (!kpiData[kpi.name]) {
               kpiData[kpi.name] = {
                 data: [],
                 range: kpi.range
               };
             }
+
             kpiData[kpi.name].data.push({
-              time: indicador.ses_name,
+              time: trimestre.ses_name,
               score: kpi.score
             });
-          }
+          });
         });
 
         for (const [key, value] of Object.entries(kpiData)) {
@@ -806,32 +930,7 @@ export default {
 
         await this.cargarDAFO();
       } catch (error) {
-        console.error("Error al cargar KPIs trimestrales:", error);
-      }
-    },
-    async cargarKPIs() {
-      const loader = document.querySelector('.loader-container');
-			if(loader) {loader.style.display = 'flex';}
-
-      this.kpis_jugador_sesion= [];
-      this.kpis_jugador_mensual= [];
-      this.kpis_jugador_trimestral= [];
-      this.kpis_jugador_all= [];
-      this.chartData= [];
-      this.resultados_DAFO = {
-        "Fortalezas": [],
-        "Debilidades": [],
-        "Oportunidades": [],
-        "Amenazas": []
-      };
-
-      const methodName = `cargarKPIs_${this.modo}`;
-      if (typeof this[methodName] === 'function') {
-        await this[methodName]();
-        const loader = document.querySelector('.loader-container');
-			  loader.style.display = 'none';
-      } else {
-        console.error(`Method ${methodName} does not exist`);
+        console.error("Error al cargar KPIs mensuales:", error);
       }
     },
 
@@ -853,11 +952,6 @@ export default {
         } else {
           this.resultados_DAFO.Debilidades.push(`${kpi.name}: Promedio GPA muy bajo`);
         }
-
-        for (const [campo, resultados] of Object.entries(this.resultados_DAFO)) {
-            console.log(`  ${campo}: ${resultados.join(', ')}`);
-        }
-        console.log(this.resultados_DAFO);
 
       });
     },
@@ -940,11 +1034,11 @@ export default {
         const cambios_negativos = cambiosSesiones.filter(cambio => cambio < 0);
 
         if (cambios_positivos.length > cambios_negativos.length) {
-          this.resultados_DAFO.Oportunidades.push("Tiende a mejorar entre sesiones");
+          this.resultados_DAFO.Oportunidades.push(`${kpi.name}: Tiende a mejorar entre sesiones`);
         } else if (cambios_positivos.length < cambios_negativos.length){
-          this.resultados_DAFO.Debilidades.push("Tiende a empeorar entre sesiones");
+          this.resultados_DAFO.Debilidades.push(`${kpi.name}:  a empeorar entre sesiones`);
         } else {
-          this.resultados_DAFO.Amenazas.push("No mejora entre sesiones");
+          this.resultados_DAFO.Amenazas.push(`${kpi.name}: No mejora entre sesiones`);
         }
       });
     },
@@ -996,11 +1090,11 @@ export default {
   .block-title {
     display: flex;
     align-items: center;
-    margin-bottom: 10px; /* Añade separación inferior */
+    margin-bottom: 10px;
   }
 
   .block-title svg {
-    margin-right: 10px; /* Añade separación derecha del icono */
+    margin-right: 10px;
   }
 
   .player-pic h3{
@@ -1011,8 +1105,8 @@ export default {
   .list-container {
     width: 100%;
     height: 100%;
-    overflow-y: auto; /* Asegura que haya una barra de desplazamiento dentro del contenedor */
-    padding-right: 10px; /* Añadir padding para que la barra de desplazamiento no cubra el contenido */
+    overflow-y: auto; 
+    padding-right: 10px; 
     box-sizing: border-box;
   }
 
@@ -1060,7 +1154,7 @@ export default {
   }
  
   .list-item-link {
-    text-decoration: none; /* Quita el subrayado de los enlaces */
+    text-decoration: none;
   }
 
   .list-item {
@@ -1097,7 +1191,7 @@ export default {
 
   .item-details {
     display: flex;
-    flex-direction: row; /* Mantiene los elementos en fila */
+    flex-direction: row;
   }
 
   .name {
@@ -1109,57 +1203,6 @@ export default {
     font-weight: lighter;
   }
 
-  .dafo-stats{
-    display: grid;
-    grid-template-areas: 
-      "debilidades amenazas"
-      "fortalezas oportunidades";
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 20px; /* Sseparación entre areas */
-    width: 100%;
-    box-sizing: border-box;
-
-  }
-
-  .debilidades, .amenazas, .fortalezas, .oportunidades {
-    margin-bottom: 20px;
-  }
-
-  .dafo-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .dafo-item {
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 5px;
-    font-weight: normal;
-    color: #fff;
-  }
-
-  .weakness {
-    background-color: #dc3545;
-  }
-
-  .threat {
-    background-color: #ffc107;
-  }
-
-  .strength {
-    background-color: #28a745;
-  }
-
-  .opportunity {
-    background-color: #17a2b8;
-  }
-
-  .charts-container {
-    grid-area: charts-container;
-  }
-
   .player-info-container{
     grid-area: player-info-container;
     overflow: auto;
@@ -1169,19 +1212,13 @@ export default {
   }
   .kpis-container{
     grid-area:kpis-container;
-    max-height: 100%; /* Mantiene la altura máxima */
+    max-height: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
   }
 
-  .match-history-container{
-    grid-area:match-history-container;
-    max-height: 100%; /* Mantiene la altura máxima */
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
+  /* DAFO */
   .dafo-container {
     grid-area: dafo-container;
     display: flex;
@@ -1190,6 +1227,123 @@ export default {
     justify-content: flex-start;
     padding: 10px;
     box-sizing: border-box;
+  }
+
+  .dafo-stats{
+    display: grid;
+    grid-template-areas: 
+      "debilidades amenazas"
+      "fortalezas oportunidades";
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 20px;
+  }
+  .dropdown-container {
+    background: #d9d9d9;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    max-height: 50px;
+  }
+
+  .dropdown-container.expanded {
+    max-height: 500px;
+  }
+
+  .dropdown-container span {
+    padding: 15px 30px;
+    background: #30312d;
+    color: white;
+    font-size: 1.2em;
+    font-variant: small-caps;
+    cursor: pointer;
+    display: block;
+    position: relative;
+  }
+
+  .dropdown-container span::after {
+    content: "+";
+    position: absolute;
+    right: 15px;
+    transition: transform 0.3s ease;
+  }
+
+  .dropdown-container.expanded span::after{
+    content: "-";
+  }
+
+  input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+  }
+
+  .slide {
+    max-height: 0;
+    overflow: auto;
+    transition: max-height 0.3s ease;
+  }
+
+  .dropdown-container.expanded .slide {
+    max-height: 500px;
+  }
+
+  .slide li {
+    padding: 15px 30px;
+    list-style-type: none;
+  }
+
+  input[type="checkbox"]:checked + .slide {
+    max-height: 500px;
+  }
+
+  input[type="checkbox"]:checked + span::after {
+    transform: rotate(45deg);
+  }
+
+  #Debilidades span{
+    background-color: #e20017;
+  }
+  #Debilidades {
+    grid-area: debilidades;
+    background-color: #dc3545;
+  }
+
+  #Amenazas span{
+    background-color: #c79500;
+  }
+  #Amenazas {
+    background-color: #ffc107;
+  }
+
+  #Fortalezas span{
+    background-color: #007a1d;
+  }
+  #Fortalezas {
+    background-color: #28a745;
+  }
+
+  #Oportunidades span{
+    background-color: #0062a3;
+  }
+  #Oportunidades {
+    background-color: #17a2b8;
+  }
+
+  .dropdown-enter-active, .dropdown-leave-active {
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+  }
+
+  .dropdown-enter, .dropdown-leave-to {
+    max-height: 0;
+    opacity: 0;
+  }
+
+
+  /* GRAFICOS */
+  .swiper-container {
+    width: 100%;
+    height: 100%;
   }
   .charts-container{
     grid-area:charts-container;
@@ -1201,13 +1355,9 @@ export default {
     box-sizing: border-box;
   }
 
-  .dropdown-enter-active, .dropdown-leave-active {
-    transition: max-height 0.3s ease, opacity 0.3s ease;
-  }
-
-  .dropdown-enter, .dropdown-leave-to {
-    max-height: 0;
-    opacity: 0;
+  .chart-item {
+    width: 80%;
+    height: 80%;
   }
 
 </style>

@@ -17,6 +17,7 @@
 import { useStore } from 'vuex';
 import { inject, onMounted } from 'vue';
 import { mapGetters } from 'vuex';
+import Swal from 'sweetalert2';
 
 export default {
   data() {
@@ -35,12 +36,20 @@ export default {
         orgs = response.filter(organization =>
           organization.name === team
         );
-        console.log('Organizaciones: ', orgs);
         if (orgs.length > 0) {
           store.dispatch('actualizarTeamSelectedID', orgs[0].idOrganization);
           store.dispatch('actualizarTeamSelectedName', orgs[0].name);
         } else {
           console.error('Team not found');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Actualmente no tienes permisos sobre ningún equipo',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              router.push('/');
+            }
+          });
         }
       });
     };
@@ -57,7 +66,6 @@ export default {
     cargarOrgs() {
       this.dao.organization.read().then((response) => {
         this.equipos = response.filter(fila => fila.idOrganization == this.user.Organization_idOrganization);
-        console.log("Equipos:",this.equipos);
       }).catch(error => {
         console.error('Error al cargar organizaciones:', error);
       });
@@ -65,8 +73,6 @@ export default {
     cargarEquipos() {
       this.dao.user_has_organization.read().then((response) => {
         this.user = response.filter(fila => fila.user_id == this.userID)[0];
-        console.log("Usuario", this.userID, ":", this.user);
-
         this.cargarOrgs();
       }).catch(error => {
         console.error('Error al cargar equipos:', error);

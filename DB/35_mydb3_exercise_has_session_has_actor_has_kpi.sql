@@ -43,7 +43,8 @@ CREATE TABLE `exercise_has_session_has_actor_has_kpi` (
 
 LOCK TABLES `exercise_has_session_has_actor_has_kpi` WRITE;
 /*!40000 ALTER TABLE `exercise_has_session_has_actor_has_kpi` DISABLE KEYS */;
-INSERT INTO `exercise_has_session_has_actor_has_kpi` VALUES (1,1,1,2,3,62),(1,1,1,4,1,100),(1,1,1,5,3,49),(1,1,1,6,7,100),(4,4,13,10,13,0),(7,4,13,10,13,17),(6,4,13,10,13,35),(3,5,14,12,15,27);
+INSERT INTO `exercise_has_session_has_actor_has_kpi` VALUES (1,1,1,2,3,62),(1,1,1,4,1,100),(1,1,1,5,3,49),(1,1,1,6,7,100),(4,4,13,10,13,0),(7,4,13,10,13,17),(6,4,13,10,13,35),(3,5,14,12,15,27),(6,6,14, 9,13, 36),(5,6,14, 15,12, 20),(3,6,14, 10,13, 25),(6,7,14, 10,13, 27),(9,7,14, 17,10, 40),(5,7,14, 15,12, 24),
+(6,8,14, 10,13, 35),(7,8,14, 10,13, 30),(6,6,13, 9,13, 40),(3,6,14, 9,13, 36),(3,6,13, 10,13, 36),(6,7,13, 10,13, 45),(9,7,13, 17,10, 48),(6,8,13, 10,13, 33);
 /*!40000 ALTER TABLE `exercise_has_session_has_actor_has_kpi` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

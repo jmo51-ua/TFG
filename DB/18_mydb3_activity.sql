@@ -41,7 +41,7 @@ CREATE TABLE `activity` (
 
 LOCK TABLES `activity` WRITE;
 /*!40000 ALTER TABLE `activity` DISABLE KEYS */;
-INSERT INTO `activity` VALUES (1,'Actividad 1','ola',NULL,NULL,NULL,NULL,NULL),(2,'Disparos lejanos','Los jugadores disparan de fuera del area',NULL,2,1,NULL,NULL),(3,'Centros y remates','Se realizarán centros que serán rematados ',NULL,3,2,NULL,NULL),(4,'Carrera continua','Se correra durante un determinado tiempo',NULL,1,2,NULL,NULL),(5,'Calentamiento','Calentaran todos los musculos',NULL,1,1,NULL,NULL),(6,'Partido entrenamiento','Partido entre un mismo equipo',NULL,3,3,NULL,NULL),(7,'Partido','Partido contra otro equipo',NULL,3,3,NULL,NULL);
+INSERT INTO `activity` VALUES (1,'Actividad 1','ola',NULL,NULL,NULL,NULL,NULL),(2,'Disparos lejanos','Los jugadores disparan de fuera del area',NULL,2,1,NULL,NULL),(3,'Centros y remates','Se realizarán centros que serán rematados ',NULL,3,2,NULL,NULL),(4,'Carrera continua','Se correra durante un determinado tiempo',NULL,1,2,NULL,NULL),(5,'Calentamiento','Calentaran todos los musculos',NULL,1,1,NULL,NULL),(6,'Partido entrenamiento','Partido entre un mismo equipo',NULL,3,3,NULL,NULL),(7,'Partido','Partido contra otro equipo',NULL,3,3,NULL,NULL),(8,'Defender','Ejercicios defensivos',NULL,3,3,NULL,NULL);
 /*!40000 ALTER TABLE `activity` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

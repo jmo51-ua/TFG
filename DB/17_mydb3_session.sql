@@ -41,7 +41,8 @@ CREATE TABLE `session` (
 
 LOCK TABLES `session` WRITE;
 /*!40000 ALTER TABLE `session` DISABLE KEYS */;
-INSERT INTO `session` VALUES (1,1,'sesion1',NULL,NULL,NULL),(2,1,'sesion2','2020-09-09',NULL,NULL),(3,1,'sesion3',NULL,NULL,NULL),(4,2,'Entrenamiento jueves','2024-03-14','16:30:00',75),(5,2,'Partido sabado','2024-03-16','12:00:00',60);
+INSERT INTO `session` VALUES (1,1,'sesion1',NULL,NULL,NULL),(2,1,'sesion2','2020-09-09',NULL,NULL),(3,1,'sesion3',NULL,NULL,NULL),(4,2,'Entrenamiento jueves','2024-03-14','16:30:00',75),(5,2,'Partido sabado','2024-03-16','12:00:00',60),(6,2,'Entrenamiento viernes','2024-03-15','16:30:00',90),(7,2,'Entrenamiento martes','2024-03-19','11:00:00',20),(8,2,'Reunion miercoles equipo','2024-06-19','13:00:00',15),(9,2,'Amistoso Domingo','2024-06-23','10:30:00',105),(10,2,'Revision Nueva Temporada','2024-09-09','17:45:00',35),(11,2,'Intensivo Ataque','2024-09-11','20:00:00',60),(12,2,'Intensivo Defensa','2024-09-13','19:30:00',65);
+
 /*!40000 ALTER TABLE `session` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

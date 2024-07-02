@@ -39,7 +39,7 @@ CREATE TABLE `exercise` (
 
 LOCK TABLES `exercise` WRITE;
 /*!40000 ALTER TABLE `exercise` DISABLE KEYS */;
-INSERT INTO `exercise` VALUES (1,1,NULL,'Ejercicio1'),(2,1,NULL,'Ejercicio 2'),(3,2,10,'Disparos lejanos'),(4,3,15,'Centros y remates'),(5,4,10,'Carrera continua'),(6,5,10,'Calentamiento'),(7,6,20,'Partido entrenamiento'),(8,7,60,'Partido');
+INSERT INTO `exercise` VALUES (1,1,NULL,'Ejercicio1'),(2,1,NULL,'Ejercicio 2'),(3,2,10,'Disparos lejanos'),(4,3,15,'Centros y remates'),(5,4,10,'Carrera continua'),(6,5,10,'Calentamiento'),(7,6,20,'Partido entrenamiento'),(8,7,60,'Partido'),(9,8,30,'Entradas a balon');
 /*!40000 ALTER TABLE `exercise` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
