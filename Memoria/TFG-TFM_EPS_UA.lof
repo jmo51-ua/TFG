@@ -1,23 +1,53 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Bcoach - Estadísticas de Jugadores}}{4}{figure.caption.11}%
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Bcoach - Crear categoría de tarea}}{5}{figure.caption.12}%
-\contentsline {figure}{\numberline {2.3}{\ignorespaces Football Tactical Board - Pantalla del entrenador}}{6}{figure.caption.13}%
-\contentsline {figure}{\numberline {2.4}{\ignorespaces Sportlyzer Players App - Gráfico de los tiempos de finalización del entrenamiento}}{8}{figure.caption.36}%
-\contentsline {figure}{\numberline {2.5}{\ignorespaces Longomatch - Creación de eventos en el vídeo}}{9}{figure.caption.37}%
-\contentsline {figure}{\numberline {2.6}{\ignorespaces Picco - Interfaz durante el partido}}{10}{figure.caption.38}%
-\contentsline {figure}{\numberline {2.7}{\ignorespaces Teamtag - Interfaz durante el partido}}{11}{figure.caption.39}%
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Bcoach - Estadísticas de Jugadores}}{4}{figure.caption.12}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Bcoach - Crear categoría de tarea}}{4}{figure.caption.13}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Football Tactical Board - Pantalla del entrenador}}{5}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Sportlyzer Players App - Gráfico de los tiempos de finalización del entrenamiento}}{8}{figure.caption.37}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Longomatch - Creación de eventos en el vídeo}}{8}{figure.caption.38}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Picco - Interfaz durante el partido}}{9}{figure.caption.39}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Teamtag - Interfaz durante el partido}}{10}{figure.caption.40}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Logo de Github}}{18}{figure.caption.53}%
-\contentsline {figure}{\numberline {4.2}{\ignorespaces Logo de Visual Studio Code}}{19}{figure.caption.54}%
-\contentsline {figure}{\numberline {4.3}{\ignorespaces Logo de Draw.io}}{19}{figure.caption.55}%
-\contentsline {figure}{\numberline {4.4}{\ignorespaces Logo de Moqups}}{20}{figure.caption.56}%
-\contentsline {figure}{\numberline {4.5}{\ignorespaces Logo de Vue.js}}{20}{figure.caption.57}%
-\contentsline {figure}{\numberline {4.6}{\ignorespaces Icono de gráfico importado desde la biblioteca de Iconify}}{21}{figure.caption.60}%
-\contentsline {figure}{\numberline {4.7}{\ignorespaces Gráfico generado con ChartJS}}{24}{figure.caption.65}%
-\contentsline {figure}{\numberline {4.8}{\ignorespaces Logo de MySQL}}{25}{figure.caption.70}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Logo de Github}}{18}{figure.caption.54}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Logo de Visual Studio Code}}{19}{figure.caption.55}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Logo de Draw.io}}{19}{figure.caption.56}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Logo de Moqups}}{20}{figure.caption.57}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Logo de Vue.js}}{20}{figure.caption.58}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces Icono de gráfico importado desde la biblioteca de Iconify}}{21}{figure.caption.61}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces Gráfico generado con ChartJS}}{24}{figure.caption.66}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Logo de MySQL}}{25}{figure.caption.71}%
 \addvspace {10\p@ }
+\contentsline {figure}{\numberline {5.1}{\ignorespaces Mapa conceptual de Sergio Yáñez Cánovas y Daniel Gónzalez Luque}}{35}{figure.caption.100}%
+\contentsline {figure}{\numberline {5.2}{\ignorespaces Modelo Entidad-Relación de Sergio Yáñez Cánovas y Daniel Gónzalez Luque}}{36}{figure.caption.101}%
+\contentsline {figure}{\numberline {5.3}{\ignorespaces Arquitectura general del sistema de Sergio Yáñez Cánovas y Daniel Gónzalez Luque}}{40}{figure.caption.102}%
+\contentsline {figure}{\numberline {5.4}{\ignorespaces Mockup de inicio de sesión}}{41}{figure.caption.103}%
+\contentsline {figure}{\numberline {5.5}{\ignorespaces Mockup de selección de equipo}}{41}{figure.caption.104}%
+\contentsline {figure}{\numberline {5.6}{\ignorespaces Mockup de la página principal}}{42}{figure.caption.105}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Mockup de la página de equipo}}{42}{figure.caption.106}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Mockup de la página de jugador}}{43}{figure.caption.107}%
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Mockup de la página de estadísticas}}{44}{figure.caption.108}%
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Mockup de la página de calendario}}{44}{figure.caption.109}%
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Modelo lógico de Sergio Yáñez Cánovas y Daniel Gónzalez Luque}}{45}{figure.caption.110}%
+\contentsline {figure}{\numberline {5.12}{\ignorespaces Relación entre las tablas user, organization y user has organization}}{46}{figure.caption.111}%
+\contentsline {figure}{\numberline {5.13}{\ignorespaces Relación entre las tablas user, actor, session, actor has actortype, kpi, exercise, exercise has session has actor has kpi}}{48}{figure.caption.112}%
+\contentsline {figure}{\numberline {5.14}{\ignorespaces Arquitectura técnica del sistema}}{51}{figure.caption.113}%
+\contentsline {figure}{\numberline {5.15}{\ignorespaces Implentación de la interfaz de inicio de sesión}}{52}{figure.caption.114}%
+\contentsline {figure}{\numberline {5.16}{\ignorespaces Implentación de la interfaz de selección de organización}}{53}{figure.caption.115}%
+\contentsline {figure}{\numberline {5.17}{\ignorespaces Implentación de la interfaz de la página principal}}{53}{figure.caption.116}%
+\contentsline {figure}{\numberline {5.18}{\ignorespaces Implentación de la interfaz de equipo}}{54}{figure.caption.117}%
+\contentsline {figure}{\numberline {5.19}{\ignorespaces Implentación de la interfaz de un único jugador - Datos y sesiones}}{54}{figure.caption.118}%
+\contentsline {figure}{\numberline {5.20}{\ignorespaces Implentación de la interfaz de un único jugador - DAFO y gráficos}}{55}{figure.caption.119}%
+\contentsline {figure}{\numberline {5.21}{\ignorespaces Implentación de la interfaz de estadísticas}}{55}{figure.caption.120}%
+\contentsline {figure}{\numberline {5.22}{\ignorespaces Implentación de la interfaz de calendario}}{56}{figure.caption.121}%
+\contentsline {figure}{\numberline {5.23}{\ignorespaces Ejemplo de la vista principal con el intervalo por sesión seleccionado}}{77}{figure.caption.128}%
+\contentsline {figure}{\numberline {5.24}{\ignorespaces Ejemplo de la vista principal con el intervalo mensual seleccionado}}{77}{figure.caption.129}%
+\contentsline {figure}{\numberline {5.25}{\ignorespaces Vista principal accedida desde una pantalla Ipad 11}}{77}{figure.caption.130}%
+\contentsline {figure}{\numberline {5.26}{\ignorespaces Informe PDF que se genera desde la vista de estadísticas}}{78}{figure.caption.131}%
+\contentsline {figure}{\numberline {5.27}{\ignorespaces Vista del actor individual con ID 13}}{78}{figure.caption.132}%
+\contentsline {figure}{\numberline {5.28}{\ignorespaces Vista del actor individual con ID 14}}{78}{figure.caption.133}%
+\contentsline {figure}{\numberline {5.29}{\ignorespaces Intento de acceso a URL interna sin haber iniciado sesión}}{79}{figure.caption.134}%
+\contentsline {figure}{\numberline {5.30}{\ignorespaces Conexiones con múltiples usuarios simultáneos}}{79}{figure.caption.135}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

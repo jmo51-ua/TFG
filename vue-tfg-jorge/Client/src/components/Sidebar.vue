@@ -142,6 +142,7 @@
 			logout(){
 				this.actualizarLogged(false);
 				this.actualizarTeamSelectedID(null);
+				this.app.logout();
 			},
 			cambiarModo() {
 				this.actualizarModo(this.selectedModo);

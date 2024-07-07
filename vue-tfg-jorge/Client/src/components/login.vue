@@ -54,7 +54,11 @@
                     });
                 },
                 () => {
-                    alert("Error en login");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error en el login',
+                    });
                 }
             );
         };

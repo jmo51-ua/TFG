@@ -74,8 +74,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Configuración automática según el identificador elegido
-\input{include/configuraciontitulacion} 
-
+\input{include/configuraciontitulacion}
 % Información añadida a las propiedades del archivo PDF.
 \hypersetup{
   pdfauthor = {Jorge Moreno Ozores (jmo51@alu.ua.es)},
@@ -87,7 +86,7 @@
 % Archivo de acrónimos
 %%
 \makeglossaries % Genera la base de datos de acrónimos
-\input{anexos/acronimos.tex} % Archivo que contiene los acrónimos
+\input{anexos/acronimos} % Archivo que contiene los acrónimos
 
 %%%%%%%%%%%%%%%%%%%%%%%% 
 % INICIO DEL DOCUMENTO
@@ -97,14 +96,14 @@
 
 % Números romanos hasta el mainmatter.
 \frontmatter
-
+\raggedbottom
 % PORTADA
 \input{include/portada/portada_color} % Portada Color
 \input{include/portada/portada_bn} % Portada B/N
 
 %%%%% PREAMBULO
 % Incluye el .tex que contiene el preámbulo, agradecimientos y dedicatorias.
-%\input{capitulos/preliminaresconagradecimientos} 
+\input{capitulos/preliminaresconagradecimientos} 
 
 % Incluye después del archivo anterior el indice y lista de figuras, tablas y códigos.
 \tableofcontents	% Índice

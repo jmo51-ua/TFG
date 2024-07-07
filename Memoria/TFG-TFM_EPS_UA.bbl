@@ -1,6 +1,30 @@
 \begin{thebibliography}{}
 
 \bibitem [\protect \citeauthoryear {%
+Academica%
+}{%
+Academica%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+def_gpa}
+\APACinsertmetastar {%
+def_gpa}%
+\begin{APACrefauthors}%
+Academica.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {¿Cómo se calcula el GPA?} {¿cómo se calcula el gpa?}
+\newblock
+\APAChowpublished {\url{https://www.academica.school/news/como-se-calcula-el-gpa/}}.
+\newblock
+\APACrefnote{Accessed: 2024-07-05}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
 Agilest%
 }{%
 Agilest%
@@ -97,9 +121,105 @@ Bcoach.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
-Flores%
+Daniel%
 }{%
-Flores%
+Daniel%
+}{%
+{\protect \APACyear {2020}}%
+}]{%
+TFG_Daniel}
+\APACinsertmetastar {%
+TFG_Daniel}%
+\begin{APACrefauthors}%
+Daniel, G\BPBI L.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+\APACrefbtitle {Sistema de ánalisis y cuadro de mandos para evaluación de formación personalizada en el fútbol base.} {Sistema de ánalisis y cuadro de mandos para evaluación de formación personalizada en el fútbol base.}
+\newblock
+\APAChowpublished {\url{https://rua.ua.es/dspace/handle/10045/36931}}.
+\newblock
+\APACrefnote{Accessed: 2024-02-20}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Deborah%
+}{%
+Deborah%
+}{%
+{\protect \APACyear {1999}}%
+}]{%
+DHoare}
+\APACinsertmetastar {%
+DHoare}%
+\begin{APACrefauthors}%
+Deborah, H.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{1999}{}{}.
+\newblock
+\APACrefbtitle {Seminario Internacional de detección de talentos deportivo.} {Seminario internacional de detección de talentos deportivo.}
+\newblock
+\APAChowpublished {\url{https://isidoro-hornillos.webnode.es/products/deteccion-y-seleccion-de-talentos-deportivos-conferencia-/}}.
+\newblock
+\APACrefnote{Accessed: 2024-05-15}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Diana%
+}{%
+Diana%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+def_github}
+\APACinsertmetastar {%
+def_github}%
+\begin{APACrefauthors}%
+Diana, W.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {Qué es GitHub y para qué sirve.} {Qué es github y para qué sirve.}
+\newblock
+\APAChowpublished {\url{https://blog.hubspot.es/website/que-es-github#que-es}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-25}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+FasterCapital%
+}{%
+FasterCapital%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+def_reglaemp}
+\APACinsertmetastar {%
+def_reglaemp}%
+\begin{APACrefauthors}%
+FasterCapital.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {¿Qué Es La Regla Empírica?} {¿qué es la regla empírica?}
+\newblock
+\APAChowpublished {\url{https://fastercapital.com/es/tema/%C2%BFqu%C3%A9-es-la-regla-emp%C3%ADrica.html/3#:~:text=Nivel%20de%20confianza%3A%20la%20regla,son%20apropiados%20para%20cada%20situaci%C3%B3n.}}
+\newblock
+\APACrefnote{Accessed: 2024-07-05}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Frankier%
+}{%
+Frankier%
 }{%
 {\protect \APACyear {2024}}%
 }]{%
@@ -107,7 +227,7 @@ def_vscode}
 \APACinsertmetastar {%
 def_vscode}%
 \begin{APACrefauthors}%
-Flores, F.%
+Frankier, F.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -145,27 +265,27 @@ Guardian.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
-Hoare%
+Hmarkets%
 }{%
-Hoare%
+Hmarkets%
 }{%
-{\protect \APACyear {1999}}%
+{\protect \APACyear {2024}}%
 }]{%
-DHoare}
+def_tend}
 \APACinsertmetastar {%
-DHoare}%
+def_tend}%
 \begin{APACrefauthors}%
-Hoare, D.%
+Hmarkets.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
-\APACrefYearMonthDay{1999}{}{}.
+\APACrefYearMonthDay{2024}{}{}.
 \newblock
-\APACrefbtitle {Seminario Internacional de detección de talentos deportivo.} {Seminario internacional de detección de talentos deportivo.}
+\APACrefbtitle {Introducción a las Líneas de Tendencia para Principiantes.} {Introducción a las líneas de tendencia para principiantes.}
 \newblock
-\APAChowpublished {\url{https://isidoro-hornillos.webnode.es/products/deteccion-y-seleccion-de-talentos-deportivos-conferencia-/}}.
+\APAChowpublished {\url{https://hmarkets.com/es/learn-to-trade/learning-hub/trendlines/#:~:text=Las%20l%C3%ADneas%20de%20tendencia%20funcionan,potenciales%20de%20soporte%20y%20resistencia.}}
 \newblock
-\APACrefnote{Accessed: 2024-05-15}
+\APACrefnote{Accessed: 2024-07-05}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -217,9 +337,33 @@ Imagina.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
-Komarnicki%
+IONOS%
 }{%
-Komarnicki%
+IONOS%
+}{%
+{\protect \APACyear {2020}}%
+}]{%
+def_websocket}
+\APACinsertmetastar {%
+def_websocket}%
+\begin{APACrefauthors}%
+IONOS.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+\APACrefbtitle {¿Qué es WebSocket?} {¿qué es websocket?}
+\newblock
+\APAChowpublished {\url{https://www.ionos.es/digitalguide/paginas-web/desarrollo-web/que-es-websocket/}}.
+\newblock
+\APACrefnote{Accessed: 2024-07-04}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+John%
+}{%
+John%
 }{%
 {\protect \APACyear {2023}}%
 }]{%
@@ -227,7 +371,7 @@ VueJSTutorial}
 \APACinsertmetastar {%
 VueJSTutorial}%
 \begin{APACrefauthors}%
-Komarnicki, J.%
+John, K.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -311,9 +455,33 @@ Maida, J., Esteban Gabriel ;~Pacienzia.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
-Montiel%
+Max%
 }{%
-Montiel%
+Max%
+}{%
+{\protect \APACyear {2024}}%
+}]{%
+def_sprints}
+\APACinsertmetastar {%
+def_sprints}%
+\begin{APACrefauthors}%
+Max, R.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2024}{}{}.
+\newblock
+\APACrefbtitle {Scrum sprints.} {Scrum sprints.}
+\newblock
+\APAChowpublished {\url{https://www.atlassian.com/agile/scrum/sprints}}.
+\newblock
+\APACrefnote{Accessed: 2024-06-25}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Obdulia%
+}{%
+Obdulia%
 }{%
 {\protect \APACyear {2024}}%
 }]{%
@@ -321,7 +489,7 @@ def_git}
 \APACinsertmetastar {%
 def_git}%
 \begin{APACrefauthors}%
-Montiel, O.%
+Obdulia, M.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
@@ -357,27 +525,51 @@ Parmenter, D.%
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
-Rrehkof%
+QuestionPro%
 }{%
-Rrehkof%
+QuestionPro%
 }{%
 {\protect \APACyear {2024}}%
 }]{%
-def_sprints}
+def_desvest}
 \APACinsertmetastar {%
-def_sprints}%
+def_desvest}%
 \begin{APACrefauthors}%
-Rrehkof, M.%
+QuestionPro.%
 \end{APACrefauthors}%
 \unskip\
 \newblock
 \APACrefYearMonthDay{2024}{}{}.
 \newblock
-\APACrefbtitle {Scrum sprints.} {Scrum sprints.}
+\APACrefbtitle {¿Qué es la desviación estándar?} {¿qué es la desviación estándar?}
 \newblock
-\APAChowpublished {\url{https://www.atlassian.com/agile/scrum/sprints}}.
+\APAChowpublished {\url{https://www.questionpro.com/blog/es/desviacion-estandar/}}.
 \newblock
-\APACrefnote{Accessed: 2024-06-25}
+\APACrefnote{Accessed: 2024-07-05}
+\PrintBackRefs{\CurrentBib}
+
+\bibitem [\protect \citeauthoryear {%
+Sergio%
+}{%
+Sergio%
+}{%
+{\protect \APACyear {2020}}%
+}]{%
+TFG_Sergio}
+\APACinsertmetastar {%
+TFG_Sergio}%
+\begin{APACrefauthors}%
+Sergio, Y\BPBI C.%
+\end{APACrefauthors}%
+\unskip\
+\newblock
+\APACrefYearMonthDay{2020}{}{}.
+\newblock
+\APACrefbtitle {Sistema integral para el entrenamiento personalizado de fútbol base.} {Sistema integral para el entrenamiento personalizado de fútbol base.}
+\newblock
+\APAChowpublished {\url{https://rua.ua.es/dspace/handle/10045/36931}}.
+\newblock
+\APACrefnote{Accessed: 2024-02-20}
 \PrintBackRefs{\CurrentBib}
 
 \bibitem [\protect \citeauthoryear {%
@@ -448,30 +640,6 @@ VueJS.%
 \APACrefbtitle {¿Qué es Vue.js?} {¿qué es vue.js?}
 \newblock
 \APAChowpublished {\url{https://es.vuejs.org/v2/guide/#%C2%BFQue-es-Vue-js}}.
-\newblock
-\APACrefnote{Accessed: 2024-06-25}
-\PrintBackRefs{\CurrentBib}
-
-\bibitem [\protect \citeauthoryear {%
-Walsh%
-}{%
-Walsh%
-}{%
-{\protect \APACyear {2024}}%
-}]{%
-def_github}
-\APACinsertmetastar {%
-def_github}%
-\begin{APACrefauthors}%
-Walsh, D.%
-\end{APACrefauthors}%
-\unskip\
-\newblock
-\APACrefYearMonthDay{2024}{}{}.
-\newblock
-\APACrefbtitle {Qué es GitHub y para qué sirve.} {Qué es github y para qué sirve.}
-\newblock
-\APAChowpublished {\url{https://blog.hubspot.es/website/que-es-github#que-es}}.
 \newblock
 \APACrefnote{Accessed: 2024-06-25}
 \PrintBackRefs{\CurrentBib}

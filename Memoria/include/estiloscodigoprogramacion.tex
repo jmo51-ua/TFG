@@ -13,6 +13,7 @@
 \usepackage[framed,numbered]{matlab-prettifier}
 % Paquete mostrar código de programación de distintos lenguajes
 \usepackage{listings}
+\usepackage{color}
 \lstset{ inputencoding=utf8,
 extendedchars=true,
 frame=single, % Caja donde se ubica el código
@@ -73,7 +74,20 @@ literate=
 \DeclareCaptionFormat{listing}{\colorbox{gray}{\parbox{\textwidth - 2\fboxsep}{#1#2#3}}}
 \captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white,font= scriptsize}
 
-
+\lstdefinelanguage{JavaScript}{
+  keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  sensitive=false,
+  comment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  morestring=[b]',
+  morestring=[b]"
+}
 %%%%%%%%%%%%%%%%%%%%%%%% 
 % CÓDIGO. ESTILOS. Ajústalos a tu gusto
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -135,15 +149,15 @@ literate=
 	language=javascript,
  	}  
 \lstdefinestyle{Javascript-color}
-	{
+{
+	language=JavaScript,
+  	basicstyle=\scriptsize\bfseries\ttfamily, % Igual que Consola
+  	backgroundcolor=\color{lightgray},
+  	showstringspaces=false,
+  	showspaces=false,
   	breaklines=true,
-  	language=Javascript,
-  	basicstyle=\scriptsize,
-  	keywordstyle=\bfseries\color{green!40!black},
-  	commentstyle=\itshape\color{purple!40!black},
-  	identifierstyle=\color{blue},
-  	stringstyle=\color{orange},
-    }  
+}
+
 \lstdefinestyle{PHP}
 	{
 	basicstyle=\scriptsize,
@@ -269,3 +283,4 @@ literate=
   	commentstyle=\color{YellowGreen},
   	stringstyle=\color{ForestGreen}  
 }
+

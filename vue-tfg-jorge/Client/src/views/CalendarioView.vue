@@ -8,8 +8,17 @@
 			@event-click="onEventClick"
 			class="vue-cal-custom"
 			:locale="es"
-			style="width: 100%;">
+			style="width: 70%; float: left;">
 			</vue-cal>
+      <div class="next-sessions" style="width: 30%; float: left; padding-left: 20px;">
+        <h3>Próximas Sesiones</h3>
+        <ul>
+          <li v-for="session in nextFiveSessions" :key="session.start">
+            <div class="li-title"><strong>{{ session.title }}</strong></div>
+            <div class="li-content">{{ session.start }} - {{ session.end }}</div>
+          </li>
+        </ul>
+      </div>
 		</div>
 	</div>
 </template>
@@ -27,7 +36,7 @@
     },
     data() {
       return {
-		    sessions: [],
+        sessions: [],
         events: [
           {
             start: '2024-05-30 10:35',
@@ -44,7 +53,7 @@
         es : {
           "weekDays": ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
           "weekDaysShort": ["L", "M", "X", "J", "V", "S", "D"],
-          "months": ["Enero", "Febero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+          "months": ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
           "years": "Años",
           "year": "Año",
           "month": "Mes",
@@ -63,6 +72,13 @@
       ...mapGetters(['teamSelectedID']),
       ...mapGetters(['teamSelectedName']),
       ...mapGetters(['userID']),
+      nextFiveSessions() {
+        const now = new Date();console.log(this.sessions);
+        return this.sessions
+          .filter(session => new Date(session.start) > now)
+          .sort((a, b) => new Date(a.start) - new Date(b.start))
+          .slice(0, 5);
+      },
     },
     setup() {
       const app = inject('app');
@@ -70,7 +86,7 @@
       return { app, dao };
     },
     methods: {
-      carcularTimeStart(date,time){
+      carcularTimeStart(date, time) {
         if(!time){
           time = "9:00:00";
         }
@@ -84,13 +100,13 @@
 
         return `${year}-${month}-${day} ${hours}:${minutes}`;
       },
-      carcularTimeEnd(date,time,duration){
+      carcularTimeEnd(date, time, duration) {
         if(!time){
           time = "9:00:00";
         }
 
         if(!duration){
-          duration= 30;
+          duration = 30;
         }
 
         const dateFormat = new Date(date);
@@ -102,7 +118,7 @@
         minutes = (parseInt(minutes) + duration).toString();
 
         if (minutes >= 60) {
-          hours = (parseInt(hours) +  Math.floor(minutes / 60)).toString();
+          hours = (parseInt(hours) + Math.floor(minutes / 60)).toString();
           minutes = minutes % 60;
         }
 
@@ -157,5 +173,49 @@
 	.calendar-container {
 		width: 100%;
 	}
+  .calendar-container {
+    display: flex;
+  }
+  .next-sessions {
+    margin-left: 20px;
+    overflow-y: auto;
+    max-height: 600px;
+  }
+
+  .next-sessions ul{
+    list-style: none;
+  }
+
+  .next-sessions ul li{
+    padding: 20px 20px 20px 0px;
+    border: solid 1px grey;
+    margin-top: 15px;
+  }
+
+  .next-sessions ul .li-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .next-sessions ul .li-content{
+    margin-top:5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  @media (max-width: 1350px) {
+    .calendar-container {
+      display: grid;
+      grid-template-areas:
+        "vue-cal-custom"
+        "next-sessions";
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+  }
 
 </style>

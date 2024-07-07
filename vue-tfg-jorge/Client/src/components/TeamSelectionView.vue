@@ -47,6 +47,7 @@ export default {
             text: 'Actualmente no tienes permisos sobre ningún equipo',
           }).then((result) => {
             if (result.isConfirmed) {
+              store.dispatch('actualizarLogged', false);
               router.push('/');
             }
           });
@@ -75,7 +76,7 @@ export default {
         this.user = response.filter(fila => fila.user_id == this.userID)[0];
         this.cargarOrgs();
       }).catch(error => {
-        console.error('Error al cargar equipos:', error);
+        console.error('Error al cargar organizaciones:', error);
       });
     },
   },
@@ -116,6 +117,6 @@ export default {
   }
 
   button:hover {
-    background-color: rgb(83, 209, 102);
+    background-color: #85b4ff;
   }
 </style>
