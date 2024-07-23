@@ -142,7 +142,7 @@
 			logout(){
 				this.actualizarLogged(false);
 				this.actualizarTeamSelectedID(null);
-				this.app.logout();
+				this.$router.push('/');
 			},
 			cambiarModo() {
 				this.actualizarModo(this.selectedModo);

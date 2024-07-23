@@ -24,6 +24,12 @@
             </div> -->
           </div>
         </router-link>
+
+        <div class="nokpis-container">
+          <div class="nokpis">
+            <span >No se han registrado jugadores </span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -68,6 +74,12 @@
             </div>
           </transition>
         </div>
+
+        <div class="nokpis-container">
+          <div class="nokpis">
+            <span >No se han registrado KPIs </span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -84,6 +96,12 @@
             :chartName="chart.name"
             :isHomeView="true"
           />
+        </div>
+
+        <div class="nokpis-container">
+          <div class="nokpis">
+            <span >No se han registrado KPIs </span>
+          </div>
         </div>
       </div>
     </div>
@@ -471,32 +489,38 @@
 
       //EQUIPO
       async cargarJugadores() {
-				if (!this.teamSelectedID) {
-					console.error('No team selected');
-					return;
-				}
+        if (!this.teamSelectedID) {
+          console.error('No hay equipo seleccionado');
+          return;
+        }
 
-				try {
-					const response = await this.dao.actor_has_actortype.read();
-					this.actores = response.filter(actor =>
-					  actor.ActorType_idActorType === 2 &&
-					  actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
-					);
-					this.actorIds = this.actores.map(actor => actor.Actor_idActor);
-					await this.cargarDatosCompletosJugadores();
-				} catch (error) {
-					console.error('Error al cargar jugadores:', error);
-				}
-			},
+        try {
+          const response = await this.dao.actor_has_actortype.read();
+          this.actores = response.filter(actor =>
+            actor.ActorType_idActorType === 2 &&
+            actor.Organization_has_Category_Organization_idOrganization === this.teamSelectedID
+          );
+          this.actorIds = this.actores.map(actor => actor.Actor_idActor);
+
+          await this.cargarDatosCompletosJugadores();
+        } catch (error) {
+          console.error('Error al cargar jugadores:', error);
+        }
+      },
+
       async cargarDatosCompletosJugadores() {
-				try {
-					const promises = this.actorIds.map(id => this.dao.actor.read({ idActor: id }));
-					this.actoresCompletos = await Promise.all(promises);
-					console.log('Datos completos de los actores:', this.actoresCompletos);
-				} catch (error) {
-					console.error('Error al cargar jugadores completos:', error);
-				}
-			},
+        try {
+          if (this.actorIds.length === 0) {
+            console.warn('No se han encontrado actores');
+            return;
+          }
+          const actoresCompletosPromises = this.actorIds.map(id => this.dao.actor.read({ idActor: id }));
+          this.actoresCompletos = await Promise.all(actoresCompletosPromises);
+
+        } catch (error) {
+          console.error('Error al cargar jugadores completos:', error);
+        }
+      },
 
       //KPIs Y GRÁFICOS
       async cargarKPIs() {
@@ -504,12 +528,41 @@
         if(loader){loader.style.display = 'flex';}
 
         this.chartData = [];
+        this.openSessions = this.openKpis = [];
 
         const methodName = `cargarKPIs_${this.modo}`;
         if (typeof this[methodName] === 'function') {
           await this[methodName]();
           if(loader){loader.style.display = 'none';}
           console.log('Gráficos cargados')
+
+          if(this.kpisJugador.length == 0){
+            const message = document.querySelector('.block2 .nokpis-container');
+            if (message) { message.style.display = 'block'; }
+          }
+          else{
+            const message = document.querySelector('.block2 .nokpis-container');
+            if (message) { message.style.display = 'none'; }
+          }
+
+          if(this.chartData.length == 0){
+            const message = document.querySelector('.charts-container .nokpis-container');
+            if (message) { message.style.display = 'block'; }
+          }
+          else{
+            const message = document.querySelector('.charts-container .nokpis-container');
+            if (message) { message.style.display = 'none'; }
+          }
+
+          if(this.actoresCompletos.length == 0){
+            const message = document.querySelector('.block1 .nokpis-container');
+            if (message) { message.style.display = 'block'; }
+          }
+          else{
+            const message = document.querySelector('.block1 .nokpis-container');
+            if (message) { message.style.display = 'none'; }
+          }
+
         } else {
           console.error(`Method ${methodName} does not exist`);
         }
@@ -824,33 +877,40 @@
       },
       async cargarKPIs_trimestral() {
         const loader = document.querySelector('.loader-container');
-        if(loader){loader.style.display = 'flex';}
+        if (loader) { loader.style.display = 'flex'; }
 
         let kpiPorTrimestre = {};
         let kpiPorSesion = {};
 
         try {
-          const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+          const [ejercicios, indicadores, sesiones, ejerciciosResponse] = await Promise.all([
+            this.dao.exercise_has_session_has_actor_has_kpi.read(),
+            this.dao.kpi.read(),
+            this.dao.session.read(),
+            this.dao.exercise.read()
+          ]);
+
           const ejerciciosFiltrados = ejercicios.filter(sesion =>
             this.actorIds.includes(sesion.Exercise_has_Session_has_Actor_Actor_idActor)
           );
 
-          const kpiPromises = ejerciciosFiltrados.map(async element => {
-            const indicadores = await this.dao.kpi.read();
-            let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
-            indicador.score = element.score;
+          ejerciciosFiltrados.forEach(element => {
+            const indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+            const sesion = sesiones.find(s => s.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes);
+            const ejercicio = ejerciciosResponse.find(ex => ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer);
 
-            const sesiones = await this.dao.session.read();
-            let sesion = sesiones.find(sesion =>
-              sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
-            );
-            indicador.ses_date = sesion.date;
+            if (!indicador || !sesion || !ejercicio) return;
+
+            const date = new Date(sesion.date);
+            indicador.score = element.score;
+            indicador.ses_date = date.toISOString();
             indicador.ses_name = sesion.name;
+            indicador.ex_name = ejercicio.name;
 
             if (!kpiPorSesion[sesion.idSession]) {
               kpiPorSesion[sesion.idSession] = {
                 name: sesion.name,
-                date: sesion.date,
+                date: indicador.ses_date,
                 [indicador.idKPI]: {
                   idKPI: indicador.idKPI,
                   name: indicador.name,
@@ -869,12 +929,6 @@
               };
             }
 
-            const ejerciciosResponse = await this.dao.exercise.read();
-            let ejercicio = ejerciciosResponse.find(ex =>
-              ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
-            );
-            indicador.ex_name = ejercicio.name;
-
             if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
               kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise] = {
                 id: ejercicio.idExercise,
@@ -885,10 +939,6 @@
 
             kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
           });
-
-          await Promise.all(kpiPromises);
-
-          let resultado = [];
 
           // Preparar KPI Por Trimestre
           for (let ses in kpiPorSesion) {
@@ -918,7 +968,7 @@
 
               if (kpi.scores) {
                 let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-                
+
                 kpiPorTrimestre[trimestre].sessions[ses].KPIs[idKPI] = {
                   id: idKPI,
                   name: kpi.name,
@@ -932,38 +982,29 @@
             }
           }
 
-
-          for (let trimestre in kpiPorTrimestre) {
-            let month = kpiPorTrimestre[trimestre];
-            let sessions = [];
-
-            for (let ses in month.sessions) {
-              let session = month.sessions[ses];
-              let KPIs = [];
-
-              for (let idKPI in session.KPIs) {
-                KPIs.push(session.KPIs[idKPI]);
-              }
-
+          let resultado = Object.keys(kpiPorTrimestre).map(trimestre => {
+            let quarter = kpiPorTrimestre[trimestre];
+            let sessions = Object.keys(quarter.sessions).map(ses => {
+              let session = quarter.sessions[ses];
+              let KPIs = Object.keys(session.KPIs).map(idKPI => session.KPIs[idKPI]);
               let avgScore = (KPIs.reduce((acc, kpi) => acc + parseFloat(kpi.score), 0) / KPIs.length).toFixed(2);
 
-              sessions.push({
+              return {
                 idKPI: session.idKPI,
                 name: session.name,
                 range: null,
                 score: avgScore,
                 exercises: KPIs
-              });
-            }
-
-            resultado.push({
-              ses_name: month.name, // Nombre del trimestre
-              ses_date: month.name,
-              ses_id: trimestre,
-
-              KPIs: sessions // Sesiones
+              };
             });
-          }
+
+            return {
+              ses_name: quarter.name, // Nombre del trimestre
+              ses_date: quarter.name,
+              ses_id: trimestre,
+              KPIs: sessions // Sesiones
+            };
+          });
 
           this.kpis_trimestral = resultado;
 
@@ -972,7 +1013,7 @@
 
           resultado.forEach(trimestre => {
             trimestre.KPIs.forEach(kpi => {
-              kpi.exercises.forEach(exercise => {
+              Object.values(kpi.exercises).forEach(exercise => {
                 if (!exerciseData[exercise.name]) {
                   exerciseData[exercise.name] = {};
                 }
@@ -1004,7 +1045,9 @@
           }
 
         } catch (error) {
-          console.error('Error al cargar KPIs mensuales:', error);
+          console.error('Error al cargar KPIs trimestrales:', error);
+        } finally {
+          if (loader) { loader.style.display = 'none'; }
         }
       },
       async cargarGraficos() {			
@@ -1026,17 +1069,26 @@
       //CALENDAR
       async cargarSesiones() {
         try {
-          const actoresResponse = await this.dao.actor.read();
+          // Leer actores y sesiones a la vez
+          const [actoresResponse, sesionesResponse] = await Promise.all([
+            this.dao.actor.read(),
+            this.dao.session.read()
+          ]);
+
+          // Filtrar actores por el usuario actual
           const actores = actoresResponse.filter(actor => actor.User_idUser == this.userID);
 
-          for (const fila of actores) {
-            const actorID = fila.idActor;
+          let sesionesPorActor = {};
 
-            const sesionesResponse = await this.dao.session.read();
-            const sesiones = actorID !== null 
-              ? sesionesResponse.filter(sesion => sesion.Actor_idActor == actorID && sesion.date != null)
-              : sesionesResponse;
+          // Filtrar sesiones por cada actor
+          actores.forEach(actor => {
+            sesionesPorActor[actor.idActor] = sesionesResponse.filter(
+              sesion => sesion.Actor_idActor == actor.idActor && sesion.date != null
+            );
+          });
 
+          // Agregar sesiones filtradas
+          for (const [actorID, sesiones] of Object.entries(sesionesPorActor)) {
             sesiones.forEach(element => {
               this.sessions.push({
                 start: this.carcularTimeStart(element.date.toString(), element.time.toString()),
@@ -1045,6 +1097,7 @@
               });
             });
           }
+
         } catch (error) {
           console.error('Error al cargar sesiones:', error);
         }
@@ -1177,14 +1230,14 @@
   .block1.hovered {
     transform: scale(1.1);
     cursor: pointer;
-    background-color: var(--dark);
-    color: var(--light);;
+    /*background-color: var(--dark);
+    color: var(--light);*/
   }
 
   .block1.hovered-inItem {
     transform: scale(1.1);
     cursor: pointer;
-    background-color: #d6e6ff;
+    /*background-color: #d6e6ff;*/
   }
 
   /* STATS */
@@ -1201,17 +1254,17 @@
   .block2:hover{
     transform: scale(1.1);
     cursor: pointer;
-    background-color: var(--dark);
-    color: var(--light);;
+    /*background-color: var(--dark);
+    color: var(--light);*/
   }
 
   .block2.hovered-inItem {
     transform: scale(1.1);
     cursor: pointer;
-    background-color: #d6e6ff;
+    /*background-color: #d6e6ff;*/
   }
 
-  .session-name {
+  .session-name{
     font-weight: bold;
     padding: 10px;
     margin: 5px 0;
@@ -1224,6 +1277,24 @@
   .session-name:hover {
     background-color: rgb(125, 196, 243);
     cursor: pointer;
+  }
+
+  .nokpis{
+    font-weight: bold;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    background: #85b4ff;
+    border: 1px solid grey;
+    color:#000;
+  }
+
+  .nokpis:hover{
+    cursor: auto;
+  }
+
+  .nokpis-container{
+    display: none;
   }
 
   .kpi-dropdown {

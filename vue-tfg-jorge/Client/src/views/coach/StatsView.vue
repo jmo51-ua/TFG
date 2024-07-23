@@ -18,6 +18,9 @@
 			<div v-for="(chart, index) in chartData" :key="index" class="chart">
 				<KpiChart :chartData="chart.data" :chartId="'chart-' + index" :chartName="chart.name" />
 			</div>
+			<div class="nostats" style="display: none;">
+				No se han registrado KPIs
+			</div>
 		</div>
 
 		<div class="create-kpi" v-if="showCreateKpiForm">
@@ -231,77 +234,81 @@ import html2canvas from 'html2canvas';
 			if (typeof this[methodName] === 'function') {
 				await this[methodName]();
 				loader.style.display = 'none';
+				if(this.chartData.length == 0){
+					const message = document.querySelector('.nostats');
+					if (message) { message.style.display = 'block'; }
+				}
+				else{
+					const message = document.querySelector('.nostats');
+					if (message) { message.style.display = 'none'; }
+				}
 			} else {
 				console.error(`Method ${methodName} does not exist`);
 			}
 		},
 		async cargarKPIs_sesion() {
 			const loader = document.querySelector('.loader-container');
-			if(loader){loader.style.display = 'flex';}
+			if (loader) { loader.style.display = 'flex'; }
+
 			let kpiPorSesion = {};
 
 			try {
-				const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+				const [ejercicios, indicadores, sesiones] = await Promise.all([
+				this.dao.exercise_has_session_has_actor_has_kpi.read(),
+				this.dao.kpi.read(),
+				this.dao.session.read()
+				]);
 
-				const kpiPromises = this.actorIds.map(async idActor => {
 				const ejerciciosFiltrados = ejercicios.filter(sesion =>
-					sesion.Exercise_has_Session_has_Actor_Actor_idActor == idActor
+				this.actorIds.includes(sesion.Exercise_has_Session_has_Actor_Actor_idActor)
 				);
 
-				return Promise.all(ejerciciosFiltrados.map(async element => {
-					const indicadores = await this.dao.kpi.read();
-					let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
-					indicador.score = element.score;
+				ejerciciosFiltrados.forEach(element => {
+				let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+				let sesion = sesiones.find(s => s.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes);
 
-					const sesiones = await this.dao.session.read();
-					let sesion = sesiones.find(sesion =>
-					sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
-					);
+				if (!indicador || !sesion) return;
 
-					indicador.ses_date = sesion.date;
-					indicador.ses_name = sesion.name;
-					let distinctSesion = `${sesion.idSession}-${sesion.name}`;
+				indicador.score = element.score;
+				indicador.ses_date = sesion.date;
+				indicador.ses_name = sesion.name;
+				let distinctSesion = `${sesion.idSession}-${sesion.name}`;
 
-					if (!kpiPorSesion[distinctSesion]) {
-						kpiPorSesion[distinctSesion] = {};
-					}
+				if (!kpiPorSesion[distinctSesion]) {
+					kpiPorSesion[distinctSesion] = {};
+				}
 
-					if (!kpiPorSesion[distinctSesion][indicador.idKPI]) {
-						kpiPorSesion[distinctSesion][indicador.idKPI] = {
-							idKPI: indicador.idKPI,
-							name: indicador.name,
-							scores: [],
-							range: indicador.range,
-						};
-					}
+				if (!kpiPorSesion[distinctSesion][indicador.idKPI]) {
+					kpiPorSesion[distinctSesion][indicador.idKPI] = {
+					idKPI: indicador.idKPI,
+					name: indicador.name,
+					scores: [],
+					range: indicador.range,
+					};
+				}
 
-					kpiPorSesion[distinctSesion][indicador.idKPI].scores.push(indicador.score);
-					console.log("indicador:", indicador);
-
-					return indicador;
-				}));
+				kpiPorSesion[distinctSesion][indicador.idKPI].scores.push(indicador.score);
 				});
-
-				await Promise.all(kpiPromises.flat());
 
 				let resultado = [];
 
 				for (let sesion in kpiPorSesion) {
-					for (let idKPI in kpiPorSesion[sesion]) {
-						let kpi = kpiPorSesion[sesion][idKPI];
-						let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-						let name_sesion = sesion.split('-')[1];
+				for (let idKPI in kpiPorSesion[sesion]) {
+					let kpi = kpiPorSesion[sesion][idKPI];
+					let avgScore = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+					let name_sesion = sesion.split('-')[1];
 
-						resultado.push({
-						idKPI: kpi.idKPI,
-						name: kpi.name,
-						date: name_sesion,
-						score: avgScore,
-						ses_name: name_sesion,
-						range: kpi.range,
-						});
-					}
+					resultado.push({
+					idKPI: kpi.idKPI,
+					name: kpi.name,
+					date: name_sesion,
+					score: avgScore,
+					ses_name: name_sesion,
+					range: kpi.range,
+					});
 				}
+				}
+
 				this.kpis_sesion = resultado;
 
 				this.chartData = [];
@@ -330,376 +337,358 @@ import html2canvas from 'html2canvas';
 
 			} catch (error) {
 				console.error('Error al cargar KPIs de sesión:', error);
+			} finally {
+				if (loader) { loader.style.display = 'none'; }
 			}
 		},
 		async cargarKPIs_mensual() {
 			const loader = document.querySelector('.loader-container');
-			if(loader){loader.style.display = 'flex';}
+			if (loader) { loader.style.display = 'flex'; }
 
 			let kpiPorMes = {};
 			let kpiPorSesion = {};
 
 			try {
-				const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+				const [ejercicios, indicadores, sesiones, ejerciciosResponse] = await Promise.all([
+				this.dao.exercise_has_session_has_actor_has_kpi.read(),
+				this.dao.kpi.read(),
+				this.dao.session.read(),
+				this.dao.exercise.read()
+				]);
+
 				const ejerciciosFiltrados = ejercicios.filter(sesion =>
-					this.actorIds.includes(sesion.Exercise_has_Session_has_Actor_Actor_idActor)
+				this.actorIds.includes(sesion.Exercise_has_Session_has_Actor_Actor_idActor)
 				);
 
-				const kpiPromises = ejerciciosFiltrados.map(async element => {
-					const indicadores = await this.dao.kpi.read();
-					let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
-					indicador.score = element.score;
+				ejerciciosFiltrados.forEach(element => {
+				const indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+				const sesion = sesiones.find(s => s.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes);
+				const ejercicio = ejerciciosResponse.find(ex => ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer);
 
-					const sesiones = await this.dao.session.read();
-					let sesion = sesiones.find(sesion =>
-					sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
-					);
-					indicador.ses_date = sesion.date;
-					indicador.ses_name = sesion.name;
+				if (!indicador || !sesion || !ejercicio) return;
 
-					if (!kpiPorSesion[sesion.idSession]) {
+				indicador.score = element.score;
+				indicador.ses_date = sesion.date;
+				indicador.ses_name = sesion.name;
+
+				if (!kpiPorSesion[sesion.idSession]) {
 					kpiPorSesion[sesion.idSession] = {
-						name: sesion.name,
-						date: sesion.date,
-						[indicador.idKPI]: {
+					name: sesion.name,
+					date: sesion.date,
+					[indicador.idKPI]: {
 						idKPI: indicador.idKPI,
 						name: indicador.name,
 						scores: [],
 						range: indicador.range,
 						exercises: {}
-						}
-					};
-					} else if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
-						kpiPorSesion[sesion.idSession][indicador.idKPI] = {
-							idKPI: indicador.idKPI,
-							name: indicador.name,
-							scores: [],
-							range: indicador.range,
-							exercises: {}
-						};
 					}
+					};
+				}
 
-					const ejerciciosResponse = await this.dao.exercise.read();
-					let ejercicio = ejerciciosResponse.find(ex =>
-					ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
-					);
-					indicador.ex_name = ejercicio.name;
+				if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
+					kpiPorSesion[sesion.idSession][indicador.idKPI] = {
+					idKPI: indicador.idKPI,
+					name: indicador.name,
+					scores: [],
+					range: indicador.range,
+					exercises: {}
+					};
+				}
 
-					if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
+				if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
 					kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise] = {
-						id: ejercicio.idExercise,
-						name: ejercicio.name,
-						score: element.score,
+					id: ejercicio.idExercise,
+					name: ejercicio.name,
+					score: element.score,
 					};
-					}
+				}
 
-					kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
+				kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
 				});
-
-				await Promise.all(kpiPromises);
-
-				let resultado = [];
 
 				// Preparar KPI Por Mes
 				for (let ses in kpiPorSesion) {
-					let sesion = kpiPorSesion[ses];
-					let mes = this.cogerYearMonth(sesion.date);
-					let month_name = this.obtenerNombreMes(mes.split('-')[1]) + ` ${mes.split('-')[0]}`;
+				let sesion = kpiPorSesion[ses];
+				let mes = this.cogerYearMonth(sesion.date);
+				let month_name = this.obtenerNombreMes(mes.split('-')[1]) + ` ${mes.split('-')[0]}`;
 
-					if (!kpiPorMes[mes]) {
+				if (!kpiPorMes[mes]) {
 					kpiPorMes[mes] = {
-						name: month_name,
-						sessions: {}
+					name: month_name,
+					sessions: {}
 					};
-					}
+				}
 
-					if (!kpiPorMes[mes].sessions[ses]) {
+				if (!kpiPorMes[mes].sessions[ses]) {
 					kpiPorMes[mes].sessions[ses] = {
-						idKPI: ses,
-						name: sesion.name,
-						date: sesion.date,
-						scores: [],
-						KPIs: {}  // Para almacenar los KPIs
+					idKPI: ses,
+					name: sesion.name,
+					date: sesion.date,
+					scores: [],
+					KPIs: {}  // Para almacenar los KPIs
 					};
-					}
+				}
 
-					for (let idKPI in sesion) {
+				for (let idKPI in sesion) {
 					let kpi = sesion[idKPI];
 
 					if (kpi.scores) {
-						let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-						
-						kpiPorMes[mes].sessions[ses].KPIs[idKPI] = {
+					let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+
+					kpiPorMes[mes].sessions[ses].KPIs[idKPI] = {
 						id: idKPI,
 						name: kpi.name,
 						score: avgScoreKPI,
 						exercises: kpi.exercises,
 						range: kpi.range,
-						};
+					};
 
-						kpiPorMes[mes].sessions[ses].scores.push(parseFloat(avgScoreKPI));
-					}
+					kpiPorMes[mes].sessions[ses].scores.push(parseFloat(avgScoreKPI));
 					}
 				}
+				}
 
-
-				for (let mes in kpiPorMes) {
-					let month = kpiPorMes[mes];
-					let sessions = [];
-
-					for (let ses in month.sessions) {
+				let resultado = Object.keys(kpiPorMes).map(mes => {
+				let month = kpiPorMes[mes];
+				let sessions = Object.keys(month.sessions).map(ses => {
 					let session = month.sessions[ses];
-					let KPIs = [];
-
-					for (let idKPI in session.KPIs) {
-						KPIs.push(session.KPIs[idKPI]);
-					}
-
+					let KPIs = Object.keys(session.KPIs).map(idKPI => session.KPIs[idKPI]);
 					let avgScore = (KPIs.reduce((acc, kpi) => acc + parseFloat(kpi.score), 0) / KPIs.length).toFixed(2);
 
-					sessions.push({
-						idKPI: session.idKPI,
-						name: session.name,
-						range: null,
-						score: avgScore,
-						exercises: KPIs
-					});
-					}
+					return {
+					idKPI: session.idKPI,
+					name: session.name,
+					range: null,
+					score: avgScore,
+					exercises: KPIs
+					};
+				});
 
-					resultado.push({
-						ses_name: month.name, // Nombre del Mes
-						ses_date: month.name,
-						ses_id: mes,
-
-						KPIs: sessions // Sesiones
-					});
-				}
+				return {
+					ses_name: month.name, // Nombre del Mes
+					ses_date: month.name,
+					ses_id: mes,
+					KPIs: sessions // Sesiones
+				};
+				});
 
 				this.kpis_mensual = resultado;
 
 				this.chartData = [];
 				const exerciseData = {};
-				console.log(resultado);
+
 				resultado.forEach(mes => {
-					mes.KPIs.forEach(kpi => {
-						kpi.exercises.forEach(exercise => {
-							if (!exerciseData[exercise.name]) {
-								exerciseData[exercise.name] = {};
-							}
+				mes.KPIs.forEach(kpi => {
+					Object.values(kpi.exercises).forEach(exercise => {
+					if (!exerciseData[exercise.name]) {
+						exerciseData[exercise.name] = {};
+					}
 
-							if (!exerciseData[exercise.name][mes.ses_name]) {
-								exerciseData[exercise.name][mes.ses_name] = [];
-							}
+					if (!exerciseData[exercise.name][mes.ses_name]) {
+						exerciseData[exercise.name][mes.ses_name] = [];
+					}
 
-							exerciseData[exercise.name][mes.ses_name].push(parseFloat(exercise.score));
-						});
+					exerciseData[exercise.name][mes.ses_name].push(parseFloat(exercise.score));
 					});
+				});
 				});
 
 				for (const [exerciseName, months] of Object.entries(exerciseData)) {
-					const data = [];
+				const data = [];
 
-					for (const [month, scores] of Object.entries(months)) {
-						const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-						data.push({
-							time: month,
-							score: avgScore.toFixed(2)
-						});
-					}
-
-					this.chartData.push({
-						name: exerciseName,
-						data: data,
+				for (const [month, scores] of Object.entries(months)) {
+					const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+					data.push({
+					time: month,
+					score: avgScore.toFixed(2)
 					});
+				}
+
+				this.chartData.push({
+					name: exerciseName,
+					data: data,
+				});
 				}
 
 			} catch (error) {
 				console.error('Error al cargar KPIs mensuales:', error);
+			} finally {
+				if (loader) { loader.style.display = 'none'; }
 			}
 		},
 		async cargarKPIs_trimestral() {
 			const loader = document.querySelector('.loader-container');
-			if(loader){loader.style.display = 'flex';}
+			if (loader) { loader.style.display = 'flex'; }
 
-			let kpiPorMes = {};
+			let kpiPorTrimestre = {};
 			let kpiPorSesion = {};
 
 			try {
-				const ejercicios = await this.dao.exercise_has_session_has_actor_has_kpi.read();
+				const [ejercicios, indicadores, sesiones, ejerciciosResponse] = await Promise.all([
+				this.dao.exercise_has_session_has_actor_has_kpi.read(),
+				this.dao.kpi.read(),
+				this.dao.session.read(),
+				this.dao.exercise.read()
+				]);
+
 				const ejerciciosFiltrados = ejercicios.filter(sesion =>
-					this.actorIds.includes(sesion.Exercise_has_Session_has_Actor_Actor_idActor)
+				this.actorIds.includes(sesion.Exercise_has_Session_has_Actor_Actor_idActor)
 				);
 
-				const kpiPromises = ejerciciosFiltrados.map(async element => {
-					const indicadores = await this.dao.kpi.read();
-					let indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
-					indicador.score = element.score;
+				ejerciciosFiltrados.forEach(element => {
+				const indicador = indicadores.find(indic => indic.idKPI == element.KPI_idKPI);
+				const sesion = sesiones.find(s => s.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes);
+				const ejercicio = ejerciciosResponse.find(ex => ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer);
 
-					const sesiones = await this.dao.session.read();
-					let sesion = sesiones.find(sesion =>
-					sesion.idSession == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Ses_idSes
-					);
-					indicador.ses_date = sesion.date;
-					indicador.ses_name = sesion.name;
+				if (!indicador || !sesion || !ejercicio) return;
 
-					if (!kpiPorSesion[sesion.idSession]) {
+				indicador.score = element.score;
+				indicador.ses_date = sesion.date;
+				indicador.ses_name = sesion.name;
+
+				if (!kpiPorSesion[sesion.idSession]) {
 					kpiPorSesion[sesion.idSession] = {
-						name: sesion.name,
-						date: sesion.date,
-						[indicador.idKPI]: {
+					name: sesion.name,
+					date: sesion.date,
+					[indicador.idKPI]: {
 						idKPI: indicador.idKPI,
 						name: indicador.name,
 						scores: [],
 						range: indicador.range,
 						exercises: {}
-						}
-					};
-					} else if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
-						kpiPorSesion[sesion.idSession][indicador.idKPI] = {
-							idKPI: indicador.idKPI,
-							name: indicador.name,
-							scores: [],
-							range: indicador.range,
-							exercises: {}
-						};
 					}
+					};
+				}
 
-					const ejerciciosResponse = await this.dao.exercise.read();
-					let ejercicio = ejerciciosResponse.find(ex =>
-					ex.idExercise == element.Exercise_has_Session_has_Actor_Exercise_has_Session_Exer_idExer
-					);
-					indicador.ex_name = ejercicio.name;
+				if (!kpiPorSesion[sesion.idSession][indicador.idKPI]) {
+					kpiPorSesion[sesion.idSession][indicador.idKPI] = {
+					idKPI: indicador.idKPI,
+					name: indicador.name,
+					scores: [],
+					range: indicador.range,
+					exercises: {}
+					};
+				}
 
-					if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
+				if (!kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise]) {
 					kpiPorSesion[sesion.idSession][indicador.idKPI][ejercicio.idExercise] = {
-						id: ejercicio.idExercise,
-						name: ejercicio.name,
-						score: element.score,
+					id: ejercicio.idExercise,
+					name: ejercicio.name,
+					score: element.score,
 					};
-					}
+				}
 
-					kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
+				kpiPorSesion[sesion.idSession][indicador.idKPI].scores.push(element.score);
 				});
 
-				await Promise.all(kpiPromises);
-
-				let resultado = [];
-
-				// Preparar KPI Por Mes
+				// Preparar KPI Por Trimestre
 				for (let ses in kpiPorSesion) {
-					let sesion = kpiPorSesion[ses];
-					let mes = this.cogerYearMonth(sesion.date);
-					let trimestre = this.getTrimestre(mes);
+				let sesion = kpiPorSesion[ses];
+				let mes = this.cogerYearMonth(sesion.date);
+				let trimestre = this.getTrimestre(mes);
 
-					if (!kpiPorMes[trimestre]) {
-						kpiPorMes[trimestre] = {
-							name: trimestre,
-							sessions: {}
-						};
-					}
-
-					if (!kpiPorMes[trimestre].sessions[ses]) {
-						kpiPorMes[trimestre].sessions[ses] = {
-							idKPI: ses,
-							name: sesion.name,
-							date: sesion.date,
-							scores: [],
-							KPIs: {}  // Para almacenar los KPIs
-						};
-					}
-
-					for (let idKPI in sesion) {
-						let kpi = sesion[idKPI];
-
-						if (kpi.scores) {
-							let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
-							
-							kpiPorMes[trimestre].sessions[ses].KPIs[idKPI] = {
-								id: idKPI,
-								name: kpi.name,
-								score: avgScoreKPI,
-								exercises: kpi.exercises,
-								range: kpi.range,
-							};
-
-							kpiPorMes[trimestre].sessions[ses].scores.push(parseFloat(avgScoreKPI));
-						}
-					}
+				if (!kpiPorTrimestre[trimestre]) {
+					kpiPorTrimestre[trimestre] = {
+					name: trimestre,
+					sessions: {}
+					};
 				}
 
-
-				for (let mes in kpiPorMes) {
-					let month = kpiPorMes[mes];
-					let sessions = [];
-
-					for (let ses in month.sessions) {
-						let session = month.sessions[ses];
-						let KPIs = [];
-
-						for (let idKPI in session.KPIs) {
-							KPIs.push(session.KPIs[idKPI]);
-						}
-
-						let avgScore = (KPIs.reduce((acc, kpi) => acc + parseFloat(kpi.score), 0) / KPIs.length).toFixed(2);
-
-						sessions.push({
-							idKPI: session.idKPI,
-							name: session.name,
-							range: null,
-							score: avgScore,
-							exercises: KPIs
-						});
-					}
-
-					resultado.push({
-						ses_name: month.name, // Nombre del Trimestre
-						ses_date: month.name,
-						ses_id: mes,
-
-						KPIs: sessions // Sesiones
-					});
+				if (!kpiPorTrimestre[trimestre].sessions[ses]) {
+					kpiPorTrimestre[trimestre].sessions[ses] = {
+					idKPI: ses,
+					name: sesion.name,
+					date: sesion.date,
+					scores: [],
+					KPIs: {}  // Para almacenar los KPIs
+					};
 				}
+
+				for (let idKPI in sesion) {
+					let kpi = sesion[idKPI];
+
+					if (kpi.scores) {
+					let avgScoreKPI = (kpi.scores.reduce((a, b) => a + b, 0) / kpi.scores.length).toFixed(2);
+
+					kpiPorTrimestre[trimestre].sessions[ses].KPIs[idKPI] = {
+						id: idKPI,
+						name: kpi.name,
+						score: avgScoreKPI,
+						exercises: kpi.exercises,
+						range: kpi.range,
+					};
+
+					kpiPorTrimestre[trimestre].sessions[ses].scores.push(parseFloat(avgScoreKPI));
+					}
+				}
+				}
+
+				let resultado = Object.keys(kpiPorTrimestre).map(trimestre => {
+				let quarter = kpiPorTrimestre[trimestre];
+				let sessions = Object.keys(quarter.sessions).map(ses => {
+					let session = quarter.sessions[ses];
+					let KPIs = Object.keys(session.KPIs).map(idKPI => session.KPIs[idKPI]);
+					let avgScore = (KPIs.reduce((acc, kpi) => acc + parseFloat(kpi.score), 0) / KPIs.length).toFixed(2);
+
+					return {
+					idKPI: session.idKPI,
+					name: session.name,
+					range: null,
+					score: avgScore,
+					exercises: KPIs
+					};
+				});
+
+				return {
+					ses_name: quarter.name, // Nombre del Trimestre
+					ses_date: quarter.name,
+					ses_id: trimestre,
+					KPIs: sessions // Sesiones
+				};
+				});
 
 				this.kpis_trimestral = resultado;
 
 				this.chartData = [];
 				const exerciseData = {};
 
-				resultado.forEach(mes => {
-					mes.KPIs.forEach(kpi => {
-						kpi.exercises.forEach(exercise => {
-							if (!exerciseData[exercise.name]) {
-								exerciseData[exercise.name] = {};
-							}
+				resultado.forEach(trimestre => {
+				trimestre.KPIs.forEach(kpi => {
+					Object.values(kpi.exercises).forEach(exercise => {
+					if (!exerciseData[exercise.name]) {
+						exerciseData[exercise.name] = {};
+					}
 
-							if (!exerciseData[exercise.name][mes.ses_name]) {
-								exerciseData[exercise.name][mes.ses_name] = [];
-							}
+					if (!exerciseData[exercise.name][trimestre.ses_name]) {
+						exerciseData[exercise.name][trimestre.ses_name] = [];
+					}
 
-							exerciseData[exercise.name][mes.ses_name].push(parseFloat(exercise.score));
-						});
+					exerciseData[exercise.name][trimestre.ses_name].push(parseFloat(exercise.score));
 					});
+				});
 				});
 
 				for (const [exerciseName, months] of Object.entries(exerciseData)) {
-					const data = [];
+				const data = [];
 
-					for (const [month, scores] of Object.entries(months)) {
-						const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
-						data.push({
-							time: month,
-							score: avgScore.toFixed(2)
-						});
-					}
-
-					this.chartData.push({
-						name: exerciseName,
-						data: data,
+				for (const [month, scores] of Object.entries(months)) {
+					const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+					data.push({
+					time: month,
+					score: avgScore.toFixed(2)
 					});
 				}
 
+				this.chartData.push({
+					name: exerciseName,
+					data: data,
+				});
+				}
+
 			} catch (error) {
-				console.error('Error al cargar KPIs mensuales:', error);
+				console.error('Error al cargar KPIs trimestrales:', error);
+			} finally {
+				if (loader) { loader.style.display = 'none'; }
 			}
 		},
 		async cargarGraficos() {			

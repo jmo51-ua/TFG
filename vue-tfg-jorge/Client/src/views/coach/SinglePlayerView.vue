@@ -386,6 +386,14 @@ export default {
         return "Mes inválido";
       }
     },
+    compararSesiones(puntajes){
+      let cambios = [];
+      for (let i = 1; i < puntajes.length; i++) {
+        const cambio = ((puntajes[i] - puntajes[i - 1]) / puntajes[i - 1]) * 100;
+        cambios.push(cambio);
+      }
+      return cambios;
+    },
 
     
     async getPlayerInfo() {
@@ -421,6 +429,7 @@ export default {
         "Oportunidades": [],
         "Amenazas": []
       };
+      this.openSessions = this.openKpis = [];
 
       const methodName = `cargarKPIs_${this.modo}`;
       if (typeof this[methodName] === 'function') {
@@ -944,20 +953,22 @@ export default {
     cargarDAFO_promedioGPA(){
       this.chartData.forEach(kpi => {
         const puntajes = kpi.data.map(d => parseFloat(d.score));
-        const rango = kpi.range;
-        const gpa_puntos = puntajes.map(puntaje => this.convertir_a_gpa(puntaje, rango));
+        if(puntajes.length > 1){
+          const rango = kpi.range;
+          const gpa_puntos = puntajes.map(puntaje => this.convertir_a_gpa(puntaje, rango));
 
-        const total = gpa_puntos.reduce((sum, value) => sum + value, 0);
-        const promedio_gpa = total / gpa_puntos.length;
+          const total = gpa_puntos.reduce((sum, value) => sum + value, 0);
+          const promedio_gpa = total / gpa_puntos.length;
 
-        if (promedio_gpa >= 3.5) {
-            this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Promedio GPA alto`);
-        } else if (promedio_gpa >= 2.5) {
-          this.resultados_DAFO.Oportunidades.push(`${kpi.name}: Promedio GPA moderado`);
-        } else if (promedio_gpa >= 1.5) {
-          this.resultados_DAFO.Amenazas.push(`${kpi.name}: Promedio GPA bajo`);
-        } else {
-          this.resultados_DAFO.Debilidades.push(`${kpi.name}: Promedio GPA muy bajo`);
+          if (promedio_gpa >= 3.5) {
+              this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Promedio GPA alto`);
+          } else if (promedio_gpa >= 2.5) {
+            this.resultados_DAFO.Oportunidades.push(`${kpi.name}: Promedio GPA moderado`);
+          } else if (promedio_gpa >= 1.5) {
+            this.resultados_DAFO.Amenazas.push(`${kpi.name}: Promedio GPA bajo`);
+          } else {
+            this.resultados_DAFO.Debilidades.push(`${kpi.name}: Promedio GPA muy bajo`);
+          }
         }
 
       });
@@ -965,100 +976,99 @@ export default {
     cargarDAFO__Desviacion() {
       this.chartData.forEach(kpi => {
         const puntajes = kpi.data.map(d => parseFloat(d.score));
-        const rango = kpi.range;
+        if(puntajes.length > 1){
+          const rango = kpi.range;
         
-        if (puntajes.length === 0 || rango === 0) return; // Manejar casos de división por cero o datos vacíos
+          if (puntajes.length === 0 || rango === 0) return; // Manejar casos de división por cero o datos vacíos
 
-        const desviacionEstandar = this.desviacion_estandar(puntajes);
-        const porcentajeDesviacion = (desviacionEstandar / rango) * 100;
+          const desviacionEstandar = this.desviacion_estandar(puntajes);
+          const porcentajeDesviacion = (desviacionEstandar / rango) * 100;
 
-        const representatividadCV = {
-          14: "Fortaleza:Mucha constancia",
-          22: "Oportunidad:Puede ser más constante",
-          29: "Amenaza:Constancia irregular",
-          100: "Debilidad:Sus datos no son nada constantes"
-        };
+          const representatividadCV = {
+            14: "Fortaleza:Mucha constancia",
+            22: "Oportunidad:Puede ser más constante",
+            29: "Amenaza:Constancia irregular",
+            100: "Debilidad:Sus datos no son nada constantes"
+          };
 
-        const tramoDesviacion = this.determinarTramo(porcentajeDesviacion, representatividadCV);
-        const [categoria, descripcion] = tramoDesviacion.split(':');
+          const tramoDesviacion = this.determinarTramo(porcentajeDesviacion, representatividadCV);
+          const [categoria, descripcion] = tramoDesviacion.split(':');
 
-        switch(categoria) {
-          case "Fortaleza":
-            this.resultados_DAFO.Fortalezas.push(`${kpi.name}: ${descripcion}`);
-            break;
-          case "Debilidad":
-            this.resultados_DAFO.Debilidades.push(`${kpi.name}: ${descripcion}`);
-            break;
-          case "Oportunidad":
-            this.resultados_DAFO.Oportunidades.push(`${kpi.name}: ${descripcion}`);
-            break;
-          case "Amenaza":
-            this.resultados_DAFO.Amenazas.push(`${kpi.name}: ${descripcion}`);
-            break;
+          switch(categoria) {
+            case "Fortaleza":
+              this.resultados_DAFO.Fortalezas.push(`${kpi.name}: ${descripcion}`);
+              break;
+            case "Debilidad":
+              this.resultados_DAFO.Debilidades.push(`${kpi.name}: ${descripcion}`);
+              break;
+            case "Oportunidad":
+              this.resultados_DAFO.Oportunidades.push(`${kpi.name}: ${descripcion}`);
+              break;
+            case "Amenaza":
+              this.resultados_DAFO.Amenazas.push(`${kpi.name}: ${descripcion}`);
+              break;
+          }
         }
       });
     },
     cargarDAFO_Pendiente(){
       this.chartData.forEach(kpi => {
         const puntajes = kpi.data.map(d => parseFloat(d.score));
-        const tiempos = Array.from({ length: puntajes.length }, (_, i) => i + 1);
 
-        const regression = ss.linearRegression(tiempos.map((time, index) => [time, puntajes[index]]));
-        const slope = regression.m;
+        if(puntajes.length > 1){
+          const tiempos = Array.from({ length: puntajes.length }, (_, i) => i + 1);
 
-        const media = ss.mean(puntajes);
-        const desviacion_estandar = ss.standardDeviation(puntajes);
+          const regression = ss.linearRegression(tiempos.map((time, index) => [time, puntajes[index]]));
+          const slope = regression.m;
 
-        // Regla empírica
-        const umbral1 = media + desviacion_estandar;  // 68%
-        const umbral2 = media + 2 * desviacion_estandar;  // 95%
-        const umbral3 = media + 3 * desviacion_estandar;  // 99.7%
+          const media = ss.mean(puntajes);
+          const desviacion_estandar = ss.standardDeviation(puntajes);
 
-        if (slope > 0) { // Creciente
-          if (media > umbral3) {
-            this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Rendimiento en aumento excepcionalmente sólido.`);
-          } else if (media > umbral2) {
-            this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Rendimiento en aumento muy sólido.`);
-          } else if (media > umbral1) {
-            this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Rendimiento en aumento sólido.`);
-          } else {
-            this.resultados_DAFO.Oportunidades.push(`${kpi.name}: Tendencia de mejora que aún no es fuerte pero tiene potencial.`);
-          }
-        } else { // Decreciente
-          if (media < (media - 3 * desviacion_estandar)) {
-            this.resultados_DAFO.Debilidades.push(`${kpi.name}: Rendimiento decreciente y extremadamente problemático.`);
-          } else if (media < (media - 2 * desviacion_estandar)) {
-            this.resultados_DAFO.Debilidades.push(`${kpi.name}: Rendimiento decreciente y muy problemático.`);
-          } else if (media < (media - desviacion_estandar)) {
-            this.resultados_DAFO.Debilidades.push(`${kpi.name}: Rendimiento decreciente y problemático.`);
-          } else {
-            this.resultados_DAFO.Amenazas.push(`${kpi.name}: Tendencia decreciente que aún no es fuerte pero es preocupante.`);
+          // Regla empírica
+          const umbral1 = media + desviacion_estandar;  // 68%
+          const umbral2 = media + 2 * desviacion_estandar;  // 95%
+          const umbral3 = media + 3 * desviacion_estandar;  // 99.7%
+
+          if (slope > 0) { // Creciente
+            if (media > umbral3) {
+              this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Rendimiento en aumento excepcionalmente sólido.`);
+            } else if (media > umbral2) {
+              this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Rendimiento en aumento muy sólido.`);
+            } else if (media > umbral1) {
+              this.resultados_DAFO.Fortalezas.push(`${kpi.name}: Rendimiento en aumento sólido.`);
+            } else {
+              this.resultados_DAFO.Oportunidades.push(`${kpi.name}: Tendencia de mejora que aún no es fuerte pero tiene potencial.`);
+            }
+          } else { // Decreciente
+            if (media < (media - 3 * desviacion_estandar)) {
+              this.resultados_DAFO.Debilidades.push(`${kpi.name}: Rendimiento decreciente y extremadamente problemático.`);
+            } else if (media < (media - 2 * desviacion_estandar)) {
+              this.resultados_DAFO.Debilidades.push(`${kpi.name}: Rendimiento decreciente y muy problemático.`);
+            } else if (media < (media - desviacion_estandar)) {
+              this.resultados_DAFO.Debilidades.push(`${kpi.name}: Rendimiento decreciente y problemático.`);
+            } else {
+              this.resultados_DAFO.Amenazas.push(`${kpi.name}: Tendencia decreciente que aún no es fuerte pero es preocupante.`);
+            }
           }
         }
       });
-    },
-    compararSesiones(puntajes){
-      let cambios = [];
-      for (let i = 1; i < puntajes.length; i++) {
-        const cambio = ((puntajes[i] - puntajes[i - 1]) / puntajes[i - 1]) * 100;
-        cambios.push(cambio);
-      }
-      return cambios;
     },
     cargarDAFO_Cambios_Temporales(){
       this.chartData.forEach(kpi => {
         const puntajes = kpi.data.map(d => parseFloat(d.score));
 
-        const cambiosSesiones = this.compararSesiones(puntajes);
-        const cambios_positivos = cambiosSesiones.filter(cambio => cambio > 0);
-        const cambios_negativos = cambiosSesiones.filter(cambio => cambio < 0);
+        if(puntajes.length > 1){
+          const cambiosSesiones = this.compararSesiones(puntajes);
+          const cambios_positivos = cambiosSesiones.filter(cambio => cambio > 0);
+          const cambios_negativos = cambiosSesiones.filter(cambio => cambio < 0);
 
-        if (cambios_positivos.length > cambios_negativos.length) {
-          this.resultados_DAFO.Oportunidades.push(`${kpi.name}: Tiende a mejorar entre sesiones`);
-        } else if (cambios_positivos.length < cambios_negativos.length){
-          this.resultados_DAFO.Amenazas.push(`${kpi.name}: Tiende a empeorar entre sesiones`);
-        } else {
-          this.resultados_DAFO.Amenazas.push(`${kpi.name}: No mejora entre sesiones`);
+          if (cambios_positivos.length > cambios_negativos.length) {
+            this.resultados_DAFO.Oportunidades.push(`${kpi.name}: Tiende a mejorar entre sesiones`);
+          } else if (cambios_positivos.length < cambios_negativos.length){
+            this.resultados_DAFO.Amenazas.push(`${kpi.name}: Tiende a empeorar entre sesiones`);
+          } else {
+            this.resultados_DAFO.Amenazas.push(`${kpi.name}: No mejora entre sesiones`);
+          }
         }
       });
     },

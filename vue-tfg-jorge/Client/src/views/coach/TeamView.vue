@@ -15,6 +15,10 @@
           	:playerId="item.idActor"
 			class="card"
 			/>
+
+			<div class="noplayers" style="display: none;">
+				No se han encontrado Jugadores
+			</div>
 		</div>
 	</main>
 </template>
@@ -65,9 +69,19 @@
 			},
 			async cargarDatosCompletosJugadores() {
 				try {
+
 					const promises = this.actorIds.map(id => this.dao.actor.read({ idActor: id }));
 					this.actoresCompletos = await Promise.all(promises);
 					console.log('Datos completos de los actores:', this.actoresCompletos);
+					
+					if(this.actoresCompletos.length == 0){
+						const message = document.querySelector('.noplayers');
+						if (message) { message.style.display = 'block'; }
+					}
+					else{
+						const message = document.querySelector('.noplayers');
+						if (message) { message.style.display = 'none'; }
+					}
 				} catch (error) {
 					console.error('Error al cargar jugadores completos:', error);
 				}
